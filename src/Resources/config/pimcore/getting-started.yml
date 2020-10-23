@@ -1,0 +1,8 @@
+mds_pim_print_core:
+    projects:
+        gettingStarted:
+            ident: 'gettingStarted'
+            name: 'Getting Started'
+            service: 'Mds\PimPrint\DemoBundle\Service\GettingStarted'
+            template:
+                default: 'PimPrint-GettingStarted.indd'

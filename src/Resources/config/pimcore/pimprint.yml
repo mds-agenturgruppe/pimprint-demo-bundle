@@ -1,0 +1,55 @@
+mds_pim_print_core:
+#    Optional locales to set in render mode to have floats converted to '.-strings'
+#    In demo we set a correct locale to assure that generation works on all server systems.
+#    This configuration is only needed on server systems where flaots are converted to ',-strings'
+    lc_numeric: ['en_US.UTF-8', 'de_DE.UTF-8']
+#    host:
+#        hostname:
+#        protocol:
+#        port:
+    projects:
+        commandDemo:
+            ident: 'commandDemo' #Use for multi Bundle or configuration implementations.
+            name: 'Command Demo' #Name of project displayed in InDesign-Plugin.
+            service: 'Mds\PimPrint\DemoBundle\Service\CommandDemo' #Service to use to render the project. Must inherit AbstractProject.
+            create_update_info: false
+            template:
+                default: 'PimPrint-CommandDemo.indd' #Default InDesign template filename.
+#            plugin_elements: #Available plugin elements.
+#                start_alignment: false #Field for start left/right page.
+#                page_bounds: false #Fields for page start/end.
+#                update_mode: true #Field for update modes.
+#                update_modes: [501, 502, 512] #Available update modes for project.
+            assets:
+                download: true #Toggles asset download.
+                pre_download: false #Toggles asset download before rendering start.
+#                warnings_on_page: true #Toggles missing asset onPage warnings messages.
+#                thumbnail: 'product_detail_small' #Optional Pimcore thumbnail configuration for preview images.
+        dataPrintCarBrochure:
+            ident: 'dataPrintCarBrochure'
+            name: 'Car Brochure'
+            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintCarBrochure'
+            template:
+                default: 'PimPrint-DataPrintDemo_blue.indd'
+            assets:
+                download: true
+        dataPrintCarList:
+            ident: 'dataPrintCarList'
+            name: 'Car List'
+            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintCarList'
+            template:
+                default: 'PimPrint-DataPrintDemo_blue.indd'
+            assets:
+                download: true
+            plugin_elements:
+                update_modes: [ 501, 502 ]
+        dataPrintAccessoryPartList:
+            ident: 'dataPrintAccessoryPartList'
+            name: 'AccessoryPart List'
+            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintAccessoryPartList'
+            template:
+                default: 'PimPrint-DataPrintDemo_blue.indd'
+            assets:
+                download: true
+            plugin_elements:
+                update_modes: [ 501, 502 ]

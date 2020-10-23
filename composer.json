@@ -1,0 +1,38 @@
+{
+  "name": "mds-agenturgruppe/pimprint-demo-bundle",
+  "type": "pimcore-bundle",
+  "description": "mds PimPrint DemoBundle for Pimcore Demo.",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://pimprint.mds.eu/",
+  "support": {
+    "source": "https://github.com/mds-agenturgruppe/pimprint-demo-bundle"
+  },
+  "keywords": [
+    "pimcore",
+    "pimcore demo",
+    "pimcore-plugin",
+    "pimprint",
+    "pimprint demo",
+    "database-publishing",
+    "indesign"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Mds\\PimPrint\\DemoBundle\\": "src/"
+    }
+  },
+  "require": {
+    "ext-dom": "*",
+    "mds-agenturgruppe/pimprint-core-bundle": "1.2.x"
+  },
+  "require-dev": {
+    "mds-agenturgruppe/php-code-checker": "^1.0"
+  },
+  "extra": {
+    "pimcore": {
+      "bundles": [
+        "Mds\\PimPrint\\DemoBundle\\MdsPimPrintDemoBundle"
+      ]
+    }
+  }
+}

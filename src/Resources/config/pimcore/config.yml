@@ -1,0 +1,3 @@
+imports:
+    - { resource: getting-started.yml }
+    - { resource: pimprint.yml }

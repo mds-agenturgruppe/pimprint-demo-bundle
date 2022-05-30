@@ -30,7 +30,7 @@ use Mds\PimPrint\CoreBundle\Service\SpecialChars;
 class PageHandling extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception

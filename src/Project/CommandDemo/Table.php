@@ -33,7 +33,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 class Table extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception

@@ -24,7 +24,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 class Messages extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -39,6 +39,7 @@ class Messages extends AbstractStrategy
      * Demonstrates different types of messages displayed in InDesign Plugin.
      *
      * @return void
+     * @throws \Exception
      */
     private function pluginMessages()
     {

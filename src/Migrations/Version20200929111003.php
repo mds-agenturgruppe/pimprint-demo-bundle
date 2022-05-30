@@ -51,7 +51,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
     protected $folderName = 'PimPrint-Demo';
 
     /**
-     * {@inheritDoc}
+     * No sql migrations
      *
      * @return bool
      */

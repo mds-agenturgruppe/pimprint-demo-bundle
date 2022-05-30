@@ -29,7 +29,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 class Groups extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception

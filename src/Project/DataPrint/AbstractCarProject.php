@@ -30,7 +30,7 @@ abstract class AbstractCarProject extends AbstractProject
     use CarDataInterpreterTrait;
 
     /**
-     * {@inheritDoc}
+     * Returns all publications in tree structure to display in InDesign-Plugin.
      *
      * @return array
      */
@@ -66,7 +66,7 @@ abstract class AbstractCarProject extends AbstractProject
     }
 
     /**
-     * {@inheritDoc}
+     * Generates InDesign Commands to build the selected publication in InDesign.
      *
      * @return void
      * @throws \Exception

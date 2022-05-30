@@ -49,7 +49,7 @@ class Version20200929110947 extends AbstractPimcoreMigration
     ];
 
     /**
-     * {@inheritDoc}
+     * No sql migrations
      *
      * @return bool
      */

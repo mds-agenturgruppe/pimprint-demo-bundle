@@ -42,7 +42,7 @@ class GettingStarted extends AbstractProject
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the publication select options in the InDesign plugin for this project.
      *
      * @return array
      */

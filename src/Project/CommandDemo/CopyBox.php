@@ -28,7 +28,7 @@ use Mds\PimPrint\CoreBundle\Service\ProjectsManager;
 class CopyBox extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception

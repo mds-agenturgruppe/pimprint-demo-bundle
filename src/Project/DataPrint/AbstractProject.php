@@ -101,7 +101,7 @@ abstract class AbstractProject extends PimPrintAbstractProject
     }
 
     /**
-     * {@inheritDoc}
+     * Generates InDesign Commands to build the selected publication in InDesign.
      *
      * @return void
      * @throws \Exception

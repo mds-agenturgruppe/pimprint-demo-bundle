@@ -27,7 +27,7 @@ use Mds\PimPrint\CoreBundle\Service\PluginParameters;
 class Layers extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * Method generated the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception

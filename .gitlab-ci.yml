@@ -1,5 +1,9 @@
+stages:
+    - test
+
 code check:
-    image: gitlab.mds.eu:2244/mds/php-code-checker
+    stage: test
+    image: gitlab.mds.eu:2244/mds/php8-code-checker
     script:
         - echo "Executing mds-code-checker..."
         - ln -s $(pwd)/src /data/src

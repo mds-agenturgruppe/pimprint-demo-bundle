@@ -14,7 +14,7 @@
 namespace Mds\PimPrint\DemoBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Pimcore\Migrations\Migration\AbstractPimcoreMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Asset\Folder;
 
@@ -23,14 +23,14 @@ use Pimcore\Model\Asset\Folder;
  *
  * @package Mds\PimPrint\DemoBundle\Migrations
  */
-class Version20200929111003 extends AbstractPimcoreMigration
+class Version20200929111003 extends AbstractMigration
 {
     /**
      * Properties to create.
      *
      * @var array
      */
-    protected $files = [
+    protected array $files = [
         'PimPrint-DataPrintDemo_blue.indd',
         'PimPrint-DataPrintDemo_green.indd',
         'PimPrint-DataPrintDemo_orange.indd',
@@ -41,33 +41,24 @@ class Version20200929111003 extends AbstractPimcoreMigration
      *
      * @var string
      */
-    protected $path = '../Resources/pimprint/';
+    protected string $path = '../Resources/pimprint/';
 
     /**
      * Asset folder name.
      *
      * @var string
      */
-    protected $folderName = 'PimPrint-Demo';
-
-    /**
-     * No sql migrations
-     *
-     * @return bool
-     */
-    public function doesSqlMigrations(): bool
-    {
-        return false;
-    }
+    protected string $folderName = 'PimPrint-Demo';
 
     /**
      * Up method.
      *
      * @param Schema $schema
      *
+     * @return void
      * @throws \Exception
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $folder = $this->setupFolder($this->folderName);
         $this->importAssets($this->files, $folder);
@@ -78,9 +69,10 @@ class Version20200929111003 extends AbstractPimcoreMigration
      *
      * @param Schema $schema
      *
+     * @return void
      * @throws \Exception
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $folder = $this->setupFolder($this->folderName);
         $this->removeAssets($this->files, $folder);
@@ -95,7 +87,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
      * @return Folder
      * @throws \Exception
      */
-    private function setupFolder(string $folderName)
+    private function setupFolder(string $folderName): Folder
     {
         $folder = Folder::getByPath($folderName);
         if ($folder instanceof Folder) {
@@ -103,7 +95,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
         }
         $folder = Asset\Service::createFolderByPath($folderName);
         if ($folder instanceof Folder) {
-            $this->writeMessage('Asset folder created: ' . $folder->getFullPath());
+            $this->write('Asset folder created: ' . $folder->getFullPath());
         }
 
         return $folder;
@@ -122,7 +114,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
         foreach ($files as $file) {
             $filePath = $this->buildFilePath($file);
             if (false === file_exists($filePath)) {
-                $this->writeMessage('Template file not found: ' . $filePath);
+                $this->write('Template file not found: ' . $filePath);
                 continue;
             }
             $assetPath = $folder->getFullPath() . '/' . $file;
@@ -134,7 +126,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
             }
             $asset->setData(file_get_contents($filePath));
             $asset->save();
-            $this->writeMessage("Template file imported: " . $asset->getFullPath());
+            $this->write("Template file imported: " . $asset->getFullPath());
         }
     }
 
@@ -145,7 +137,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
      *
      * @return string
      */
-    private function buildFilePath(string $file)
+    private function buildFilePath(string $file): string
     {
         return __DIR__ . DIRECTORY_SEPARATOR . $this->path . $file;
     }
@@ -165,7 +157,7 @@ class Version20200929111003 extends AbstractPimcoreMigration
             $asset = Asset::getByPath($assetPath);
             if ($asset instanceof Asset) {
                 $asset->delete();
-                $this->writeMessage("Asset removed: " . $asset->getFullPath());
+                $this->write("Asset removed: " . $asset->getFullPath());
             }
         }
     }
@@ -180,6 +172,6 @@ class Version20200929111003 extends AbstractPimcoreMigration
     private function removeFolder(Folder $folder)
     {
         $folder->delete();
-        $this->writeMessage('Asset folder removed: ' . $folder->getFullPath());
+        $this->write('Asset folder removed: ' . $folder->getFullPath());
     }
 }

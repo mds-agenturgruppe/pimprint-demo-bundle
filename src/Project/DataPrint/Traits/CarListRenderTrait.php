@@ -13,7 +13,8 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint\Traits;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\BodyStyle;
@@ -39,7 +40,7 @@ trait CarListRenderTrait
      *
      * @throws \Exception
      */
-    private function addTableRowCarVariant(Car $car)
+    private function addTableRowCarVariant(Car $car): void
     {
         $car = CarProduct::getById($car->getId());
         $this->getTable()
@@ -63,7 +64,7 @@ trait CarListRenderTrait
      * @return array
      * @throws \Exception
      */
-    protected function buildCellContentForCar(Car $car)
+    protected function buildCellContentForCar(Car $car): array
     {
         $return = [];
         $image = $this->buildCarListTableImage($car);
@@ -98,14 +99,15 @@ trait CarListRenderTrait
     }
 
     /**
-     * Builds an Text element with $car image for display in lists.
+     * Builds a Text element with $car image for display in lists.
      *
      * @param Car $car
      *
      * @return Text|null
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function buildCarListTableImage(Car $car)
+    protected function buildCarListTableImage(Car $car): ?Text
     {
         $asset = $car->getMainImage();
         if ($asset instanceof Hotspotimage) {

@@ -17,6 +17,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CheckNewPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\BrochureTemplate;
 
 /**
@@ -35,15 +36,16 @@ trait CommonElementsTrait
      * @param string $label
      * @param string $yPosVariable
      *
+     * @return void
      * @throws \Exception
      */
-    protected function renderTitle(string $label, $yPosVariable = Variable::VARIABLE_Y_POSITION)
+    protected function renderTitle(string $label, string $yPosVariable = Variable::VARIABLE_Y_POSITION): void
     {
         $box = new TextBox(
             BrochureTemplate::ELEMENT_TITLE,
-            BrochureTemplate::CONTENT_ORIGIN_LEFT,
-            BrochureTemplate::CONTENT_ORIGIN_TOP,
-            BrochureTemplate::CONTENT_WIDTH,
+            AbstractTemplate::CONTENT_ORIGIN_LEFT,
+            AbstractTemplate::CONTENT_ORIGIN_TOP,
+            AbstractTemplate::CONTENT_WIDTH,
             BrochureTemplate::TITLE_HEIGHT
         );
         $box->addString($label)
@@ -58,19 +60,22 @@ trait CommonElementsTrait
      * subTitle is positioned relative the registered yPos variable.
      * The element size is used from template and then the frame is adjusted to content.
      *
-     * @param string    $label
-     * @param string    $yPosVariable
-     * @param int|float $top
+     * @param string $label
+     * @param string $yPosVariable
+     * @param float|int $top
      *
      * @throws \Exception
      */
-    protected function renderSubTitle($label, $yPosVariable = Variable::VARIABLE_Y_POSITION, $top = 0)
-    {
-        $subTitle = new TextBox(BrochureTemplate::ELEMENT_SUBTITLE);
+    protected function renderSubTitle(
+        string $label,
+        string $yPosVariable = Variable::VARIABLE_Y_POSITION,
+        float|int $top = 0
+    ): void {
+        $subTitle = new TextBox(AbstractTemplate::ELEMENT_SUBTITLE);
         $subTitle->addString($label)
                  ->setResize(AbstractBox::RESIZE_NO_RESIZE)
                  ->setFit(TextBox::FIT_FRAME_TO_CONTENT)
-                 ->setLeft(BrochureTemplate::CONTENT_ORIGIN_LEFT)
+                 ->setLeft(AbstractTemplate::CONTENT_ORIGIN_LEFT)
                  ->setTop($top)
                  ->setVariable($yPosVariable, Variable::POSITION_BOTTOM)
                  ->setBoxIdentReferenced('subTitle');
@@ -83,11 +88,11 @@ trait CommonElementsTrait
      * @return CheckNewPage
      * @throws \Exception
      */
-    protected function createCheckNewPage()
+    protected function createCheckNewPage(): CheckNewPage
     {
         return new CheckNewPage(
-            BrochureTemplate::CONTENT_HEIGHT + BrochureTemplate::PAGE_MARGIN_TOP,
-            BrochureTemplate::PAGE_MARGIN_TOP
+            AbstractTemplate::CONTENT_HEIGHT + AbstractTemplate::PAGE_MARGIN_TOP,
+            AbstractTemplate::PAGE_MARGIN_TOP
         );
     }
 }

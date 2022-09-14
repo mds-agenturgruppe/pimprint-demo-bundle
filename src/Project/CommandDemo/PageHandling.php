@@ -129,7 +129,7 @@ class PageHandling extends AbstractStrategy
 
     /**
      * NextPage command is used to jump to the next page in InDesign document.
-     * Useful when generating a multi page publication without the knowledge of page amounts.
+     * Useful when generating a multipage publication without the knowledge of page amounts.
      *
      * @return void
      * @throws \Exception
@@ -154,7 +154,7 @@ class PageHandling extends AbstractStrategy
      * @return void
      * @throws \Exception
      */
-    private function addTemplateToPages()
+    private function addTemplateToPages(): void
     {
         //Jumps to the empty page 2, which was left out before, and add the template elements to it.
         $this->addCommand(new GoToPage(2));
@@ -217,7 +217,7 @@ class PageHandling extends AbstractStrategy
         );
 
         //When a box with CheckNewPage command has enough space on the page no page break will be created.
-        //For demonstration we jump back to page 9 and place a smaller box at the same position as the automatic
+        //For demonstration, we jump back to page 9 and place a smaller box at the same position as the automatic
         //moved box.
         $this->addCommand(new GoToPage(9));
         $largeBox = new CopyBoxCommand('copyBox', 80, 120, 50, 100);

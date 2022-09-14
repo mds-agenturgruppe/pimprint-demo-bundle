@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CheckNewPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
@@ -37,6 +38,7 @@ class Table extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     public function build(): void
     {
@@ -285,6 +287,7 @@ class Table extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function enhancedTableContent(): void
     {
@@ -292,7 +295,7 @@ class Table extends AbstractStrategy
 
         //In this demo we place rich formatted text into a table. We use paragraph and character styles defined in
         //the InDesign template element "textBox". We have to place this element in the Document to have the styles
-        //availible in this demo.
+        //available in this demo.
         $this->addCommand(new TextBoxCommand('textBox', -10, -10, 1, 1));
 
         //Create the table box and add columns
@@ -361,7 +364,7 @@ class Table extends AbstractStrategy
      * FragmentParser offers functionality to parse complete HTML fragments.
      * The parsing process creates multiple InDesign commands.
      *
-     * @throws \Exception
+     * @throws \Exception|FilesystemException
      */
     private function htmlTable()
     {
@@ -597,7 +600,7 @@ EOT;
      *
      * @return string
      */
-    private function getDemoPrice($min = 10, $max = 99): string
+    private function getDemoPrice(int $min = 10, int $max = 99): string
     {
         return (string)rand($min, $max) . '.' . rand(10, 99);
     }

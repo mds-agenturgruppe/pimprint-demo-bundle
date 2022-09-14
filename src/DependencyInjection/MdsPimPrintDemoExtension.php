@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Loader;
 class MdsPimPrintDemoExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * Loads a specific configuration.
      *
      * @param array            $configs
      * @param ContainerBuilder $container

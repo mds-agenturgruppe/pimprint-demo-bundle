@@ -15,7 +15,7 @@ namespace Mds\PimPrint\DemoBundle\Service;
 
 use Mds\PimPrint\CoreBundle\Service\InDesign\AbstractPublicationTreeBuilder;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
-use Mds\PimPrint\CoreBundle\Service\UserHelper;
+use Pimcore\Bundle\AdminBundle\Security\User\UserLoader;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\AccessoryPart;
 use Pimcore\Model\DataObject\Category;
@@ -30,35 +30,42 @@ use Pimcore\Model\DataObject\Manufacturer;
 class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
 {
     /**
-     * PimPrint UserHelper.
+     * Pimcore UserLoader
      *
-     * @var UserHelper
+     * @var UserLoader
      */
-    private $userHelper;
+    private UserLoader $userLoader;
 
     /**
      * PimPrint PluginParameters.
      *
      * @var PluginParameters
      */
-    private $pluginParameters;
+    private PluginParameters $pluginParameters;
 
     /**
      * Currently rendered publication.
      *
-     * @var Category|Manufacturer|AccessoryPart
+     * @var AbstractObject|null
      */
-    private $renderedElement;
+    private ?AbstractObject $renderedElement = null;
+
+    /**
+     * Lazy loading current user language
+     *
+     * @var string|null
+     */
+    private ?string $contentLangauge = null;
 
     /**
      * DataPrintPublicationLoader constructor.
      *
-     * @param UserHelper       $userHelper
+     * @param UserLoader       $userLoader
      * @param PluginParameters $pluginParameters
      */
-    public function __construct(UserHelper $userHelper, PluginParameters $pluginParameters)
+    public function __construct(UserLoader $userLoader, PluginParameters $pluginParameters)
     {
-        $this->userHelper = $userHelper;
+        $this->userLoader = $userLoader;
         $this->pluginParameters = $pluginParameters;
     }
 
@@ -73,7 +80,7 @@ class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
      *
      * @return array
      */
-    public function buildCarPublicationTree(Category $rootCategory = null)
+    public function buildCarPublicationTree(Category $rootCategory = null): array
     {
         $return = [];
         if ($rootCategory instanceof Category) {
@@ -98,12 +105,12 @@ class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
      * @internal This method is placed in PublicationLoader to be used in DataPrintCar and DataPrintAccessoryParts demo.
      *           In most projects this functionality is project service specific.
      *
-     * @return Category|Manufacturer
+     * @return Category|AccessoryPart|Manufacturer
      * @throws \Exception
      */
-    public function getRenderedElement()
+    public function getRenderedElement(): Category|AccessoryPart|Manufacturer
     {
-        if (null === $this->renderedElement) {
+        if (null ===$this->renderedElement) {
             $object = AbstractObject::getById($this->pluginParameters->get(PluginParameters::PARAM_PUBLICATION));
             if (false === $object instanceof AbstractObject) {
                 throw new \Exception("Could not load object for rendering.");
@@ -133,7 +140,7 @@ class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
      *
      * @return array
      */
-    private function buildManufacturerTree()
+    private function buildManufacturerTree(): array
     {
         $folder = Folder::getByPath('/Product Data/Manufacturer');
         if ($folder instanceof Folder) {
@@ -152,13 +159,13 @@ class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
 
     /**
      * Example of overwriting the template method.
-     * For categories we want to use the Category name.
+     * For categories, we want to use the Category name.
      *
      * @param AbstractObject $object
      *
      * @return string
      */
-    protected function getObjectLabel(AbstractObject $object)
+    protected function getObjectLabel(AbstractObject $object): string
     {
         if ($object instanceof Category) {
             $label = $object->getName($this->getContentLanguage());
@@ -171,14 +178,24 @@ class DataPrintPublicationLoader extends AbstractPublicationTreeBuilder
     }
 
     /**
-     * For demonstration purpose we use the PimPrint UserHelper to access the current user
-     * to return the first content language. Language is used for i18n display of Category names in publicationTree.
+     * Returns first content language from current user.
+     * Language is used for i18n display of Category names in publicationTree.
      *
      * @return string
      */
-    protected function getContentLanguage()
+    protected function getContentLanguage(): string
     {
-        return $this->userHelper->getUser()
-                                ->getContentLanguages()[0];
+        if (null == $this->contentLangauge) {
+            $contentLanguages = $this->userLoader->getUser()
+                                                 ->getContentLanguages();
+            if (empty($contentLanguages)) {
+                $this->contentLangauge = $this->userLoader->getUser()
+                                                          ->getLanguage();
+            } else {
+                $this->contentLangauge = current($contentLanguages);
+            }
+        }
+
+        return $this->contentLangauge;
     }
 }

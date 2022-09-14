@@ -13,11 +13,13 @@
 
 namespace Mds\PimPrint\DemoBundle\Service;
 
-use AppBundle\Model\Product\AccessoryPart as AccessoryPartProduct;
+use App\Model\Product\AccessoryPart as AccessoryPartProduct;
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\NextPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractProject;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\ListTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\ListRenderTrait;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\SalesInformationTrait;
@@ -82,13 +84,14 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @var array
      */
-    protected $tableColumnDefinition = [
+    protected array $tableColumnDefinition = [
         [
             'ident'       => 'image', //We use the named column feature of Table.
             'translation' => '',
             'width'       => ListTemplate::COLUMN_WIDTH_IMAGE,
             'rowStyle'    => ListTemplate::STYLE_TABLE_CELL_ROW_CENTER,
             'headStyle'   => ListTemplate::STYLE_TABLE_CELL_HEAD,
+            'cellStyle'   => '',
         ],
         [
             'ident'       => 'ean',
@@ -189,7 +192,7 @@ class DataPrintAccessoryPartList extends AbstractProject
 
         //A category always starts on a new page, because we have the category name on the page layout.
         $this->addCommand(new NextPage());
-        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, ListTemplate::CONTENT_ORIGIN_TOP);
+        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, AbstractTemplate::CONTENT_ORIGIN_TOP);
 
         //Build table structure.
         $this->initTable(Variable::VARIABLE_Y_POSITION);
@@ -224,7 +227,7 @@ class DataPrintAccessoryPartList extends AbstractProject
 
         //A manufacturer always starts on a new page, because we have the category name on the page layout.
         $this->addCommand(new NextPage());
-        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, ListTemplate::CONTENT_ORIGIN_TOP);
+        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, AbstractTemplate::CONTENT_ORIGIN_TOP);
 
         //Build table structure.
         $this->initTable();
@@ -270,7 +273,7 @@ class DataPrintAccessoryPartList extends AbstractProject
      * @return array
      * @throws \Exception
      */
-    protected function buildCellContentForAccessoryPart(AccessoryPart $accessoryPart)
+    protected function buildCellContentForAccessoryPart(AccessoryPart $accessoryPart): array
     {
         $return = [];
         $image = $this->buildListImage($accessoryPart);
@@ -307,8 +310,9 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @return Text|null
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function buildListImage(AccessoryPart $accessoryPart)
+    protected function buildListImage(AccessoryPart $accessoryPart): ?Text
     {
         $asset = $accessoryPart->getImage();
         if ($asset instanceof Hotspotimage) {
@@ -328,7 +332,7 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @return AccessoryPart[]
      */
-    private function loadAccessoryPartForCategory(Category $category)
+    private function loadAccessoryPartForCategory(Category $category): array
     {
         $listing = $this->createAccessoryPartListing();
         $listing->addConditionParam(
@@ -346,7 +350,7 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @return AccessoryPart[]
      */
-    private function loadAccessoryPartForManufacturer(Manufacturer $manufacturer)
+    private function loadAccessoryPartForManufacturer(Manufacturer $manufacturer): array
     {
         $listing = $this->createAccessoryPartListing();
         $listing->addConditionParam(
@@ -362,7 +366,7 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @return AccessoryPartListing
      */
-    private function createAccessoryPartListing()
+    private function createAccessoryPartListing(): AccessoryPartListing
     {
         $listing = new AccessoryPartListing();
         $listing->setUnpublished(false)
@@ -379,7 +383,7 @@ class DataPrintAccessoryPartList extends AbstractProject
      *
      * @return array
      */
-    private function filterVisibility(array $parts)
+    private function filterVisibility(array $parts): array
     {
         $return = [];
         foreach ($parts as $part) {

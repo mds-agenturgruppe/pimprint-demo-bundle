@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
@@ -34,6 +35,7 @@ class TextBox extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     public function build(): void
     {
@@ -74,6 +76,7 @@ class TextBox extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function characterAndParagraph(): void
     {
@@ -227,7 +230,7 @@ class TextBox extends AbstractStrategy
      * This offers a quick and simple way to create formatted text content in InDesign.
      *
      * @return void
-     * @throws \Exception
+     * @throws \Exception|FilesystemException
      */
     protected function htmlInlineStyle(): void
     {
@@ -303,7 +306,7 @@ EOT;
      * https://loripsum.net/api/long/3/headers/ul/decorate
      *
      * @return void
-     * @throws \Exception
+     * @throws \Exception|FilesystemException
      */
     private function htmlProgrammaticStyle(): void
     {
@@ -343,7 +346,7 @@ EOT;
      * @return TextBoxCommand
      * @throws \Exception
      */
-    private function createDemoBox()
+    private function createDemoBox(): TextBoxCommand
     {
         return new TextBoxCommand(
             'textBox',

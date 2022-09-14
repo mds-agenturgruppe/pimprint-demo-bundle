@@ -13,7 +13,8 @@
 
 namespace Mds\PimPrint\DemoBundle\Service;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\NextPage;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractCarProject;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\CarBrochureRenderTrait;
@@ -35,6 +36,7 @@ class DataPrintCarBrochure extends AbstractCarProject
      * @param Category $category
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
     protected function renderCategory(Category $category)
     {
@@ -57,6 +59,7 @@ class DataPrintCarBrochure extends AbstractCarProject
      * @param Manufacturer $manufacturer
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
     protected function renderManufacturer(Manufacturer $manufacturer)
     {

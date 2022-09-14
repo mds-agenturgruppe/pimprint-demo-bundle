@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
 use Mds\PimPrint\CoreBundle\Service\ProjectsManager;
@@ -30,6 +31,7 @@ class ImageBox extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     public function build(): void
     {
@@ -48,6 +50,7 @@ class ImageBox extends AbstractStrategy
      *
      * @return float
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function placeImage(float $topPosition): float
     {
@@ -89,6 +92,7 @@ class ImageBox extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function fillModes(float $topPosition): void
     {
@@ -139,9 +143,6 @@ class ImageBox extends AbstractStrategy
      * Demonstrates usage of different Pimcore Model\Asset types with thumbnail behaviours.
      *
      * PimPrint supports fallback Images for InDesign:
-     * (@return void
-     * @throws \Exception
-     * @see \Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox::PROPERTY_PIMPRINT_ASSET)
      * When placing an Asset into a ImageBox Command PimPrint checks for Property 'pimprint_asset' and uses the
      * assigned Asset for display in InDesign. With this behaviour user specific print assets can be assigned to assets
      * like SVGs which aren't supported by InDesign.
@@ -151,8 +152,11 @@ class ImageBox extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws \Exception
+     * @throws FilesystemException
+     * @see \Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox::PROPERTY_PIMPRINT_ASSET)
      */
-    private function assetTypes()
+    private function assetTypes(): void
     {
         $this->addCommand(new GoToPage(2));
 
@@ -190,7 +194,7 @@ class ImageBox extends AbstractStrategy
             ProjectsManager::getProject()
                            ->addPageMessage('No PDF Demo-Asset found.');
         } else {
-            //PDFs can be places natively in InDesign
+            //PDFs can be placed natively in InDesign
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);
             $imageBox->setHeight($height)
                      ->setWidth($width)

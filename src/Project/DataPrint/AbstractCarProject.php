@@ -13,7 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\CarDataInterpreterTrait;
 use Pimcore\Model\DataObject\Car;
 use Pimcore\Model\DataObject\Car\Listing as CarListing;
@@ -89,7 +89,7 @@ abstract class AbstractCarProject extends AbstractProject
      *
      * @return Car[]
      */
-    protected function loadCarsForCategory(Category $category, string $type)
+    protected function loadCarsForCategory(Category $category, string $type): array
     {
         $listing = $this->createCarListing($type);
         $listing->addConditionParam(
@@ -111,7 +111,7 @@ abstract class AbstractCarProject extends AbstractProject
      *
      * @return Car[]
      */
-    protected function loadCarsForManufacturer(Manufacturer $manufacturer, string $type)
+    protected function loadCarsForManufacturer(Manufacturer $manufacturer, string $type): array
     {
         $listing = $this->createCarListing($type);
         $listing->addConditionParam(
@@ -132,7 +132,7 @@ abstract class AbstractCarProject extends AbstractProject
      *
      * @return CarListing
      */
-    protected function createCarListing(string $objectType = null)
+    protected function createCarListing(string $objectType = null): CarListing
     {
         $listing = new CarListing();
         $listing->setUnpublished(false)
@@ -153,7 +153,7 @@ abstract class AbstractCarProject extends AbstractProject
      *
      * @return array
      */
-    protected function filterForRootCars(array $cars)
+    protected function filterForRootCars(array $cars): array
     {
         $return = [];
         foreach ($cars as $car) {
@@ -176,7 +176,7 @@ abstract class AbstractCarProject extends AbstractProject
      *
      * @return array
      */
-    protected function loadVariantsForCar(Car $car)
+    protected function loadVariantsForCar(Car $car): array
     {
         $listing = $this->createCarListing(CarProduct::OBJECT_TYPE_ACTUAL_CAR);
         $listing->addConditionParam('o_path LIKE :path', ['path' => $car->getFullPath() . '/%'])

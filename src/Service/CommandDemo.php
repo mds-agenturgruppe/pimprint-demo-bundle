@@ -37,7 +37,7 @@ class CommandDemo extends AbstractProject
      *
      * @var PublicationTreeBuilder
      */
-    private $treeBuilder;
+    private PublicationTreeBuilder $treeBuilder;
 
     /**
      * CommandDemo constructor.
@@ -126,9 +126,9 @@ class CommandDemo extends AbstractProject
      *
      * @param string $message
      *
-     * @return CommandDemo
+     * @return AbstractProject
      */
-    public function addPreMessage(string $message)
+    public function addPreMessage(string $message): AbstractProject
     {
         return parent::addPreMessage($message);
     }

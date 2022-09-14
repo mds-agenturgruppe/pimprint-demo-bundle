@@ -13,6 +13,8 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint\Traits;
 
+use League\Flysystem\FilesystemException;
+use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SetLayer;
@@ -21,7 +23,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\Service\SpecialChars;
-use Mds\PimPrint\DemoBundle\Project\DataPrint\BrochureTemplate;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Pimcore\Model\Asset;
 
 /**
@@ -37,7 +39,7 @@ trait PageLayoutTrait
      *
      * @var array
      */
-    protected $facingPageSides = [
+    protected array $facingPageSides = [
         Template::SIDE_FACING_BOTH,
         Template::SIDE_FACING_LEFT,
         Template::SIDE_FACING_RIGHT,
@@ -46,9 +48,10 @@ trait PageLayoutTrait
     /**
      * Sets Layers, opens pages and sets useful variables in InDesign document.
      *
+     * @return void
      * @throws \Exception
      */
-    protected function startPages()
+    protected function startPages(): void
     {
         //Project uses language independent text layers.
         TextBox::setDefaultUseLanguageLayer(false);
@@ -57,12 +60,12 @@ trait PageLayoutTrait
         $this->addCommand(new GoToPage(0, false));
 
         //Best practice ist to have content top and left positions defined as variables inside the document.
-        $this->addCommand(new Variable('originTop', BrochureTemplate::CONTENT_ORIGIN_TOP));
-        $this->addCommand(new Variable('originLeft', BrochureTemplate::CONTENT_ORIGIN_LEFT));
+        $this->addCommand(new Variable('originTop', AbstractTemplate::CONTENT_ORIGIN_TOP));
+        $this->addCommand(new Variable('originLeft', AbstractTemplate::CONTENT_ORIGIN_LEFT));
 
         //Best practice to have the current yPos where to render elements as variable inside the document.
         //We start yPos at BrochureTemplate::CONTENT_ORIGIN_TOP.
-        $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, BrochureTemplate::CONTENT_ORIGIN_TOP));
+        $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, AbstractTemplate::CONTENT_ORIGIN_TOP));
     }
 
     /**
@@ -73,8 +76,9 @@ trait PageLayoutTrait
      * @param Asset|null $asset
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function renderPageLayout(string $label, Asset $asset = null)
+    protected function renderPageLayout(string $label, Asset $asset = null): void
     {
         //Create the Template command
         $template = new Template();
@@ -108,17 +112,18 @@ trait PageLayoutTrait
      * @param Template $template
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function createLayoutLeftPage(string $label, Template $template)
+    protected function createLayoutLeftPage(string $label, Template $template): void
     {
         //The textbox is 90° rotated to have vertical texts, we have to consider that in positioning.
         //InDesign rotates the anchor-point (normal top-left) to the actual bottom-left position.
         $textBox = new TextBox(
-            BrochureTemplate::ELEMENT_LAYOUT_BAR,
-            BrochureTemplate::LAYOUT_BAR_LEFT_LEFT,
-            BrochureTemplate::LAYOUT_BAR_TOP
+            AbstractTemplate::ELEMENT_LAYOUT_BAR,
+            AbstractTemplate::LAYOUT_BAR_LEFT_LEFT,
+            AbstractTemplate::LAYOUT_BAR_TOP
         );
-        $textBox->setResize(TextBox::RESIZE_NO_RESIZE);
+        $textBox->setResize(AbstractBox::RESIZE_NO_RESIZE);
         $textBox->addString($label);
         //Register for use on left side of facing page documents.
         $template->addCommand($textBox, Template::SIDE_FACING_LEFT);
@@ -126,11 +131,11 @@ trait PageLayoutTrait
         $template->addCommand($textBox);
 
         $textBox = new TextBox(
-            BrochureTemplate::ELEMENT_FOOTER_LEFT,
-            BrochureTemplate::FOOTER_LEFT_LEFT,
-            BrochureTemplate::FOOTER_TOP,
-            BrochureTemplate::FOOTER_WIDTH,
-            BrochureTemplate::FOOTER_HEIGHT
+            AbstractTemplate::ELEMENT_FOOTER_LEFT,
+            AbstractTemplate::FOOTER_LEFT_LEFT,
+            AbstractTemplate::FOOTER_TOP,
+            AbstractTemplate::FOOTER_WIDTH,
+            AbstractTemplate::FOOTER_HEIGHT
         );
         $textBox->addText($this->buildFooterText($label));
         //Register for use on left side of facing page documents.
@@ -146,27 +151,28 @@ trait PageLayoutTrait
      * @param Template $template
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function createLayoutRightPage(string $label, Template $template)
+    protected function createLayoutRightPage(string $label, Template $template): void
     {
         //The textbox is 90° rotated to have vertical texts, we have to consider that in positioning.
         //InDesign rotates the anchor-point (normal top-left) to the actual bottom-left position.
         $textBox = new TextBox(
-            BrochureTemplate::ELEMENT_LAYOUT_BAR,
-            BrochureTemplate::LAYOUT_BAR_RIGHT_LEFT,
-            BrochureTemplate::LAYOUT_BAR_TOP
+            AbstractTemplate::ELEMENT_LAYOUT_BAR,
+            AbstractTemplate::LAYOUT_BAR_RIGHT_LEFT,
+            AbstractTemplate::LAYOUT_BAR_TOP
         );
-        $textBox->setResize(TextBox::RESIZE_NO_RESIZE);
+        $textBox->setResize(AbstractBox::RESIZE_NO_RESIZE);
         $textBox->addString($label);
         //Register for use on right side of facing page documents.
         $template->addCommand($textBox, Template::SIDE_FACING_RIGHT);
 
         $textBox = new TextBox(
-            BrochureTemplate::ELEMENT_FOOTER_RIGHT,
-            BrochureTemplate::FOOTER_RIGHT_LEFT,
-            BrochureTemplate::FOOTER_TOP,
-            BrochureTemplate::FOOTER_WIDTH,
-            BrochureTemplate::FOOTER_HEIGHT
+            AbstractTemplate::ELEMENT_FOOTER_RIGHT,
+            AbstractTemplate::FOOTER_RIGHT_LEFT,
+            AbstractTemplate::FOOTER_TOP,
+            AbstractTemplate::FOOTER_WIDTH,
+            AbstractTemplate::FOOTER_HEIGHT
         );
         $textBox->addText($this->buildFooterText($label, false));
         //Register for use on right side of facing page documents.
@@ -181,23 +187,24 @@ trait PageLayoutTrait
      *
      * @return Text
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function buildFooterText(string $label, $left = true)
+    protected function buildFooterText(string $label, bool $left = true): Text
     {
         $pageNumber = sprintf(
             '<span class="%s">%s</span>',
-            BrochureTemplate::STYLE_CHARACTER_PAGINA,
+            AbstractTemplate::STYLE_CHARACTER_PAGINA,
             SpecialChars::AUTO_PAGE_NUMBER
         );
         $separator = sprintf(
             '&#160;<span class="%s">|</span>&#160;',
-            BrochureTemplate::STYLE_CHARACTER_SPACER
+            AbstractTemplate::STYLE_CHARACTER_SPACER
         );
 
-        $style = BrochureTemplate::STYLE_PARAGRAPH_FOOTER_RIGHT;
+        $style = AbstractTemplate::STYLE_PARAGRAPH_FOOTER_RIGHT;
         $parts = [$label, $separator, $pageNumber];
         if (true === $left) {
-            $style = BrochureTemplate::STYLE_PARAGRAPH_FOOTER;
+            $style = AbstractTemplate::STYLE_PARAGRAPH_FOOTER;
             $parts = [$pageNumber, $separator, $label];
         }
 
@@ -214,21 +221,22 @@ trait PageLayoutTrait
      * @param Template $template
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function createFooterAsset(Asset $asset, Template $template)
+    protected function createFooterAsset(Asset $asset, Template $template): void
     {
-        $imageBox = new ImageBox(BrochureTemplate::ELEMENT_IMAGE);
+        $imageBox = new ImageBox(AbstractTemplate::ELEMENT_IMAGE);
         try {
             $imageBox->setAsset($asset);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             //For SVG logos we force a thumbnail.
             $imageBox->setAsset($asset, 'product_detail');
         }
-        $imageBox->setWidth(BrochureTemplate::FOOTER_IMAGE_WIDTH)
-                 ->setHeight(BrochureTemplate::FOOTER_IMAGE_HEIGHT)
+        $imageBox->setWidth(AbstractTemplate::FOOTER_IMAGE_WIDTH)
+                 ->setHeight(AbstractTemplate::FOOTER_IMAGE_HEIGHT)
                  ->setFit(ImageBox::FIT_PROPORTIONALLY)
-                 ->setTop(BrochureTemplate::FOOTER_IMAGE_TOP)
-                 ->setLeft(BrochureTemplate::FOOTER_IMAGE_LEFT);
+                 ->setTop(AbstractTemplate::FOOTER_IMAGE_TOP)
+                 ->setLeft(AbstractTemplate::FOOTER_IMAGE_LEFT);
         //Register for use on both sides of facing page documents.
         $template->addCommand($imageBox, Template::SIDE_FACING_BOTH);
         //Register for use on single page documents.

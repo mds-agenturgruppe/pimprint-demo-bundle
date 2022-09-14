@@ -40,8 +40,8 @@ class MdsPimPrintDemoBundle extends AbstractPimcoreBundle
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return 'mds PimPrint DemoBundle for Pimcore 6 Demo.';
+        return 'mds PimPrint DemoBundle for Pimcore X Demo.';
     }
 }

@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint\Traits;
 
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CheckNewPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SplitTable;
@@ -20,6 +21,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\Table;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\ListTemplate;
 use Pimcore\Model\Asset;
 
@@ -33,34 +35,35 @@ trait ListRenderTrait
     /**
      * Table command.
      *
-     * @var Table
+     * @var Table|null
      */
-    protected $table;
+    protected ?Table $table = null;
 
     /**
      * SplitTable command.
      *
-     * @var SplitTable
+     * @var SplitTable|null
      */
-    protected $splitTable;
+    protected ?SplitTable $splitTable = null;
 
     /**
      * Initializes Table and SplitTable command.
      *
      * @param string $yPosVariable
      *
+     * @return void
      * @throws \Exception
      */
-    protected function initTable($yPosVariable = Variable::VARIABLE_Y_POSITION)
+    protected function initTable(string $yPosVariable = Variable::VARIABLE_Y_POSITION): void
     {
         $table = new Table(ListTemplate::ELEMENT_TABLE);
-        $table->setLeft(ListTemplate::CONTENT_ORIGIN_LEFT)
+        $table->setLeft(AbstractTemplate::CONTENT_ORIGIN_LEFT)
               ->setWidth(ListTemplate::TABLE_WIDTH)
-              ->setHeight(ListTemplate::CONTENT_HEIGHT)
+              ->setHeight(AbstractTemplate::CONTENT_HEIGHT)
               ->setLineHeight(null)
               ->setFit(Table::FIT_FRAME_TO_CONTENT_HEIGHT)
               ->setTableStyle(ListTemplate::STYLE_TABLE)
-              ->setTopRelative($yPosVariable, ListTemplate::BLOCK_Y_SPACE)
+              ->setTopRelative($yPosVariable, AbstractTemplate::BLOCK_Y_SPACE)
               ->setVariable($yPosVariable, Variable::POSITION_BOTTOM);
 
         $this->initSplitTable($yPosVariable);
@@ -71,23 +74,24 @@ trait ListRenderTrait
     /**
      * Initializes the SplitTable command to split the table dynamically over n pages.
      *
-     * @param $yPosVariable
+     * @param string $yPosVariable
      *
+     * @return void
      * @throws \Exception
      */
-    private function initSplitTable($yPosVariable)
+    private function initSplitTable(string $yPosVariable): void
     {
         $splitTable = new SplitTable();
 
         //Define a CheckNewPage command with ListTemplate::CONTENT_HEIGHT as maxYPos
         $checkPage = new CheckNewPage(
-            ListTemplate::CONTENT_BOTTOM,
-            ListTemplate::CONTENT_ORIGIN_TOP
+            AbstractTemplate::CONTENT_BOTTOM,
+            AbstractTemplate::CONTENT_ORIGIN_TOP
         );
         $splitTable->setCheckNewPage($checkPage);
 
         //Register ListTemplate::CONTENT_ORIGIN_TOP as table $yPosVariable on each new page.
-        $variable = new Variable($yPosVariable, ListTemplate::CONTENT_ORIGIN_TOP - ListTemplate::BLOCK_Y_SPACE);
+        $variable = new Variable($yPosVariable, AbstractTemplate::CONTENT_ORIGIN_TOP - AbstractTemplate::BLOCK_Y_SPACE);
         $splitTable->addPreCommand($variable);
 
         $this->splitTable = $splitTable;
@@ -99,7 +103,7 @@ trait ListRenderTrait
      * @return Table
      * @throws \Exception
      */
-    protected function getTable()
+    protected function getTable(): Table
     {
         if (false === $this->table instanceof Table) {
             $this->initTable();
@@ -114,7 +118,7 @@ trait ListRenderTrait
      * @return SplitTable
      * @throws \Exception
      */
-    protected function getSplitTable()
+    protected function getSplitTable(): SplitTable
     {
         //Just to ensure, that SplitTable was initialized.
         $this->getTable();
@@ -125,9 +129,10 @@ trait ListRenderTrait
     /**
      * Adds the $table with $splitTable to CommandQueue.
      *
+     * @return void
      * @throws \Exception
      */
-    protected function addSplitTable()
+    protected function addSplitTable(): void
     {
         $splitTable = $this->getSplitTable();
         $splitTable->setTable($this->getTable());
@@ -139,9 +144,11 @@ trait ListRenderTrait
      *
      * @param array $definition
      *
+     * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function setupTableStructure(array $definition)
+    protected function setupTableStructure(array $definition): void
     {
         if (empty($definition)) {
             return;
@@ -155,9 +162,10 @@ trait ListRenderTrait
      *
      * @param array $definition
      *
+     * @return void
      * @throws \Exception
      */
-    protected function createColumns(array $definition)
+    protected function createColumns(array $definition): void
     {
         foreach ($definition as $columnDefinition) {
             $this->getTable()
@@ -170,9 +178,10 @@ trait ListRenderTrait
      *
      * @param array $definition
      *
+     * @return void
      * @throws \Exception
      */
-    protected function createHeadRow(array $definition)
+    protected function createHeadRow(array $definition): void
     {
         $this->getTable()
              ->startRow(null, Table::ROW_TYPE_HEADER);
@@ -196,10 +205,11 @@ trait ListRenderTrait
      *
      * @return Text
      * @throws \Exception
+     * @throws FilesystemException
      */
-    protected function buildTableImageElement(Asset $asset)
+    protected function buildTableImageElement(Asset $asset): Text
     {
-        $image = new ImageBox(ListTemplate::ELEMENT_IMAGE);
+        $image = new ImageBox(AbstractTemplate::ELEMENT_IMAGE);
         $image->setAsset($asset)
               ->setFit(ImageBox::FIT_FILL_PROPORTIONALLY)
               ->setWidth(ListTemplate::TABLE_IMAGE_WIDTH)

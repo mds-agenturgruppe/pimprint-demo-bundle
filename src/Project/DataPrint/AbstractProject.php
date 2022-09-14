@@ -20,7 +20,7 @@ use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\PageLayoutTrait;
 use Mds\PimPrint\DemoBundle\Service\DataPrintPublicationLoader;
 use Pimcore\Localization\IntlFormatter;
 use Pimcore\Model\Asset;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class AbstractProject
@@ -67,21 +67,21 @@ abstract class AbstractProject extends PimPrintAbstractProject
      *
      * @var DataPrintPublicationLoader
      */
-    protected $publicationLoader;
+    protected DataPrintPublicationLoader $publicationLoader;
 
     /**
      * Pimcore website translator.
      *
      * @var TranslatorInterface
      */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     /**
      * Pimcore Intl Formatter.
      *
      * @var IntlFormatter
      */
-    protected $intlFormatter;
+    protected IntlFormatter $intlFormatter;
 
     /**
      * DataPrintCarBrochure constructor.
@@ -123,7 +123,7 @@ abstract class AbstractProject extends PimPrintAbstractProject
      * @return Asset|string
      * @throws \Exception
      */
-    protected function getTemplate()
+    protected function getTemplate(): Asset|string
     {
         $element = $this->publicationLoader->getRenderedElement();
         $template = $element->getProperty(self::PROPERTY_TEMPLATE);

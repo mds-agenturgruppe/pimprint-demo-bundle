@@ -146,7 +146,7 @@ class Groups extends AbstractStrategy
 
     /**
      * Creates demo elements for a group example.
-     * Elements will placed at the top left corner of the page relative to each other.
+     * Elements will be placed in the top left corner of the page relative to each other.
      *
      * @param string $label
      *

@@ -139,7 +139,7 @@ class Layers extends AbstractStrategy
         TextBox::setDefaultUseLanguageLayer(true);
 
         //TextBoxes are always placed on language dependent layers.
-        //The current active language short code will added as postfix to the target layer name.
+        //The current active language short code will add as postfix to the target layer name.
         //eg. "Layer A" will be "Layer A de"
         $language = $this->pluginParams()
                          ->get(PluginParameters::PARAM_LANGUAGE);
@@ -153,7 +153,7 @@ class Layers extends AbstractStrategy
         $box->addString("Element on 'Text Layer $language'");
         $this->addCommand($box);
 
-        //Layer name that a element is placed on can be set via LayerTrait.
+        //Layer name that an element is placed on can be set via LayerTrait.
         $box = new TextBox('copyText', 90, $topPosition, 70, 5);
         $box->addString("Element on 'Direct Text Layer $language'")
             ->setLayer("Direct Text Layer");

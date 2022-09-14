@@ -13,10 +13,12 @@
 
 namespace Mds\PimPrint\DemoBundle\Service;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\NextPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractCarProject;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\ListTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\CarListRenderTrait;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\ListRenderTrait;
@@ -76,7 +78,7 @@ class DataPrintCarList extends AbstractCarProject
      *
      * @var array
      */
-    protected $tableColumnDefinition = [
+    protected array $tableColumnDefinition = [
         [
             //We use one central column definition and filter out columns dependent of current contentType.
             'contentType' => null,
@@ -85,6 +87,7 @@ class DataPrintCarList extends AbstractCarProject
             'width'       => ListTemplate::COLUMN_WIDTH_IMAGE,
             'rowStyle'    => ListTemplate::STYLE_TABLE_CELL_ROW_CENTER,
             'headStyle'   => ListTemplate::STYLE_TABLE_CELL_HEAD,
+            'cellStyle'   => '',
         ],
         [
             'contentType' => self::TYPE_CATEGORY,
@@ -158,6 +161,7 @@ class DataPrintCarList extends AbstractCarProject
      * @param Category $category
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
     protected function renderCategory(Category $category)
     {
@@ -171,7 +175,7 @@ class DataPrintCarList extends AbstractCarProject
 
         //A category always starts on a new page, because we have the category name on the page layout.
         $this->addCommand(new NextPage());
-        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, ListTemplate::CONTENT_ORIGIN_TOP);
+        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, AbstractTemplate::CONTENT_ORIGIN_TOP);
 
         //Build table structure.
         $this->initTable();
@@ -192,6 +196,7 @@ class DataPrintCarList extends AbstractCarProject
      * @param Manufacturer $manufacturer
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
     protected function renderManufacturer(Manufacturer $manufacturer)
     {
@@ -206,7 +211,7 @@ class DataPrintCarList extends AbstractCarProject
 
         //A manufacturer always starts on a new page, because we have the category name on the page layout.
         $this->addCommand(new NextPage());
-        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, ListTemplate::CONTENT_ORIGIN_TOP);
+        $this->renderSubTitle($label, Variable::VARIABLE_Y_POSITION, AbstractTemplate::CONTENT_ORIGIN_TOP);
 
         //Build table structure.
         $this->initTable(Variable::VARIABLE_Y_POSITION);
@@ -226,10 +231,10 @@ class DataPrintCarList extends AbstractCarProject
      *
      * @param array $definition
      *
-     * @return mixed
+     * @return array
      * @see \Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractProject::$currentType
      */
-    private function filterColumnDefinitionByType(array $definition)
+    private function filterColumnDefinitionByType(array $definition): array
     {
         foreach ($definition as $key => $values) {
             if (null !== $values['contentType'] && $this->currentType != $values['contentType']) {

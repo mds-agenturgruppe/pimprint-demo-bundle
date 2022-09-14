@@ -23,10 +23,10 @@
   },
   "require": {
     "ext-dom": "*",
-    "mds-agenturgruppe/pimprint-core-bundle": "1.3.*"
+    "mds-agenturgruppe/pimprint-core-bundle": "^2.0"
   },
   "require-dev": {
-    "mds-agenturgruppe/php-code-checker": "^1.0"
+    "mds-agenturgruppe/php-code-checker": "^2.0"
   },
   "extra": {
     "pimcore": {

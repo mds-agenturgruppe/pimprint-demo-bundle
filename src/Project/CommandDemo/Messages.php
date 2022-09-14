@@ -41,7 +41,7 @@ class Messages extends AbstractStrategy
      * @return void
      * @throws \Exception
      */
-    private function pluginMessages()
+    private function pluginMessages(): void
     {
         $margin = 30;
         $this->addCommand(new GoToPage(1));

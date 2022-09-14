@@ -44,7 +44,7 @@ abstract class AbstractStrategy
      *
      * @var AbstractProject
      */
-    protected $project;
+    protected AbstractProject $project;
 
     /**
      * Factory method for strategies.
@@ -54,7 +54,7 @@ abstract class AbstractStrategy
      *
      * @return AbstractStrategy
      */
-    public static function factory($class, AbstractProject $project)
+    public static function factory(string $class, AbstractProject $project): AbstractStrategy
     {
         $class = __NAMESPACE__ . "\\" . $class;
 
@@ -87,7 +87,7 @@ abstract class AbstractStrategy
      *
      * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, array $arguments)
     {
         return call_user_func_array([$this->project, $method], $arguments);
     }
@@ -113,13 +113,16 @@ abstract class AbstractStrategy
      * images and in Pimcore demo may be larger ones.
      *
      * @param string   $path
-     * @param null|int $maxWidth Max width of the asset.
+     * @param int|null $maxWidth Max width of the asset.
      * @param string[] $mimeTypes
      *
-     * @return Asset
+     * @return Asset|null
      */
-    protected function loadRandomAsset(string $path, $maxWidth = null, $mimeTypes = ['image/jpeg', 'image/png'])
-    {
+    protected function loadRandomAsset(
+        string $path,
+        int $maxWidth = null,
+        array $mimeTypes = ['image/jpeg', 'image/png']
+    ): ?Asset {
         $listing = new AssetListing();
         $listing->addConditionParam('path LIKE :path', ['path' => $path])
                 ->addConditionParam("mimetype IN (:mimeTypes)", ['mimeTypes' => $mimeTypes])
@@ -128,6 +131,9 @@ abstract class AbstractStrategy
                 ->load();
 
         $asset = $listing->current();
+        if (false === $asset instanceof Asset) {
+            return null;
+        }
         if (null === $maxWidth) {
             return $asset;
         }
@@ -155,8 +161,13 @@ abstract class AbstractStrategy
      * @return void
      * @throws \Exception
      */
-    protected function placeText($text, $left = 12.7, $top = 12.7, $width = 100.0, $height = 4.0): void
-    {
+    protected function placeText(
+        string $text,
+        float $left = 12.7,
+        float $top = 12.7,
+        float $width = 100.0,
+        float $height = 4.0
+    ): void {
         $box = new TextBox('copyText', $left, $top, $width, $height, TextBox::FIT_FRAME_TO_CONTENT);
         $box->addString($text);
         $this->addCommand($box);
@@ -169,7 +180,7 @@ abstract class AbstractStrategy
      *
      * @return string
      */
-    protected function getDemoWords($number = 5)
+    protected function getDemoWords(int $number = 5): string
     {
         $text = $this->callLoripsumApi('plaintext/2/long/headers');
         $text = preg_replace("#[^A-Za-z0-9 ]#", '', $text);
@@ -184,13 +195,13 @@ abstract class AbstractStrategy
      * Returns plaintext demo text from Loripsum API.
      *
      * @param int    $paragraphs
-     * @param string $lenght
+     * @param string $length
      *
      * @return string
      */
-    protected function getDemoText($paragraphs = 2, $lenght = 'medium')
+    protected function getDemoText(int $paragraphs = 2, string $length = 'medium'): string
     {
-        return $this->callLoripsumApi("plaintext/{$lenght}/{$paragraphs}");
+        return $this->callLoripsumApi("plaintext/{$length}/{$paragraphs}");
     }
 
     /**
@@ -210,7 +221,7 @@ abstract class AbstractStrategy
         bool $list = false,
         bool $decorate = false,
         string $length = 'medium'
-    ) {
+    ): string {
         $query = [
             $length,
             $paragraphs,
@@ -232,7 +243,7 @@ abstract class AbstractStrategy
      *
      * @return string
      */
-    protected function callLoripsumApi($query)
+    protected function callLoripsumApi(string $query): string
     {
         $text = file_get_contents("https://loripsum.net/api/" . $query);
         if (false === $text) {

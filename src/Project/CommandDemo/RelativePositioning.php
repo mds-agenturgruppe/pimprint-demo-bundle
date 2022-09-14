@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
@@ -39,6 +40,7 @@ class RelativePositioning extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     public function build(): void
     {
@@ -52,7 +54,7 @@ class RelativePositioning extends AbstractStrategy
 
     /**
      * With Variable command arbitrary variables can be defined in InDesign.
-     * In top and left placement parameters this variables can be used.
+     * In top and left placement parameters these variables can be used.
      *
      * @return void
      * @throws \Exception
@@ -105,7 +107,7 @@ class RelativePositioning extends AbstractStrategy
             ->setTopRelative('yPos', -30.5);
         $this->addCommand($box);
 
-        //Existing varibales can we overwritten anytime.
+        //Existing variables can be overwritten anytime.
         $this->addCommand(new Variable('xPos', 40));
         $this->addCommand(new Variable('yPos', 245));
         $box = $this->createDemoBox();
@@ -116,10 +118,11 @@ class RelativePositioning extends AbstractStrategy
 
     /**
      * When a box is placed the bounds of the box can be defined as dynamically variables.
-     * This variables can be used in left and top positions as manual defined variables.
+     * These variables can be used in left and top positions as manual defined variables.
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function boxVariables(): void
     {
@@ -201,12 +204,12 @@ class RelativePositioning extends AbstractStrategy
 
     /**
      * Demonstrates the usage of Variable\AbstractMath commands. With this commands InDesign sets a variable to
-     * maximum or minimum value of other variables. This is useful to build multi column flexible layouts.
+     * maximum or minimum value of other variables. This is useful to build multi-column flexible layouts.
      *
      * @return void
      * @throws \Exception
      */
-    private function mathVariables()
+    private function mathVariables(): void
     {
         $this->addCommand(new GoToPage(3));
 
@@ -280,6 +283,7 @@ class RelativePositioning extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function demoPage(): void
     {

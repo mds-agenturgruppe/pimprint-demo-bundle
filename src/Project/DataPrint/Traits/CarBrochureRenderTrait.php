@@ -13,7 +13,8 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint\Traits;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
+use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GroupEnd;
@@ -23,6 +24,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MaxValue;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
+use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\BrochureTemplate;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Asset\Image;
@@ -42,8 +44,9 @@ trait CarBrochureRenderTrait
      * @param Car $car
      *
      * @throws \Exception
+     * @throws FilesystemException
      */
-    private function renderVirtualCar(Car $car)
+    private function renderVirtualCar(Car $car): void
     {
         //We add the car itself to the InDesign element group, to have no automatic page break between car and
         //the first two variants.
@@ -70,9 +73,11 @@ trait CarBrochureRenderTrait
      *
      * @param CarProduct $car
      *
+     * @return void
+     * @throws FilesystemException
      * @throws \Exception
      */
-    protected function renderCarDescription(CarProduct $car)
+    protected function renderCarDescription(CarProduct $car): void
     {
         $content = $car->getDescription();
         if (empty($content)) {
@@ -81,7 +86,7 @@ trait CarBrochureRenderTrait
         $asset = $this->getMainImageForCar($car);
         $this->addCommand(new Variable('logoBottom', 0));
         if ($asset instanceof Image) {
-            $logo = new ImageBox(BrochureTemplate::ELEMENT_IMAGE_FLOW, BrochureTemplate::CONTENT_ORIGIN_LEFT);
+            $logo = new ImageBox(AbstractTemplate::ELEMENT_IMAGE_FLOW, AbstractTemplate::CONTENT_ORIGIN_LEFT);
             try {
                 $logo->setAsset($asset);
             } catch (\Exception $e) {
@@ -94,25 +99,25 @@ trait CarBrochureRenderTrait
                  ->setFit(ImageBox::FIT_PROPORTIONALLY)
                  ->setTopRelative(
                      'groupYPos',
-                     BrochureTemplate::ELEMENT_Y_SPACE
+                     AbstractTemplate::ELEMENT_Y_SPACE
                  )
                  ->setVariable('logoBottom', Variable::POSITION_BOTTOM)
                  ->setBoxIdentReferenced('image');
             $this->addCommand($logo);
         }
 
-        $text = new Text(BrochureTemplate::STYLE_PARAGRAPH_COPYTEXT);
+        $text = new Text(AbstractTemplate::STYLE_PARAGRAPH_COPYTEXT);
         $text->addHtml($content);
-        $description = new TextBox(BrochureTemplate::ELEMENT_COPYTEXT);
+        $description = new TextBox(AbstractTemplate::ELEMENT_COPYTEXT);
         $description->addText($text)
                     ->setHeight(150) //Creates a very large box and adjusts box to content when element is places
-                    ->setWidth(BrochureTemplate::CONTENT_WIDTH)
-                    ->setResize(TextBox::RESIZE_WIDTH_HEIGHT)
+                    ->setWidth(AbstractTemplate::CONTENT_WIDTH)
+                    ->setResize(AbstractBox::RESIZE_WIDTH_HEIGHT)
                     ->setFit(TextBox::FIT_FRAME_TO_CONTENT)
-                    ->setLeft(BrochureTemplate::CONTENT_ORIGIN_LEFT)
+                    ->setLeft(AbstractTemplate::CONTENT_ORIGIN_LEFT)
                     ->setTopRelative(
                         'groupYPos',
-                        BrochureTemplate::ELEMENT_Y_SPACE
+                        AbstractTemplate::ELEMENT_Y_SPACE
                     )
                     ->setVariable('textBottom', Variable::POSITION_BOTTOM)
                     ->setBoxIdentReferenced('description');
@@ -127,9 +132,11 @@ trait CarBrochureRenderTrait
      *
      * @param array $cars
      *
+     * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
-    private function renderCarVariantsColumned(array $cars)
+    private function renderCarVariantsColumned(array $cars): void
     {
         $first = true;
         $rightColumn = false;
@@ -137,9 +144,9 @@ trait CarBrochureRenderTrait
 
         //Groups can be positioned when adding the GroupEnd command.
         $groupEnd = new GroupEnd($this->createCheckNewPage(), true);
-        $groupEnd->setTopRelative(Variable::VARIABLE_Y_POSITION, BrochureTemplate::BLOCK_Y_SPACE)
+        $groupEnd->setTopRelative(Variable::VARIABLE_Y_POSITION, AbstractTemplate::BLOCK_Y_SPACE)
                  ->setVariable(Variable::VARIABLE_Y_POSITION, Variable::POSITION_BOTTOM)
-                 ->setLeft(BrochureTemplate::PAGE_MARGIN_LEFT);
+                 ->setLeft(AbstractTemplate::PAGE_MARGIN_LEFT);
 
         foreach ($cars as $car) {
             $rightColumn = 0 === ++$counter % 2;
@@ -164,28 +171,30 @@ trait CarBrochureRenderTrait
      * @param Car  $car
      * @param bool $rightColumn
      *
+     * @return void
+     * @throws FilesystemException
      * @throws \Exception
      */
-    private function renderCarVariantColumn(Car $car, bool $rightColumn)
+    private function renderCarVariantColumn(Car $car, bool $rightColumn): void
     {
-        $leftPos = BrochureTemplate::CONTENT_ORIGIN_LEFT;
+        $leftPos = AbstractTemplate::CONTENT_ORIGIN_LEFT;
         if (true === $rightColumn) {
             $leftPos = BrochureTemplate::COLUMN_RIGHT_ORIGIN_LEFT;
         }
         //Appends boxIdentReference for content aware updates.
         $this->appendToBoxIdentReference($car->getId());
 
-        $headline = new TextBox(BrochureTemplate::ELEMENT_HEADLINE);
+        $headline = new TextBox(AbstractTemplate::ELEMENT_HEADLINE);
         $headline->addString($this->getVariantHeadline($car))
                  ->setWidth(BrochureTemplate::COLUMN_WIDTH)
-                 ->setTopRelative('groupYPos', BrochureTemplate::ELEMENT_Y_SPACE)
+                 ->setTopRelative('groupYPos', AbstractTemplate::ELEMENT_Y_SPACE)
                  ->setLeft($leftPos)
                  ->setResize(AbstractBox::RESIZE_WIDTH)
                  ->setVariable('colYPos', Variable::POSITION_BOTTOM)
                  ->setBoxIdentReferenced('headline');
         $this->addCommand($headline);
 
-        $line = new CopyBox(BrochureTemplate::ELEMENT_STYLE_BOX);
+        $line = new CopyBox(AbstractTemplate::ELEMENT_STYLE_BOX);
         $line->setWidth(BrochureTemplate::COLUMN_WIDTH)
              ->setTop(0)
              ->setLeft($leftPos)
@@ -196,7 +205,7 @@ trait CarBrochureRenderTrait
 
         $this->addCommand($line);
 
-        $description = new TextBox(BrochureTemplate::ELEMENT_COPYTEXT);
+        $description = new TextBox(AbstractTemplate::ELEMENT_COPYTEXT);
         $description->addString($this->getVariantDescription($car))
                     ->setWidth(BrochureTemplate::COLUMN_WIDTH)
                     ->setHeight(50)
@@ -212,7 +221,7 @@ trait CarBrochureRenderTrait
             $asset = $asset->getImage();
         }
         if (true === $asset instanceof Asset) {
-            $image = new ImageBox(BrochureTemplate::ELEMENT_IMAGE_ROUNDED);
+            $image = new ImageBox(AbstractTemplate::ELEMENT_IMAGE_ROUNDED);
             $image->setAsset($asset)
                   ->setFit(ImageBox::FIT_FILL_PROPORTIONALLY)
                   ->setWidth(BrochureTemplate::CAR_VARIANT_IMAGE_WIDTH)
@@ -228,7 +237,7 @@ trait CarBrochureRenderTrait
         $content = $this->getVariantSalesInformation($car);
         $text = new Text();
         $text->addHtml($content);
-        $textBox = new TextBox(BrochureTemplate::ELEMENT_COPYTEXT_BOTTOM);
+        $textBox = new TextBox(AbstractTemplate::ELEMENT_COPYTEXT_BOTTOM);
         $textBox->addText($text)
                 ->setTopRelative('assetTop')
                 ->setLeftRelative('assetRight', BrochureTemplate::HEADLINE_LINE_Y_SPACE)

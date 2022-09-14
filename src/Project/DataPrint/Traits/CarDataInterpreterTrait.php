@@ -13,15 +13,13 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint\Traits;
 
-use AppBundle\Model\Product\Car as CarProduct;
+use App\Model\Product\Car as CarProduct;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\BodyStyle;
 use Pimcore\Model\DataObject\Car;
 use Pimcore\Model\DataObject\Data\Hotspotimage;
 use Pimcore\Model\DataObject\Data\ImageGallery;
-use Pimcore\Model\DataObject\Data\QuantityValue;
 use Pimcore\Model\DataObject\Manufacturer;
-use Pimcore\Model\DataObject\Objectbrick\Data\SaleInformation;
 
 /**
  * Trait CarDataInterpreterTrait
@@ -40,11 +38,11 @@ trait CarDataInterpreterTrait
      *
      * @return Asset|null
      */
-    protected function getMainImageForCar(CarProduct $car)
+    protected function getMainImageForCar(CarProduct $car): ?Asset
     {
         $asset = $car->getMainImage();
-        if ($asset instanceof Asset) {
-            return $asset;
+        if ($asset instanceof Hotspotimage) {
+            return $asset->getImage();
         }
         if (self::TYPE_CATEGORY == $this->currentType) {
             $manufacturer = $car->getManufacturer();
@@ -73,7 +71,7 @@ trait CarDataInterpreterTrait
      *
      * @return string
      */
-    protected function getVariantHeadline(Car $car)
+    protected function getVariantHeadline(Car $car): string
     {
         $parts = [];
         if (self::TYPE_CATEGORY == $this->currentType) {
@@ -99,7 +97,7 @@ trait CarDataInterpreterTrait
      *
      * @return string
      */
-    protected function getVariantDescription(Car $car)
+    protected function getVariantDescription(Car $car): string
     {
         $parts = [];
         $bodyStyle = $car->getBodyStyle();
@@ -125,11 +123,11 @@ trait CarDataInterpreterTrait
      *
      * @return string
      */
-    protected function getVariantSalesInformation(Car $car)
+    protected function getVariantSalesInformation(Car $car): string
     {
         try {
             $salesInformation = $this->getSalesInformation($car);
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             return '';
         }
         $contentDefinition = [

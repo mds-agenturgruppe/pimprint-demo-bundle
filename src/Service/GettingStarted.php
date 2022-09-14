@@ -29,7 +29,7 @@ class GettingStarted extends AbstractProject
      *
      * @var PublicationTreeBuilder
      */
-    private $treeBuilder;
+    private PublicationTreeBuilder $treeBuilder;
 
     /**
      * GettingStarted constructor.

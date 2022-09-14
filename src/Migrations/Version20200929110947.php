@@ -14,8 +14,8 @@
 namespace Mds\PimPrint\DemoBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractProject;
-use Pimcore\Migrations\Migration\AbstractPimcoreMigration;
 use Pimcore\Model\Property\Predefined;
 
 /**
@@ -23,14 +23,14 @@ use Pimcore\Model\Property\Predefined;
  *
  * @package Mds\PimPrint\DemoBundle\Migrations
  */
-class Version20200929110947 extends AbstractPimcoreMigration
+class Version20200929110947 extends AbstractMigration
 {
     /**
      * Properties to create.
      *
      * @var array
      */
-    protected $properties = [
+    protected array $properties = [
         [
             "name"        => "PimPrint Template",
             "description" => "InDesign template file for PimPrint rendering",
@@ -40,30 +40,22 @@ class Version20200929110947 extends AbstractPimcoreMigration
             "inheritable" => true,
         ],
         [
-            "name" => "PimPrint Asset",
+            "name"        => "PimPrint Asset",
             "description" => "Alternative Asset for PimPrint rendering",
-            "key" => "pimprint_asset",
-            "type" => "asset",
-            "ctype" => "asset",
+            "key"         => "pimprint_asset",
+            "type"        => "asset",
+            "ctype"       => "asset",
         ]
     ];
-
-    /**
-     * No sql migrations
-     *
-     * @return bool
-     */
-    public function doesSqlMigrations(): bool
-    {
-        return false;
-    }
 
     /**
      * Up method.
      *
      * @param Schema $schema
+     *
+     * @return void
      */
-    public function up(Schema $schema)
+    public function up(Schema $schema): void
     {
         $this->addProperties($this->properties);
     }
@@ -72,8 +64,10 @@ class Version20200929110947 extends AbstractPimcoreMigration
      * Down method.
      *
      * @param Schema $schema
+     *
+     * @return void
      */
-    public function down(Schema $schema)
+    public function down(Schema $schema): void
     {
         $this->removeProperties($this->properties);
     }
@@ -88,14 +82,14 @@ class Version20200929110947 extends AbstractPimcoreMigration
         foreach ($properties as $definition) {
             $property = Predefined::getByKey($definition['key']);
             if ($property instanceof Predefined) {
-                $this->writeMessage(sprintf("Predefined Property '%s' already exists.", $definition['key']));
+                $this->write(sprintf("Predefined Property '%s' already exists.", $definition['key']));
                 continue;
             }
 
             $property = new Predefined();
             $property->setValues($definition);
             $property->save();
-            $this->writeMessage(sprintf("Predefined Property '%s' added.", $definition['key']));
+            $this->write(sprintf("Predefined Property '%s' added.", $definition['key']));
         }
     }
 

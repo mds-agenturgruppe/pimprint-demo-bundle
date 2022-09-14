@@ -32,7 +32,7 @@ trait SalesInformationTrait
      * @return SaleInformation
      * @throws \Exception
      */
-    protected function getSalesInformation(AbstractObject $object)
+    protected function getSalesInformation(AbstractObject $object): SaleInformation
     {
         if (false === method_exists($object, 'getSaleInformation')) {
             throw new \Exception();
@@ -56,7 +56,7 @@ trait SalesInformationTrait
      *
      * @return string
      */
-    protected function getPriceEurFormatted(AbstractObject $object)
+    protected function getPriceEurFormatted(AbstractObject $object): string
     {
         try {
             $salesInformation = $this->getSalesInformation($object);
@@ -78,7 +78,7 @@ trait SalesInformationTrait
      *
      * @return string
      */
-    protected function getMileageFormatted(AbstractObject $object)
+    protected function getMileageFormatted(AbstractObject $object): string
     {
         try {
             $salesInformation = $this->getSalesInformation($object);

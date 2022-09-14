@@ -55,9 +55,11 @@ trait ElementCollectorTrait
      * - One Manufacturer
      * - All manufacturers when the folder Manufacturers is selected.
      *
-     * @param AbstractObject $object
+     * @param AbstractElement|AbstractObject $object
+     *
+     * @return void
      */
-    protected function collectElements(AbstractObject $object)
+    protected function collectElements(AbstractElement|AbstractObject $object): void
     {
         if ($object instanceof Category) {
             if (true === $this->hasCategoryRenderableElements($object)) {
@@ -88,7 +90,7 @@ trait ElementCollectorTrait
      *
      * @return array
      */
-    private function loadManufacturersFromFolder(Folder $folder)
+    private function loadManufacturersFromFolder(Folder $folder): array
     {
         $listing = new ManufacturerListing();
         $listing->setUnpublished(false)
@@ -109,13 +111,13 @@ trait ElementCollectorTrait
     }
 
     /**
-     * {@inheritDoc}
+     * Renders $object
      *
      * @param AbstractElement $object
      *
-     * @throws \Exception
+     * @return void
      */
-    protected function renderElement(AbstractElement $object)
+    protected function renderElement(AbstractElement $object): void
     {
         switch (true) {
             case $object instanceof Category:

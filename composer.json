@@ -16,17 +16,18 @@
     "database-publishing",
     "indesign"
   ],
+  "require": {
+    "ext-dom": "*",
+    "mds-agenturgruppe/pimprint-core-bundle": "^3.0",
+    "fakerphp/faker": "^1.23"
+  },
+  "require-dev": {
+    "mds-agenturgruppe/php-code-checker": "^2.0"
+  },
   "autoload": {
     "psr-4": {
       "Mds\\PimPrint\\DemoBundle\\": "src/"
     }
-  },
-  "require": {
-    "ext-dom": "*",
-    "mds-agenturgruppe/pimprint-core-bundle": "^2.0"
-  },
-  "require-dev": {
-    "mds-agenturgruppe/php-code-checker": "^2.0"
   },
   "extra": {
     "pimcore": {

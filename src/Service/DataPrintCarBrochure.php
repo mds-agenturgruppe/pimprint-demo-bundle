@@ -35,10 +35,11 @@ class DataPrintCarBrochure extends AbstractCarProject
      *
      * @param Category $category
      *
-     * @throws \Exception
+     * @return void
      * @throws FilesystemException
+     * @throws \Exception
      */
-    protected function renderCategory(Category $category)
+    protected function renderCategory(Category $category): void
     {
         $label = $category->getName();
 
@@ -58,10 +59,11 @@ class DataPrintCarBrochure extends AbstractCarProject
      *
      * @param Manufacturer $manufacturer
      *
-     * @throws \Exception
+     * @return void
      * @throws FilesystemException
+     * @throws \Exception
      */
-    protected function renderManufacturer(Manufacturer $manufacturer)
+    protected function renderManufacturer(Manufacturer $manufacturer): void
     {
         //Set boxIdentReference for content aware updates.
         $this->setBoxIdentReference($manufacturer->getId());

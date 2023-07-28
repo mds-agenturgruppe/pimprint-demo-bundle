@@ -37,7 +37,7 @@ class PageHandling extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
 
         $this->firstPage();
         $this->createPageTemplate();

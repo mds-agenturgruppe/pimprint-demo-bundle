@@ -16,8 +16,7 @@ namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\RemoveEmptyLayers;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SetLayer;
-use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
-use Mds\PimPrint\CoreBundle\Service\PluginParameters;
+use Mds\PimPrint\CoreBundle\InDesign\Command\SortLayers;
 
 /**
  * Demonstrates layer functions when placing elements in InDesign Document.
@@ -34,13 +33,12 @@ class Layers extends AbstractStrategy
      */
     public function build(): void
     {
+        $this->setDocumentSettings();
+
         $this->boxLayers(12.7);
+        $this->sortLayers();
 
-        //The layer behaviour of TextBox can either be the same as normal boxes or be automatic language dependent.
-        $this->textLayers(40);
-        $this->textLayersLanguage(50);
-
-        //Empty layers can be removed with RemoveEmptyLayers command.
+//        Empty layers can be removed with RemoveEmptyLayers command.
         $this->addCommand(
             new RemoveEmptyLayers()
         );
@@ -56,17 +54,18 @@ class Layers extends AbstractStrategy
      */
     private function boxLayers(float $topPosition): void
     {
-        //Element is placed on the same layer as in the template document. If the layer doesn't exist it's created.
+//        Element is placed on the same layer as in the template document.
+//        If the layer doesn't exist in the generated document the layer is created automatically.
         $this->addCommand(
             new CopyBox('image', 12.7, $topPosition)
         );
 
-        //Layer name that a element is placed on can be set via LayerTrait
+//        Layer name that an element is placed on can be set via LayerTrait
         $box = new CopyBox('image', 50, $topPosition);
         $box->setLayer('Layer A');
         $this->addCommand($box);
 
-        //New layers can be created with SetLayer command. All following boxes are added to the last set layer.
+//        New layers can be created with SetLayer command. All following boxes are added to the last set layer.
         $this->addCommand(
             new SetLayer('Layer B')
         );
@@ -87,76 +86,29 @@ class Layers extends AbstractStrategy
             new CopyBox('copyBox', 160, $topPosition)
         );
 
-        //New layers are only created when a element is placed on it. This layer won't be created in the document.
+//        New layers are only created when an element is placed on it. This layer won't be created in the document.
         $this->addCommand(new SetLayer('Empty layer'));
     }
 
     /**
-     * Demonstrates the language independent layer placement of TextBox.
-     *
-     * @param float $topPosition
+     * Demonstrates the sorting of layers
      *
      * @return void
      * @throws \Exception
      */
-    private function textLayers(float $topPosition): void
+    private function sortLayers(): void
     {
-        //We deactivate the default use language layer option.
-        TextBox::setDefaultUseLanguageLayer(false);
-
-        //Target layer should be "Text Layer".
-        $this->addCommand(
-            new SetLayer('Text Layer')
-        );
-
-        //Element is placed on layer "Text Layer".
-        $box = new TextBox('copyText', 12.7, $topPosition, 70, 5);
-        $box->addString("Element on 'Text Layer'");
-        $this->addCommand($box);
-
-        //We activate the default value to demonstrate the setter in TextBox.
-        TextBox::setDefaultUseLanguageLayer(true);
-
-        //Layer name that a element is placed on can be set via LayerTrait
-        $box = new TextBox('copyText', 90, $topPosition, 70, 5);
-        $box->addString("Element on 'Direct Text Layer'")
-            ->setUseLanguageLayer(false) //TextBox has a setter for the instance.
-            ->setLayer("Direct Text Layer");
-        $this->addCommand($box);
-    }
-
-    /**
-     * Demonstrates the language dependent layer placement of TextBox.
-     *
-     * @param float $topPosition
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function textLayersLanguage(float $topPosition): void
-    {
-        //We activate the default use language layer option.
-        TextBox::setDefaultUseLanguageLayer(true);
-
-        //TextBoxes are always placed on language dependent layers.
-        //The current active language short code will add as postfix to the target layer name.
-        //eg. "Layer A" will be "Layer A de"
-        $language = $this->pluginParams()
-                         ->get(PluginParameters::PARAM_LANGUAGE);
+//        Layers are sorted by defining an array with the order of layer names
+//        In this example we order the layers created in boxLayers() in reverse order
+        $order = [
+            'Layer C', //Exact layer name
+            'Layer B', //Exact layer name
+            'Layer A', //Exact layer name
+        ];
+//        All layers not defined in the order array are left where they are.
 
         $this->addCommand(
-            new SetLayer('Layers Text')
+            new SortLayers($order)
         );
-
-        //Element is placed on layer "Text Layer" with the language iso postfix.
-        $box = new TextBox('copyText', 12.7, $topPosition, 70, 5);
-        $box->addString("Element on 'Text Layer $language'");
-        $this->addCommand($box);
-
-        //Layer name that an element is placed on can be set via LayerTrait.
-        $box = new TextBox('copyText', 90, $topPosition, 70, 5);
-        $box->addString("Element on 'Direct Text Layer $language'")
-            ->setLayer("Direct Text Layer");
-        $this->addCommand($box);
     }
 }

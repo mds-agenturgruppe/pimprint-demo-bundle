@@ -31,7 +31,7 @@ class Messages extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
         $this->pluginMessages();
     }
 

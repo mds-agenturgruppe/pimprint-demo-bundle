@@ -13,7 +13,9 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\DataPrint;
 
-use Mds\PimPrint\CoreBundle\Project\AbstractProject as PimPrintAbstractProject;
+use Mds\PimPrint\CoreBundle\InDesign\Command\DocumentSetup;
+use Mds\PimPrint\CoreBundle\InDesign\Command\DocumentTemplateSetup;
+use Mds\PimPrint\CoreBundle\Project\RenderingProject;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\CommonElementsTrait;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\ElementCollectorTrait;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\Traits\PageLayoutTrait;
@@ -27,7 +29,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @package Mds\PimPrint\DemoBundle\Project\DataPrint
  */
-abstract class AbstractProject extends PimPrintAbstractProject
+abstract class AbstractProject extends RenderingProject
 {
     use ElementCollectorTrait;
     use CommonElementsTrait;
@@ -109,11 +111,34 @@ abstract class AbstractProject extends PimPrintAbstractProject
     public function buildPublication(): void
     {
         $this->startRendering(false);
+        $this->setDocumentSettings();
+
         $this->startPages();
         $this->renderPages(
             $this->publicationLoader->getRenderedElement()
         );
         $this->stopRendering();
+    }
+
+    /**
+     * Sets default demo page settings
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function setDocumentSettings(): void
+    {
+//        We transfer the document settings from the template file.
+        $command = new DocumentTemplateSetup();
+//        Facing pages is used from the manually created document to have the demos
+//        work with or without facing pages to demonstrate the dynamic facing page layout creation.
+        $command->setFacingPages(false);
+        $this->addCommand($command);
+
+//        We set the number of pages to 50, to have enough pages in the document for all command demos.
+//        Empty pages will be removed at the end of the rendering.
+        $command = new DocumentSetup(null, 50);
+        $this->addCommand($command);
     }
 
     /**

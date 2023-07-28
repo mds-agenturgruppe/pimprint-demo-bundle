@@ -3,31 +3,39 @@ services:
         autowire: true
         autoconfigure: true
         public: false
+
     #Register rendering projects as service
     Mds\PimPrint\DemoBundle\Service\GettingStarted:
-        parent: mds.pimprint.core.abstract_project #Rendering projects must use 'mds.pimprint.core.abstract_project' as parent
+        parent: mds.pimprint.core.rendering_project #Rendering projects must use 'mds.pimprint.core.rendering_project' as parent
         public: true    #must be defined public
         autowire: true
         autoconfigure: false
     Mds\PimPrint\DemoBundle\Service\CommandDemo:
-        parent: mds.pimprint.core.abstract_project
+        parent: mds.pimprint.core.rendering_project
+        public: true
+        autowire: true
+        autoconfigure: false
+    Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject:
+        parent: mds.pimprint.core.master_locale_rendering_project
         public: true
         autowire: true
         autoconfigure: false
     Mds\PimPrint\DemoBundle\Service\DataPrintCarBrochure:
-        parent: mds.pimprint.core.abstract_project
+        parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
     Mds\PimPrint\DemoBundle\Service\DataPrintCarList:
-        parent: mds.pimprint.core.abstract_project
+        parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
     Mds\PimPrint\DemoBundle\Service\DataPrintAccessoryPartList:
-        parent: mds.pimprint.core.abstract_project
+        parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
+
     #Helper services
     Mds\PimPrint\DemoBundle\Service\DataPrintPublicationLoader: ~
+    Mds\PimPrint\DemoBundle\Project\LocalizationDemo\CarTreeBuilder: ~

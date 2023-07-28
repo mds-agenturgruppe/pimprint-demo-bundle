@@ -35,7 +35,7 @@ class ImageBox extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
 
         $topPosition = 12.7;
         $topPosition = $this->placeImage($topPosition);
@@ -121,21 +121,22 @@ class ImageBox extends AbstractStrategy
 
         $left = 12.7;
         $topPosition += $height + 5;
-        //#4 Demonstrates FIT_FRAME_TO_CONTENT mode
-        $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
-        $imageBox->setFit(ImageBoxCommand::FIT_FRAME_TO_CONTENT);
-        $this->addCommand($imageBox);
-
-        $left += $width + $margin;
-        //#5 Demonstrates FIT_PROPORTIONALLY mode
+        //#4 Demonstrates FIT_PROPORTIONALLY mode
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_PROPORTIONALLY);
         $this->addCommand($imageBox);
 
         $left += $width + $margin;
-        //#6 Demonstrates FIT_FILL_PROPORTIONALLY mode
+        //#5 Demonstrates FIT_FILL_PROPORTIONALLY mode
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_FILL_PROPORTIONALLY);
+        $this->addCommand($imageBox);
+
+        $left = 12.7;
+        $topPosition += $height + 5;
+        //#6 Demonstrates FIT_FRAME_TO_CONTENT mode
+        $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
+        $imageBox->setFit(ImageBoxCommand::FIT_FRAME_TO_CONTENT);
         $this->addCommand($imageBox);
     }
 

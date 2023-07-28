@@ -14,14 +14,16 @@
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
 use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractCommand;
+use Mds\PimPrint\CoreBundle\InDesign\Command\DocumentSetup;
+use Mds\PimPrint\CoreBundle\InDesign\Command\DocumentTemplateSetup;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SetLayer;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
+use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 use Mds\PimPrint\CoreBundle\Project\AbstractProject;
 use Mds\PimPrint\CoreBundle\Service\ImageDimensions;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
 use Mds\PimPrint\CoreBundle\Service\SpecialChars;
-use Pimcore\Model\Asset;
-use Pimcore\Model\Asset\Listing as AssetListing;
+use Mds\PimPrint\DemoBundle\Project\Traits\LoadRandomAssetTrait;
 
 /**
  * Abstract strategy for command demos to encapsulate each demo publication.
@@ -39,6 +41,8 @@ use Pimcore\Model\Asset\Listing as AssetListing;
  */
 abstract class AbstractStrategy
 {
+    use LoadRandomAssetTrait;
+
     /**
      * PimPrint project instance.
      *
@@ -79,17 +83,42 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Delegated all undefined method calls to $project.
-     * Convenience method offer in all strategies the same interface as in CommandDemo project.
+     * Initializes rendering of demo publication.
      *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return mixed
+     * @return void
+     * @throws \Exception
      */
-    public function __call(string $method, array $arguments)
+    protected function initDemo(): void
     {
-        return call_user_func_array([$this->project, $method], $arguments);
+        $this->setDocumentSettings();
+        $this->initDemoLayer();
+    }
+
+    /**
+     * Sets default demo page settings
+     *
+     * @return void
+     * @throws \Exception
+     */
+    protected function setDocumentSettings(): void
+    {
+//        Use the predefined A4PortraitTemplate page template class with the default InDesign page settings.
+        $example = new DocumentSetup(new A4PortraitTemplate(), 20);
+//        Note: In "Mds\PimPrint\CoreBundle\InDesign\Template\Concrete" in many page templates are predefined
+//        with standard indesign dimensions
+
+//      But we simply transfer the document settings from the template file "PimPrint-CommandDemo.indd"
+        $command = new DocumentTemplateSetup();
+//        Facing pages is used from the manually created document to have the "Page Handling" demo
+//        work with or without facing pages to demonstrate the dynamic facing page layout creation.
+        $command->setFacingPages(false)
+            ->setStartNumber(true);
+        $this->addCommand($command);
+
+//        We set the number of pages to 20, to have enough pages in the document for all command demos.
+//        Empty pages will be removed at the end of the rendering.
+        $command = new DocumentSetup(null, 20);
+        $this->addCommand($command);
     }
 
     /**
@@ -103,51 +132,9 @@ abstract class AbstractStrategy
         $class = (new \ReflectionClass($this))->getShortName();
         $this->addCommand(new SetLayer($class . ' Demo'));
         $this->setBoxIdentGenericPostfix($class);
-
-        TextBox::setDefaultUseLanguageLayer(false);
     }
 
-    /**
-     * Loads a random jpg or png Asset in $path.
-     * If $maxWidth is set only assets that are smaller are returned. In some demonstrations we wan't to have small
-     * images and in Pimcore demo may be larger ones.
-     *
-     * @param string   $path
-     * @param int|null $maxWidth Max width of the asset.
-     * @param string[] $mimeTypes
-     *
-     * @return Asset|null
-     */
-    protected function loadRandomAsset(
-        string $path,
-        int $maxWidth = null,
-        array $mimeTypes = ['image/jpeg', 'image/png']
-    ): ?Asset {
-        $listing = new AssetListing();
-        $listing->addConditionParam('path LIKE :path', ['path' => $path])
-                ->addConditionParam("mimetype IN (:mimeTypes)", ['mimeTypes' => $mimeTypes])
-                ->setLimit(1)
-                ->setOrderKey('RAND()', false)
-                ->load();
 
-        $asset = $listing->current();
-        if (false === $asset instanceof Asset) {
-            return null;
-        }
-        if (null === $maxWidth) {
-            return $asset;
-        }
-        $dimensions = $asset->getDimensions();
-        if (false === $dimensions) {
-            //we can't check the size. Try another image.
-            return $this->loadRandomAsset($path, $maxWidth, $mimeTypes);
-        }
-        if ($dimensions['width'] > $maxWidth) {
-            return $this->loadRandomAsset($path, $maxWidth, $mimeTypes);
-        }
-
-        return $asset;
-    }
 
     /**
      * Places a TextBox with $text at $left,$top with size $widthX$height on current active page.
@@ -251,5 +238,19 @@ abstract class AbstractStrategy
         }
 
         return trim($text);
+    }
+
+    /**
+     * Delegated all undefined method calls to $project.
+     * Convenience method offer in all strategies the same interface as in CommandDemo project.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
+    {
+        return call_user_func_array([$this->project, $method], $arguments);
     }
 }

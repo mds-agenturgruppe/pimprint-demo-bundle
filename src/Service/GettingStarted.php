@@ -14,7 +14,7 @@
 namespace Mds\PimPrint\DemoBundle\Service;
 
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox;
-use Mds\PimPrint\CoreBundle\Project\AbstractProject;
+use Mds\PimPrint\CoreBundle\Project\RenderingProject;
 use Mds\PimPrint\CoreBundle\Service\InDesign\PublicationTreeBuilder;
 
 /**
@@ -22,23 +22,15 @@ use Mds\PimPrint\CoreBundle\Service\InDesign\PublicationTreeBuilder;
  *
  * @package Mds\PimPrint\DemoBundle\Service
  */
-class GettingStarted extends AbstractProject
+class GettingStarted extends RenderingProject
 {
-    /**
-     * PublicationTreeBuilder instance.
-     *
-     * @var PublicationTreeBuilder
-     */
-    private PublicationTreeBuilder $treeBuilder;
-
     /**
      * GettingStarted constructor.
      *
      * @param PublicationTreeBuilder $treeBuilder
      */
-    public function __construct(PublicationTreeBuilder $treeBuilder)
+    public function __construct(private PublicationTreeBuilder $treeBuilder)
     {
-        $this->treeBuilder = $treeBuilder;
     }
 
     /**

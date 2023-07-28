@@ -379,7 +379,7 @@ class DataPrintAccessoryPartList extends AbstractProject
     /**
      * Filters $parts for visibility for current user.
      *
-     * @param AccessoryPart[] $parts
+     * @param array $parts
      *
      * @return array
      */

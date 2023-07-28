@@ -12,7 +12,7 @@ mds_pim_print_core:
             ident: 'commandDemo' #Use for multi Bundle or configuration implementations.
             name: 'Command Demo' #Name of project displayed in InDesign-Plugin.
             service: 'Mds\PimPrint\DemoBundle\Service\CommandDemo' #Service to use to render the project. Must inherit AbstractProject.
-            create_update_info: false
+            create_update_layers: false
             template:
                 default: 'PimPrint-CommandDemo.indd' #Default InDesign template filename.
 #            plugin_elements: #Available plugin elements.
@@ -25,6 +25,14 @@ mds_pim_print_core:
                 pre_download: false #Toggles asset download before rendering start.
 #                warnings_on_page: true #Toggles missing asset onPage warnings messages.
 #                thumbnail: 'product_detail_small' #Optional Pimcore thumbnail configuration for preview images.
+        localizationDemo:
+            ident: 'localizationDemo'
+            name: 'Localization Demo'
+            service: 'Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject'
+            template:
+                default: 'PimPrint-CommandDemo.indd'
+            assets:
+                download: true
         dataPrintCarBrochure:
             ident: 'dataPrintCarBrochure'
             name: 'Car Brochure'

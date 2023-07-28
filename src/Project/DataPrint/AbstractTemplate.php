@@ -19,31 +19,17 @@ use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
  * Abstract DataPrint template class with page size and layout definitions used in all DataPrint demos.
  *
  * @note    Template classes are a best practice to define constants with elementNames, positions, margins, etc.
- *          With these files layout adaptions regarding used elements or positions can made in a central file.
+ *          With these files layout adaptions regarding used elements or positions can be made in a central file.
  *
  * @package Mds\PimPrint\DemoBundle\Project\DataPrint
- * @todo    Move Page_Margin_ and Content_* calculation to build in feature via method access
- *          in \Mds\PimPrint\CoreBundle\InDesign\Template\AbstractTemplate.
  */
 class AbstractTemplate extends A4PortraitTemplate
 {
     /**
-     * Page margins.
-     *
-     * @var float
-     */
-    const PAGE_MARGIN_TOP = 12.7;
-
-    const PAGE_MARGIN_BOTTOM = self::PAGE_MARGIN_TOP;
-
-    const PAGE_MARGIN_LEFT = self::PAGE_MARGIN_TOP;
-
-    const PAGE_MARGIN_RIGHT = self::PAGE_MARGIN_TOP;
-
-    /**
      * Content sizes and positions
      *
      * @var float
+     * @see \Mds\PimPrint\CoreBundle\InDesign\Template\BestPractices\ContentSizesPositions
      */
     const CONTENT_WIDTH = self::PAGE_WIDTH - self::PAGE_MARGIN_LEFT - self::PAGE_MARGIN_RIGHT;
 
@@ -54,6 +40,8 @@ class AbstractTemplate extends A4PortraitTemplate
     const CONTENT_ORIGIN_LEFT = self::PAGE_MARGIN_LEFT;
 
     const CONTENT_BOTTOM = self::PAGE_HEIGHT - self::PAGE_MARGIN_BOTTOM;
+
+    const CONTENT_RIGHT = self::PAGE_WIDTH - self::PAGE_MARGIN_RIGHT;
 
     /**
      * Common Y in mm space between elements.

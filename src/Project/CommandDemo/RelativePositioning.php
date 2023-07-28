@@ -19,6 +19,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
+use Mds\PimPrint\CoreBundle\InDesign\Command\VariableOutput;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MaxValue;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MinValue;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
@@ -44,7 +45,7 @@ class RelativePositioning extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
 
         $this->manualVariables();
         $this->boxVariables();
@@ -148,7 +149,14 @@ class RelativePositioning extends AbstractStrategy
               ->setVariable('rightPos', Variable::POSITION_RIGHT);
         $this->addCommand($image);
 
-        //As manual defined variables new elements can be placed relative to the the variables.
+        //For development purpose variables can be output in the plugin.
+        //By default, the output is only done in 'dev' environment. (See optional setForce() option)
+
+        //Outputs the variable 'topPos' in the plugin with optional label.
+        $this->addCommand(new VariableOutput('topPos', 'Image topPos'));
+
+
+        //As manual defined variables new elements can be placed relative to the variables.
         //By this elements can be positioned relative to other elements.
 
         //Box is placed at top-left corner of image
@@ -254,15 +262,13 @@ class RelativePositioning extends AbstractStrategy
              ->setVariable('bottomCol1', Variable::POSITION_BOTTOM);
         $this->addCommand($text);
 
-        //Random amount of boxed in second 'column'
-        for ($i = 0; $i <= rand(1, 2); $i++) {
+        //Random box height in second 'column'
             $box = $this->createDemoBox();
             $box->setLeft(120)
+                ->setHeight(rand(20, 100))
                 ->setTopRelative('topPos', 5)
-                ->setVariable('topPos', Variable::POSITION_BOTTOM)
                 ->setVariable('bottomCol2', Variable::POSITION_BOTTOM);
             $this->addCommand($box);
-        }
 
         //Set variable 'maxColumn' to the maximum of 'bottomCol1' and 'bottomCol2'
         $this->addCommand(

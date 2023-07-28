@@ -66,28 +66,12 @@ abstract class AbstractCarProject extends AbstractProject
     }
 
     /**
-     * Generates InDesign Commands to build the selected publication in InDesign.
-     *
-     * @return void
-     * @throws \Exception
-     */
-    public function buildPublication(): void
-    {
-        $this->startRendering(false);
-        $this->startPages();
-        $this->renderPages(
-            $this->publicationLoader->getRenderedElement()
-        );
-        $this->stopRendering();
-    }
-
-    /**
      * Loads all published Car objects for $type object-type assigned to $category visible for current user.
      *
      * @param Category $category
      * @param string   $type
      *
-     * @return Car[]
+     * @return array
      */
     protected function loadCarsForCategory(Category $category, string $type): array
     {
@@ -149,7 +133,7 @@ abstract class AbstractCarProject extends AbstractProject
      * In publications only 'root' virtual-cars that are visible for the current user are rendered.
      * By checking the parent of each car, BodyStyle 'virtual-car' Car objects are filtered out.
      *
-     * @param Car[] $cars
+     * @param array $cars
      *
      * @return array
      */

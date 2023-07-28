@@ -15,6 +15,7 @@ namespace Mds\PimPrint\DemoBundle\Service;
 
 use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractCommand;
 use Mds\PimPrint\CoreBundle\Project\AbstractProject;
+use Mds\PimPrint\CoreBundle\Project\RenderingProject;
 use Mds\PimPrint\CoreBundle\Service\InDesign\PublicationTreeBuilder;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
 use Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy;
@@ -30,7 +31,7 @@ use Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy;
  *
  * @package Mds\PimPrint\DemoBundle\Project
  */
-class CommandDemo extends AbstractProject
+class CommandDemo extends RenderingProject
 {
     /**
      * PublicationTreeBuilder service.
@@ -64,6 +65,7 @@ class CommandDemo extends AbstractProject
             'Page Handling',
             'Groups',
             'Layers',
+            'Localization',
             'Relative Positioning',
             'Messages',
         ];
@@ -111,7 +113,7 @@ class CommandDemo extends AbstractProject
     /**
      * Change method signature to have addCommand accessible in demo strategy context.
      *
-     * @param AbstractCommand[] $commands
+     * @param array $commands
      *
      * @return AbstractProject
      * @throws \Exception

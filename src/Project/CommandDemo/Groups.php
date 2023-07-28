@@ -36,7 +36,7 @@ class Groups extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
         $topPosition = 12.7;
 
         $this->simpleGroup($topPosition);

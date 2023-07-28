@@ -39,7 +39,7 @@ class TextBox extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
 
         $this->basicTextBox();
         $this->characterAndParagraph();

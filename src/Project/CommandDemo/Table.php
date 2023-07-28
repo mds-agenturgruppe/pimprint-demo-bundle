@@ -42,7 +42,7 @@ class Table extends AbstractStrategy
      */
     public function build(): void
     {
-        $this->initDemoLayer();
+        $this->initDemo();
 
         $this->basicTable();
         $this->namedColumns();
@@ -57,6 +57,7 @@ class Table extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function basicTable(): void
     {
@@ -148,6 +149,7 @@ class Table extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function namedColumns(): void
     {
@@ -210,6 +212,7 @@ class Table extends AbstractStrategy
      *
      * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function stylingTables(): void
     {
@@ -364,9 +367,11 @@ class Table extends AbstractStrategy
      * FragmentParser offers functionality to parse complete HTML fragments.
      * The parsing process creates multiple InDesign commands.
      *
-     * @throws \Exception|FilesystemException
+     * @return void
+     * @throws \Exception
+     * @throws FilesystemException
      */
-    private function htmlTable()
+    private function htmlTable(): void
     {
         $this->addCommand(new GoToPage(5));
         $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, 12.7));
@@ -465,9 +470,11 @@ EOT;
      * Demonstrates the SplitTable command.
      * This command offers splits up tables onto multiple pages repeating the header and footer rows.
      *
+     * @return void
      * @throws \Exception
+     * @throws FilesystemException
      */
-    private function splitTable()
+    private function splitTable(): void
     {
         $this->addCommand(new GoToPage(6));
         $topPosition = 12.7;

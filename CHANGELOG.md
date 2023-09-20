@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2023-09-20
+
+### Features
+
+- Pimcore 11 compatibility
+
 ## [3.0.0] - 2023-07-28
 
 ### Features
@@ -24,13 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example of a MasterLocaleRenderingProject:
     - `\Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject`
 - VariableOutput example in `\Mds\PimPrint\DemoBundle\Project\CommandDemo\RelativePositioning` demo.
-
-## [2.0.0] - 2022-09-14
-
-### Features
-
-- Pimcore 10 compatibility
-- Use `pimprint-core-bundle:^2.0`
 
 ## [2.0.0] - 2022-09-14
 

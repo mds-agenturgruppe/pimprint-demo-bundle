@@ -15,7 +15,7 @@ namespace Mds\PimPrint\DemoBundle\Service;
 
 use Mds\PimPrint\CoreBundle\Service\InDesign\AbstractPublicationTreeBuilder;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
-use Pimcore\Bundle\AdminBundle\Security\User\UserLoader;
+use Pimcore\Security\User\UserLoader;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\AccessoryPart;
 use Pimcore\Model\DataObject\Category;

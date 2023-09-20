@@ -94,7 +94,7 @@ trait ElementCollectorTrait
     {
         $listing = new ManufacturerListing();
         $listing->setUnpublished(false)
-                ->addConditionParam('o_path LIKE :path', ['path' => $folder->getFullPath() . '/%'])
+                ->addConditionParam('path LIKE :path', ['path' => $folder->getFullPath() . '/%'])
                 ->setOrder('ASC')
                 ->setOrderKey('name');
         $return = [];

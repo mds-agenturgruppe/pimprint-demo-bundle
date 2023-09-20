@@ -7,19 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [3.2.0] - 2023-11-27
-
 ### Features
 
 - Update to `mds-agenturgruppe/pimprint-core-bundle:3.2.0`
 - Enhance `\Mds\PimPrint\DemoBundle\Project\CommandDemo\ImageBox::assetTypes`
     - Force usage of Pimcore named thumbnails when using Assets.
 
-## [3.1.0] - 2023-10-11
+## [4.0.0] - 2023-09-20
 
 ### Features
 
-- Documentation of `CoreBundle` v3.1.0 SVG support.
+- Pimcore 11 compatibility
 
 ## [3.0.0] - 2023-07-28
 
@@ -38,13 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Example of a MasterLocaleRenderingProject:
     - `\Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject`
 - VariableOutput example in `\Mds\PimPrint\DemoBundle\Project\CommandDemo\RelativePositioning` demo.
-
-## [2.0.0] - 2022-09-14
-
-### Features
-
-- Pimcore 10 compatibility
-- Use `pimprint-core-bundle:^2.0`
 
 ## [2.0.0] - 2022-09-14
 

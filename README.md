@@ -2,33 +2,36 @@
 
 mds PimPrint the InDesign Printing Solution for Pimcore.
 
-This bundle is a demo for [PimPrint CoreBundle](https://github.com/mds-agenturgruppe/pimprint-core-bundle) using the [Pimcore 10 Demo](https://github.com/pimcore/demo/tree/10.3).
+This bundle is a demo for [PimPrint CoreBundle](https://github.com/mds-agenturgruppe/pimprint-core-bundle) using the [Pimcore 11 Demo](https://github.com/pimcore/demo/tree/11.x).
 
 ## Supported Pimcore Versions
 
+- Pimcore 11: `mds-agenturgruppe/pimprint-demo-bundle:^4.0`
 - Pimcore 10: `mds-agenturgruppe/pimprint-demo-bundle:^3.0`
 - Pimcore 5/6: `mds-agenturgruppe/pimprint-demo-bundle:^1.0`
 
 ## Prerequisites
 
-- [PHP 8.0](https://secure.php.net/) or higher
-- [Pimcore 10 Demo](https://github.com/pimcore/demo/tree/10.3) installed
+- [PHP 8.1](https://secure.php.net/) or higher
+- [Pimcore 11 Demo](https://github.com/pimcore/demo/tree/11.x) installed
 
 ## Installing PimPrint Demo
 
-Install the `MdsPimPrintDemoBundle` into your Pimcore Demo by issuing:
+Install `MdsPimPrintDemoBundle` into your Pimcore Demo by issuing:
 
 ```bash
-composer require mds-agenturgruppe/pimprint-demo-bundle:^3.0
+composer require mds-agenturgruppe/pimprint-demo-bundle:^4.0
 ```
 
-Enable `MdsPimPrintCoreBundle` and `MdsPimPrintDemoBundle` by issuing following commands in exactly this order:
+Enable `MdsPimPrintCoreBundle` and `MdsPimPrintDemoBundle` in `config/bundles.php`:
+
+```php
+MdsPimPrintCoreBundle::class => ['all' => true],
+MdsPimPrintDemoBundle::class => ['all' => true],
+```
 
 ```bash
-bin/console pimcore:bundle:enable MdsPimPrintCoreBundle
 bin/console pimcore:bundle:install MdsPimPrintCoreBundle
- 
-bin/console pimcore:bundle:enable MdsPimPrintDemoBundle
 ```
 
 For further details please refer the [installation guide](https://pimprint.mds.eu/docs/PimPrint_Demo/Installation.html) in the documentation.

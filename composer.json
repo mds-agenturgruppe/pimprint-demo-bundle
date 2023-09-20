@@ -18,7 +18,7 @@
   ],
   "require": {
     "ext-dom": "*",
-    "mds-agenturgruppe/pimprint-core-bundle": "^3.2",
+    "mds-agenturgruppe/pimprint-core-bundle": "^4.0",
     "fakerphp/faker": "^1.23"
   },
   "require-dev": {

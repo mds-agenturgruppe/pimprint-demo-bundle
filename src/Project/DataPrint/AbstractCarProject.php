@@ -163,7 +163,7 @@ abstract class AbstractCarProject extends AbstractProject
     protected function loadVariantsForCar(Car $car): array
     {
         $listing = $this->createCarListing(CarProduct::OBJECT_TYPE_ACTUAL_CAR);
-        $listing->addConditionParam('o_path LIKE :path', ['path' => $car->getFullPath() . '/%'])
+        $listing->addConditionParam('path LIKE :path', ['path' => $car->getFullPath() . '/%'])
                 ->setOrder('ASC')
                 ->setOrderKey('name');
 

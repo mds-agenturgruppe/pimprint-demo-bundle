@@ -9,9 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Features
 
-- Update to `mds-agenturgruppe/pimprint-core-bundle:3.2.0`
+- Update to `mds-agenturgruppe/pimprint-core-bundle:4.2.0`
 - Enhance `\Mds\PimPrint\DemoBundle\Project\CommandDemo\ImageBox::assetTypes`
     - Force usage of Pimcore named thumbnails when using Assets.
+
+## [4.1.0] - 2023-10-11
+
+### Features
+
+- Documentation of `CoreBundle` v4.1.0 SVG support.
 
 ## [4.0.0] - 2023-09-20
 

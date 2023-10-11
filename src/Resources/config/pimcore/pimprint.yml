@@ -7,6 +7,8 @@ mds_pim_print_core:
 #        hostname:
 #        protocol:
 #        port:
+#    Disable SVG Support when using InDesign prior CC 2020 (15.0)
+#    svg_support: false
     projects:
         commandDemo:
             ident: 'commandDemo' #Use for multi Bundle or configuration implementations.

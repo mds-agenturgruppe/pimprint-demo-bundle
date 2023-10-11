@@ -172,20 +172,24 @@ class ImageBox extends AbstractStrategy
             ProjectsManager::getProject()
                            ->addPageMessage('No SVG Demo-Asset found.');
         } else {
-            //Scalable Vector Graphics (SVG) aren't supported by InDesign.
+            //Scalable Vector Graphics (SVG) support was dropped with CS4, but resumed with version CC 2020 (15.0)
+            //SVG support can be disabled via configuration `mds_pim_print_core.svg_support`
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);
             $imageBox->setHeight($height)
                      ->setWidth($width);
             try {
+                //`mds_pim_print_core.svg_support`: true
                 $imageBox->setAsset($asset);
             } catch (\Exception $e) {
+                //`mds_pim_print_core.svg_support`: false
                 //setAsset throws an exception when asset isn't usable in InDesign
                 ProjectsManager::getProject()
                                ->addPageMessage($e->getMessage());
+
+                //When setting an asset the name of a thumbnail config can be used to use thumbnails and not the
+                //original asset.
+                $imageBox->setAsset($asset, 'product_detail');
             }
-            //When setting an asset the name of a thumbnail config can be used to use thumbnails an not the
-            //original asset.
-            $imageBox->setAsset($asset, 'product_detail');
             $this->addCommand($imageBox);
             $topPosition += $height + $margin;
         }

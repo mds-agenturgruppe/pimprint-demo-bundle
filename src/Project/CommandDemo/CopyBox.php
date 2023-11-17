@@ -14,7 +14,6 @@
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
-use Mds\PimPrint\CoreBundle\Service\ProjectsManager;
 
 /**
  * Demonstrates the CopyBox command for placement of template elements in InDesign document.
@@ -110,8 +109,7 @@ class CopyBox extends AbstractStrategy
         try {
             $copyBox->setHeight(-10);
         } catch (\Exception $e) {
-            ProjectsManager::getProject()
-                           ->addPageMessage($e->getMessage(), true);
+            $this->project->addPageMessage($e->getMessage(), true);
         }
     }
 }

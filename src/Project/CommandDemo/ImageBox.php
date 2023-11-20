@@ -16,7 +16,6 @@ namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
-use Mds\PimPrint\CoreBundle\Service\ProjectsManager;
 use Pimcore\Model\Asset;
 
 /**
@@ -168,8 +167,7 @@ class ImageBox extends AbstractStrategy
 
         $asset = $this->loadRandomAsset('/Brand Logos/%', null, ['image/svg+xml']);
         if (false === $asset instanceof Asset) {
-            ProjectsManager::getProject()
-                           ->addPageMessage('No SVG Demo-Asset found.');
+            $this->project->addPageMessage('No SVG Demo-Asset found.');
         } else {
             //Scalable Vector Graphics (SVG) aren't supported by InDesign.
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);
@@ -179,8 +177,7 @@ class ImageBox extends AbstractStrategy
                 $imageBox->setAsset($asset);
             } catch (\Exception $e) {
                 //setAsset throws an exception when asset isn't usable in InDesign
-                ProjectsManager::getProject()
-                               ->addPageMessage($e->getMessage());
+                $this->project->addPageMessage($e->getMessage());
             }
             //When setting an asset the name of a thumbnail config can be used to use thumbnails an not the
             //original asset.
@@ -191,8 +188,7 @@ class ImageBox extends AbstractStrategy
 
         $asset = $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf']);
         if (false === $asset instanceof Asset) {
-            ProjectsManager::getProject()
-                           ->addPageMessage('No PDF Demo-Asset found.');
+            $this->project->addPageMessage('No PDF Demo-Asset found.');
         } else {
             //PDFs can be placed natively in InDesign
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);

@@ -53,9 +53,6 @@ trait PageLayoutTrait
      */
     protected function startPages(): void
     {
-        //Project uses language independent text layers.
-        TextBox::setDefaultUseLanguageLayer(false);
-
         $this->addCommand(new SetLayer('Content'));
         $this->addCommand(new GoToPage(0, false));
 

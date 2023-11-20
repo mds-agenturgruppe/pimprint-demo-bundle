@@ -64,6 +64,7 @@ class CommandDemo extends AbstractProject
             'Page Handling',
             'Groups',
             'Layers',
+            'Localization',
             'Relative Positioning',
             'Messages',
         ];

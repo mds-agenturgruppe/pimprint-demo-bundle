@@ -103,8 +103,6 @@ abstract class AbstractStrategy
         $class = (new \ReflectionClass($this))->getShortName();
         $this->addCommand(new SetLayer($class . ' Demo'));
         $this->setBoxIdentGenericPostfix($class);
-
-        TextBox::setDefaultUseLanguageLayer(false);
     }
 
     /**

@@ -178,17 +178,30 @@ class ImageBox extends AbstractStrategy
             try {
                 //`mds_pim_print_core.svg_support`: true
                 $imageBox->setAsset($asset);
+                $this->addCommand($imageBox);
+                $topPosition += $height + $margin;
             } catch (\Exception $e) {
                 //`mds_pim_print_core.svg_support`: false
                 //setAsset throws an exception when asset isn't usable in InDesign
                 $this->project->addPageMessage($e->getMessage());
+
+                //If you need to display an SVG in a not supported InDesign Version you can force to use
+                //a Pimcore thumbnail instead.
+                //In this case refer to the next ImageBox example where a thumbnail is forced.
             }
-            //When setting an asset the name of a thumbnail config can be used to use thumbnails an not the
-            //original asset.
-            $imageBox->setAsset($asset, 'product_detail');
-            $this->addCommand($imageBox);
-            $topPosition += $height + $margin;
         }
+
+        //If you don't want to use the original asset you can force a Pimcore named thumbnail configuration.
+        $asset = $this->loadRandomAsset('/Car Images/%');
+        $imageBox = new ImageBoxCommand('image', $left, $topPosition);
+        $imageBox->setHeight($height)
+                 ->setWidth($width);
+
+        //When setting an asset the name of a thumbnail config can be used to use thumbnails a not the original asset.
+        $imageBox->setAsset($asset, 'product_detail');
+
+        $this->addCommand($imageBox);
+        $topPosition += $height + $margin;
 
         $asset = $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf']);
         if (false === $asset instanceof Asset) {

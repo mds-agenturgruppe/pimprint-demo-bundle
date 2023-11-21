@@ -9,6 +9,8 @@ mds_pim_print_core:
 #        port:
 #    Disable SVG Support when using InDesign prior CC 2020 (15.0)
 #    svg_support: false
+#    Set to false to use Asset modificationDate. Use if Storage returns wrong lastModified timestamp.
+#    file_storage_mtime: false
     projects:
         commandDemo:
             ident: 'commandDemo' #Use for multi Bundle or configuration implementations.

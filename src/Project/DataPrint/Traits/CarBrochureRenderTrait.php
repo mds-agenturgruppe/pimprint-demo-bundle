@@ -26,7 +26,6 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MaxValue;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractTemplate;
 use Mds\PimPrint\DemoBundle\Project\DataPrint\BrochureTemplate;
-use Pimcore\Bundle\EcommerceFrameworkBundle\Exception\UnsupportedException;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\DataObject\Car;

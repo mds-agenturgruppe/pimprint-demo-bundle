@@ -14,7 +14,6 @@
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
 use League\Flysystem\FilesystemException;
-use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SetLayer;
@@ -22,7 +21,6 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\SortLayers;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Table as TableBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
-use Mds\PimPrint\DemoBundle\Project\LocalizationDemo\ExampleTemplate;
 
 /**
  * Demonstrates the localization of page-elements.

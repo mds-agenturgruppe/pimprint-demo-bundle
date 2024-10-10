@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Feature
+
+- Add demo for new placement mode for localized page-elements to omit the master locale box geometry.
+    - `\Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject::renderDontUseMasterLocaleText`
+
 ## [3.2.0] - 2023-11-27
 
 ### Features

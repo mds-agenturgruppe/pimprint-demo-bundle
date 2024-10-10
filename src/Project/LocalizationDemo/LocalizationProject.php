@@ -435,6 +435,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     {
         $this->renderFixedSizeText($topPos);
         $this->renderFixedHeightText($topPos);
+        $this->renderDontUseMasterLocaleText();
 
         $topPos += 30;
 
@@ -509,6 +510,33 @@ class LocalizationProject extends MasterLocaleRenderingProject
         //Option AbstractBox::USE_MASTER_LOCALE_HEIGHT:
         //Uses Position (left, top) and height from master locale. Width and fit from command.
         $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_HEIGHT);
+
+        $this->addCommand($textBox);
+    }
+
+    /**
+     * Renders a localized TextBox with random content to demonstrate AbstractBox::USE_MASTER_LOCALE_NONE
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function renderDontUseMasterLocaleText(): void
+    {
+        $textBox = new TextBox(ExampleTemplate::ELEMENT_HEADLINE, 110, 250, 70, 20);
+
+        $textBox->addString(
+            $this->getFaker()
+                 ->words(4, true)
+        );
+        $textBox->setBoxIdent('noMasterLocaleSize');
+
+        //We define a localized TextBox
+        $textBox->setLocalized();
+
+        //Option AbstractBox::USE_MASTER_LOCALE_NONE:
+        //Uses Position (left, top) and dimension (width, height) from command.
+        //Nothing is used from master locale.
+        $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_NONE);
 
         $this->addCommand($textBox);
     }

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add demo for new placement mode for localized page-elements to omit the master locale box geometry.
     - `\Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject::renderDontUseMasterLocaleText`
+- Example for a dynamic paginated document with columns using `CheckNewColumn` command
+    - `\Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPaginationDemo`
 
 ## [3.2.0] - 2023-11-27
 

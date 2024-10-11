@@ -543,14 +543,13 @@ EOT;
                  ->addCell('Table Foot 5', null, 1, $cellStyle);
 
         //CheckNewPage command defined the maximum y-Position where content can be rendered on the page.
-        //If a element would be placed underneath this y-Position it is placed on the next page at then new y-Position
-        //parameter value.
+        //If an element was placed underneath this y-Position it is placed on the next page at new y-Position.
         $checkNewPage = new CheckNewPage(284, $topPosition);
 
         //Create the SplitTable command and pass the Table to split and the CheckNewPage page break definition.
         $splitTable = new SplitTable($tableBox, $checkNewPage);
 
-        //We want to have $headline repeated on each page before the table.
+        //We want to have the $headline repeated on each page before the table.
         $splitTable->addPreCommand($headline);
 
         //Add the SplitTable command to CommandQueue.

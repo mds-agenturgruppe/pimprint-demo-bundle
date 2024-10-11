@@ -123,7 +123,7 @@ class Groups extends AbstractStrategy
         $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, $topPosition - $blockMargin));
 
         //CheckNewPage command defined the maximum y-Position where content can be rendered on the page.
-        //If a element would be placed underneath this y-Position it is placed on the next page at then new y-Position
+        //If an element was placed underneath this y-Position it is placed on the next page at then new y-Position
         //parameter value.
         $checkNewPage = new CheckNewPage(284, $topPosition);
 
@@ -150,9 +150,10 @@ class Groups extends AbstractStrategy
      *
      * @param string $label
      *
+     * @return void
      * @throws \Exception
      */
-    private function renderGroupElements(string $label)
+    private function renderGroupElements(string $label): void
     {
         $image = new CopyBoxCommand('image', 0, 0);
         $image->setVariable('imageBottom', Variable::POSITION_BOTTOM)

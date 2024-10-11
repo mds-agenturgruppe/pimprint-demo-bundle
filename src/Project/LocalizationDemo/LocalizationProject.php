@@ -13,8 +13,6 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\LocalizationDemo;
 
-use Faker\Factory;
-use Faker\Generator;
 use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox;
@@ -29,6 +27,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 use Mds\PimPrint\CoreBundle\Project\MasterLocaleRenderingProject;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
+use Mds\PimPrint\DemoBundle\Project\Traits\FakerGeneratorTrait;
 use Mds\PimPrint\DemoBundle\Project\Traits\LoadRandomAssetTrait;
 use Pimcore\Model\Asset\Image;
 use Pimcore\Model\DataObject\Car;
@@ -46,6 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class LocalizationProject extends MasterLocaleRenderingProject
 {
     use LoadRandomAssetTrait;
+    use FakerGeneratorTrait;
 
     /**
      * Car to render document for.
@@ -60,13 +60,6 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @var Manufacturer
      */
     private Manufacturer $manufacturer;
-
-    /**
-     * Faker generator instance
-     *
-     * @var Generator
-     */
-    private Generator $faker;
 
     /**
      * LocalizationProject constructor
@@ -619,10 +612,11 @@ class LocalizationProject extends MasterLocaleRenderingProject
                  ->addColumn(40, null, ExampleTemplate::STYLE_TABLE_CELL);
 
 
+
         for ($i = 0; $i <= 2; $i++) {
             $tableBox->startRow();
-            $tableBox->addCell($this->faker->words(2, true))
-                     ->addCell($this->faker->words(2, true));
+            $tableBox->addCell($this->getFaker()->words(2, true))
+                     ->addCell($this->getFaker()->words(2, true));
         }
 
         $asset = $this->loadRandomAsset('/Car Images/%');
@@ -727,22 +721,6 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $copyBox->setBoxIdentReferenced('layoutBar' . $topPos);
 
         $this->addCommand($copyBox);
-    }
-
-    /**
-     * Because there is mostly only en content in the Pimcore demo,
-     * faker content is used for the localisation demo if no data is available in Pimcore.
-     *
-     * @return Generator
-     * @throws \Exception
-     */
-    private function getFaker(): Generator
-    {
-        if (!isset($this->faker)) {
-            $this->faker = Factory::create($this->getLanguage());
-        }
-
-        return $this->faker;
     }
 
     /**

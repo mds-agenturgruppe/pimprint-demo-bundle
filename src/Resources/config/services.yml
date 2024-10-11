@@ -4,6 +4,9 @@ services:
         autoconfigure: true
         public: false
 
+    Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\:
+        resource: '../../Project/DynamicPaginationDemo'
+
     #Register rendering projects as service
     Mds\PimPrint\DemoBundle\Service\GettingStarted:
         parent: mds.pimprint.core.rendering_project #Rendering projects must use 'mds.pimprint.core.rendering_project' as parent
@@ -17,6 +20,11 @@ services:
         autoconfigure: false
     Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject:
         parent: mds.pimprint.core.master_locale_rendering_project
+        public: true
+        autowire: true
+        autoconfigure: false
+    Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPaginationDemo:
+        parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `\Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject::renderDontUseMasterLocaleText`
 - Example for a dynamic paginated document with columns using `CheckNewColumn` command
     - `\Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPaginationDemo`
+- `ImageBoxScaled` asset offset and scaling demo
 
 ## [3.2.0] - 2023-11-27
 

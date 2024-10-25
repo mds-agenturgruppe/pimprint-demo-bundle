@@ -16,6 +16,9 @@ namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
+use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBoxScaled;
+use Mds\PimPrint\CoreBundle\InDesign\Command\NextPage;
+use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 use Pimcore\Model\Asset;
 
 /**
@@ -37,9 +40,13 @@ class ImageBox extends AbstractStrategy
         $this->initDemo();
 
         $topPosition = 12.7;
-        $topPosition = $this->placeImage($topPosition);
+        $this->placeImage($topPosition);
         $this->fillModes($topPosition);
+
         $this->assetTypes();
+
+        $this->imageScaledBox();
+        $this->fullPagePlacement();
     }
 
     /**
@@ -47,11 +54,11 @@ class ImageBox extends AbstractStrategy
      *
      * @param float $topPosition
      *
-     * @return float
+     * @return void
      * @throws \Exception
      * @throws FilesystemException
      */
-    private function placeImage(float $topPosition): float
+    private function placeImage(float &$topPosition): void
     {
         $this->addCommand(new GoToPage(1));
         $asset = $this->loadRandomAsset('/Brand Logos/', 500);
@@ -81,7 +88,7 @@ class ImageBox extends AbstractStrategy
         $imageBox->setAsset($asset, null, true);
         $this->addCommand($imageBox);
 
-        return $topPosition + $imageBox->getHeight() + 20;
+        $topPosition += $imageBox->getHeight() + 20;
     }
 
     /**
@@ -167,7 +174,7 @@ class ImageBox extends AbstractStrategy
         $margin = 5;
 
         $asset = $this->loadRandomAsset('/Brand Logos/%', null, ['image/svg+xml']);
-        if (false === $asset instanceof Asset) {
+        if (!$asset instanceof Asset) {
             $this->project->addPageMessage('No SVG Demo-Asset found.');
         } else {
             //Scalable Vector Graphics (SVG) support was dropped with CS4, but resumed with version CC 2020 (15.0)
@@ -204,7 +211,7 @@ class ImageBox extends AbstractStrategy
         $topPosition += $height + $margin;
 
         $asset = $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf']);
-        if (false === $asset instanceof Asset) {
+        if (!$asset instanceof Asset) {
             $this->project->addPageMessage('No PDF Demo-Asset found.');
         } else {
             //PDFs can be placed natively in InDesign
@@ -214,5 +221,72 @@ class ImageBox extends AbstractStrategy
                      ->setAsset($asset);
             $this->addCommand($imageBox);
         }
+    }
+
+    /**
+     * Demonstrates the usage of ImageBoxScaled which gives directly access to the asset
+     * position and dimension inside the placed image box.
+     *
+     * @return void
+     * @throws \Exception
+     * @throws FilesystemException
+     */
+    private function imageScaledBox(): void
+    {
+        $this->addCommand(new GoToPage(3));
+
+        $asset = $this->loadRandomAsset('/Car Images/%', 1000);
+        $topPosition = 12.7;
+        $left = 12.7;
+        $width = 60;
+        $height = 40;
+        $margin = 10;
+
+        $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
+        $imageBoxScaled->setXScroll(5) //Moves the asset inside the box to the right
+                       ->setYScroll(5); //Moves the asset inside the box downwards
+        $this->addCommand($imageBoxScaled);
+
+        $topPosition += $height + $margin;
+        $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
+        $imageBoxScaled->setXScroll(-5) //Negative offset
+                       ->setYScroll(-5); //Negative offset
+        $this->addCommand($imageBoxScaled);
+
+        $topPosition += $height + $margin;
+        $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
+        $imageBoxScaled->setScale(10); //Sets x-y scale to 10% of the original asset dimensions
+        $this->addCommand($imageBoxScaled);
+
+        $topPosition += $height + $margin;
+        $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
+        $imageBoxScaled->setScale(10)
+                       ->setXScroll(5)
+                       ->setYScroll(5);
+        $this->addCommand($imageBoxScaled);
+    }
+
+    /**
+     * Sets a PDF in full width on a page.
+     *
+     * @return void
+     * @throws FilesystemException
+     * @throws \Exception
+     */
+    private function fullPagePlacement(): void
+    {
+        $this->addCommand(new NextPage());
+
+        $imageBoxScaled = new ImageBoxScaled(
+            'image',
+            0,
+            0,
+            A4PortraitTemplate::PAGE_WIDTH,
+            A4PortraitTemplate::PAGE_HEIGHT,
+            $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf'])
+        );
+        $imageBoxScaled->setXScroll(-10)
+                       ->setYScroll(-10);
+        $this->addCommand($imageBoxScaled);
     }
 }

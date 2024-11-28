@@ -1,6 +1,6 @@
 <?php
 /**
- * mds Agenturgruppe GmbH
+ * mds PimPrint
  *
  * This source file is licensed under GNU General Public License version 3 (GPLv3).
  *
@@ -8,6 +8,7 @@
  * LICENSE.md which is distributed with this source code.
  *
  * @copyright  Copyright (c) mds. Agenturgruppe GmbH (https://www.mds.eu)
+ * @license    https://pimprint.mds.eu/license GPLv3
  */
 
 namespace Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo;
@@ -102,6 +103,7 @@ class ColumnPaginationDemo extends RenderingProject
         }
 
         $this->startRendering(false);
+        $this->demonstratePluginStartAlignment();
 
         $this->setDocumentProperties();
         $this->registerVariables();
@@ -160,6 +162,27 @@ class ColumnPaginationDemo extends RenderingProject
     }
 
     /**
+     * Demonstrates the usage of Plugin-Field start_alignment.
+     * Selected value is only passed to the backend, which can react on the value.
+     *
+     * Start alignment is not used directly by the Plugin while document generation.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function demonstratePluginStartAlignment(): void
+    {
+        switch (true) {
+            case $this->pluginParams->isStartOnLeftPage():
+                $this->addPreMessage('Start on left page');
+                break;
+
+            case $this->pluginParams->isStartOnRightPage():
+                $this->addPreMessage('Start on right page');
+        }
+    }
+
+    /**
      * Document settings can be adjusted for the current open document in InDesign in which generation takes place.
      * We add 50 pages to the document to have "probably" enough pages.
      *
@@ -190,7 +213,12 @@ class ColumnPaginationDemo extends RenderingProject
         //We always top position elements at the yPos variable.
         //We initialize it with the origin top
         //While placing elements on the document we update this variable with the bottom position of the placed element.
-        $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, PaginationTemplate::CONTENT_ORIGIN_TOP));
+        $this->addCommand(
+            new Variable(
+                Variable::VARIABLE_Y_POSITION,
+                PaginationTemplate::CONTENT_ORIGIN_TOP - PaginationTemplate::BOX_MARGIN
+            )
+        );
     }
 
     /**

@@ -41,6 +41,7 @@ mds_pim_print_core:
                 publications:
                     label: 'Manufacturer'
                 update_modes: [ 501 ]
+                start_alignment: true
         localizationDemo:
             ident: 'localizationDemo'
             name: 'Localization Demo'

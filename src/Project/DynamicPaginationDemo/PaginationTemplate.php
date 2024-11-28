@@ -151,12 +151,20 @@ class PaginationTemplate extends A4PortraitTemplate
      */
     public function getCheckNewPage(int|float $marginOffset = null): CheckNewPage
     {
-        return new CheckNewPage(
+        $command = new CheckNewPage(
             PaginationTemplate::CONTENT_BOTTOM,
             PaginationTemplate::CONTENT_ORIGIN_TOP,
             PaginationTemplate::CONTENT_ORIGIN_LEFT,
             $marginOffset,
         );
+
+        $command->setNewPosXFacingPages(
+            PaginationTemplate::CONTENT_ORIGIN_LEFT,
+            //For demo purpose we place the content on right pages 5mm more to the right
+            PaginationTemplate::CONTENT_ORIGIN_LEFT + 5
+        );
+
+        return $command;
     }
 
     /**

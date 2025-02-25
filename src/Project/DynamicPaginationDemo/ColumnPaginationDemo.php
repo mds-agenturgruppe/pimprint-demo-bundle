@@ -148,7 +148,7 @@ class ColumnPaginationDemo extends RenderingProject
     private function setupCars(): void
     {
         $listing = new Listing();
-        $listing->addConditionParam('objectType = :objectType', ['objectType' => 'actual-car']);
+        $listing->addConditionParam('objectType = ?', ['actual-car']);
         $listing->filterByManufacturer($this->manufacturer);
         $listing->setOrderKey('productionYear');
         $listing->setOrder('asc');

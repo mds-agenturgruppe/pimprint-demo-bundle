@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.0] - 2025-02-25
+
 ### Feature
 
 - Add demo for new placement mode for localized page-elements to omit the master locale box geometry.
@@ -16,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Facing pages aware CheckNewPage with `CheckNewPage::setNewPosXFacingPages()`
     - Demonstrates usage of Plugin-Element `start_alignment`
 - `ImageBoxScaled` asset offset and scaling demo
+- Update to `mds-agenturgruppe/pimprint-core-bundle:^3.3`
 
 ## [3.2.0] - 2023-11-27
 

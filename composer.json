@@ -18,11 +18,14 @@
   ],
   "require": {
     "ext-dom": "*",
-    "mds-agenturgruppe/pimprint-core-bundle": "^4.3",
+    "mds-agenturgruppe/pimprint-core-bundle": "^4.4",
     "fakerphp/faker": "^1.23"
   },
   "require-dev": {
     "mds-agenturgruppe/php-code-checker": "2.1.1"
+  },
+  "conflict": {
+    "pimcore/pimcore": "<11.0 || >12.0"
   },
   "autoload": {
     "psr-4": {

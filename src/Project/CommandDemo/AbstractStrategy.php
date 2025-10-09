@@ -23,6 +23,7 @@ use Mds\PimPrint\CoreBundle\Project\AbstractProject;
 use Mds\PimPrint\CoreBundle\Service\ImageDimensions;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
 use Mds\PimPrint\CoreBundle\Service\SpecialChars;
+use Mds\PimPrint\DemoBundle\Project\Traits\FakerGeneratorTrait;
 use Mds\PimPrint\DemoBundle\Project\Traits\LoadRandomAssetTrait;
 
 /**
@@ -42,6 +43,7 @@ use Mds\PimPrint\DemoBundle\Project\Traits\LoadRandomAssetTrait;
 abstract class AbstractStrategy
 {
     use LoadRandomAssetTrait;
+    use FakerGeneratorTrait;
 
     /**
      * PimPrint project instance.
@@ -112,7 +114,7 @@ abstract class AbstractStrategy
 //        Facing pages is used from the manually created document to have the "Page Handling" demo
 //        work with or without facing pages to demonstrate the dynamic facing page layout creation.
         $command->setFacingPages(false)
-            ->setStartNumber(true);
+                ->setStartNumber(true);
         $this->addCommand($command);
 
 //        We set the number of pages to 20, to have enough pages in the document for all command demos.
@@ -133,8 +135,6 @@ abstract class AbstractStrategy
         $this->addCommand(new SetLayer($class . ' Demo'));
         $this->setBoxIdentGenericPostfix($class);
     }
-
-
 
     /**
      * Places a TextBox with $text at $left,$top with size $widthX$height on current active page.
@@ -161,88 +161,118 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Returns $number of demo words from Loripsum API.
+     * Returns $number of words
      *
      * @param int $number
      *
      * @return string
+     * @throws \Exception
      */
     protected function getDemoWords(int $number = 5): string
     {
-        $text = $this->callLoripsumApi('plaintext/2/long/headers');
-        $text = preg_replace("#[^A-Za-z0-9 ]#", '', $text);
-        $text = str_replace('Lorem ipsum dolor sit amet', '', $text);
-        $words = explode(' ', $text, (int)$number + 1);
-        array_pop($words);
-
-        return implode(' ', $words);
+        return implode(
+            ' ',
+            $this->getFaker()
+                 ->words($number)
+        );
     }
 
     /**
-     * Returns plaintext demo text from Loripsum API.
+     * Returns $numberParagraphs lines in $length of demo plaintext
      *
-     * @param int    $paragraphs
+     * @param int    $numberParagraphs
      * @param string $length
      *
      * @return string
+     * @throws \Exception
      */
-    protected function getDemoText(int $paragraphs = 2, string $length = 'medium'): string
+    protected function getDemoText(int $numberParagraphs = 2, string $length = 'medium'): string
     {
-        return $this->callLoripsumApi("plaintext/{$length}/{$paragraphs}");
+        $length = $this->getLengthFromVerboseParam($length);
+
+        $paragraphs = [];
+        for ($i = 0; $i <= $numberParagraphs; $i++) {
+            $paragraphs[] = $this->getFaker()
+                                 ->text($length);
+        }
+
+        return implode("\n", $paragraphs);
     }
 
     /**
      * Returns html demo text from Loripsum API.
      *
-     * @param int    $paragraphs
-     * @param bool   $headers
-     * @param bool   $list
-     * @param bool   $decorate
-     * @param string $length
+     * @param int        $paragraphs
+     * @param bool       $headers
+     * @param bool       $list
+     * @param array|null $decorate
+     * @param string     $length
      *
      * @return string
+     * @throws \Exception
      */
     protected function getDemoHtml(
-        int $paragraphs = 2,
-        bool $headers = false,
-        bool $list = false,
-        bool $decorate = false,
-        string $length = 'medium'
+        int $paragraphs = 3,
+        bool $headers = true,
+        bool $list = true,
+        ?array $decorate = ['b', 'i'],
+        string $length = 'medium',
     ): string {
-        $query = [
-            $length,
-            $paragraphs,
-        ];
-        $headers ? $query[] = 'headers' : false;
-        $list ? $query[] = 'ul' : false;
-        $decorate ? $query[] = 'decorate' : false;
+        $length = $this->getLengthFromVerboseParam($length);
 
-        $html = $this->callLoripsumApi(implode('/', $query));
+        $html = '';
+        for ($i = 1; $i <= $paragraphs; $i++) {
+            if ($headers) {
+                $html .= "<h$i>{$this->getDemoWords(rand(1, 3))}</h$i>";
+            }
+            $sentence = $this->getFaker()
+                             ->sentence($length, false);
 
-        //remove not XHTML compliant <mark> tag,
-        return str_replace(array('<mark>', '</mark>'), '', $html);
+            if (null !== $decorate) {
+                $words = explode(' ', $sentence);
+                for ($i = 0; $i <= rand(1, 3); $i++) {
+                    foreach ($decorate as $tag) {
+                        $index = rand(0, $length - 1);
+                        $words[$index] = "<$tag>$words[$index]</$tag>";
+                    }
+                }
+                $sentence = implode(' ', $words);
+            }
+
+            $html .= "<p>$sentence</p>";
+        }
+
+        if ($list) {
+            $html .= "<ul>";
+            for ($i = 0; $i < rand(1, 10); $i++) {
+                $html .= "<li>{$this->getFaker()->words(rand(1,5), true)}</li>";
+            }
+            $html .= "</ul>";
+        }
+
+        return $html;
     }
 
     /**
-     * Calls loripsum.net API via 'file_get_contents'.
+     * Returns length in int for verbose $length parameter
      *
-     * @param string $query
+     * @param string $length
      *
-     * @return string
+     * @return int
      */
-    protected function callLoripsumApi(string $query): string
+    protected function getLengthFromVerboseParam(string $length): int
     {
-        $text = file_get_contents("https://loripsum.net/api/" . $query);
-        if (false === $text) {
-            $text = "Unable to load example text from loripsum.net via 'file_get_contents'";
-        }
-
-        return trim($text);
+        return match ($length) {
+            'short' => 20,
+            'long' => 100,
+            'max' => 1000,
+            default => 50,
+        };
     }
 
     /**
      * Delegated all undefined method calls to $project.
-     * Convenience method offer in all strategies the same interface as in CommandDemo project.
+     * Convenience method offers in all strategies the same interface as in CommandDemo project.
      *
      * @param string $method
      * @param array  $arguments

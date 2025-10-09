@@ -66,7 +66,7 @@ class TextBox extends AbstractStrategy
 
         //Place the 'copyText' text box from InDesign template
         $textBox = new TextBoxCommand('copyText', 12.7, 22, 184.6, 200);
-        $textBox->addString($this->getDemoText(3));
+        $textBox->addString($this->getDemoText(1, 'max'));
         $this->addCommand($textBox);
     }
 
@@ -197,15 +197,15 @@ class TextBox extends AbstractStrategy
         $text->addPlainText($this->getDemoWords(8), null, 'UpperSpace');
 
         //Add some more plain text
-        $text->addPlainText($this->getDemoText(2));
+        $text->addPlainText($this->getDemoText(3, 'long'));
 
         for ($i = 0; $i <= 5; $i++) {
-            $text->addPlainText($this->getDemoWords(4), $i == 5 ? 'ListItem_last': 'ListItem');
+            $text->addPlainText($this->getDemoWords(4), $i == 5 ? 'ListItem_last' : 'ListItem');
         }
 
         //Text allows manual adding of paragraphs to give the full flexibility of paragraphs and characters.
         $paragraph = new Paragraph(
-            $this->getDemoWords(5),
+            $this->getDemoWords(),
             'Headline',
             'UpperSpace'
         );
@@ -330,7 +330,7 @@ EOT;
              ->setStyle($style);
 
         //Add HTML to Text
-        $text->addHtml($this->getDemoHtml(4, true, true, true, 'long'));
+        $text->addHtml($this->getDemoHtml());
 
         //Create TextBox command.
         $textBox = $this->createDemoBox();

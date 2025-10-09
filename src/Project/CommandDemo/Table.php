@@ -335,7 +335,7 @@ class Table extends AbstractStrategy
               ->setCharacter('i', 'Highlight');
 
         $text = new Text();
-        $text->addHtml($this->getDemoHtml(2, true, true, true, 'short'), $style);
+        $text->addHtml($this->getDemoHtml(2, length: 'short'), $style);
 
         $tableBox->startRow()
                  ->addCell(

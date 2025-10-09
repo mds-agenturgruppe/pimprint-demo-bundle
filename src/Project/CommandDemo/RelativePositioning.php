@@ -329,7 +329,7 @@ class RelativePositioning extends AbstractStrategy
                  ->setVariable('imageRight', Variable::POSITION_RIGHT);
         $this->addCommand($imageBox);
 
-        $highlight = new Paragraph($this->getDemoWords(50), 'CopyText', 'Highlight');
+        $highlight = new Paragraph($this->getDemoWords(80), 'CopyText', 'Highlight');
         $text = new TextBoxCommand('textBox', null, null, $pageWidth - 63, 40);
         $text->addParagraph($highlight)
              ->setTopRelative('topPosition', 3)
@@ -337,7 +337,7 @@ class RelativePositioning extends AbstractStrategy
         $this->addCommand($text);
 
         $text = new TextBoxCommand('colText', $leftPosition, null, $pageWidth, 100);
-        $text->addString($this->getDemoText(2, 'short'))
+        $text->addString($this->getDemoText())
              ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
              ->setTopRelative('imageBottom', 3)
              ->setVariable('topPosition', Variable::POSITION_BOTTOM)
@@ -345,7 +345,7 @@ class RelativePositioning extends AbstractStrategy
         $this->addCommand($text);
 
         $subHeadline = new TextBoxCommand('subHeadline', $leftPosition, null, $pageWidth, 100);
-        $subHeadline->addString($this->getDemoWords(8))
+        $subHeadline->addString($this->getDemoText())
                     ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
                     ->setTopRelative('topPosition', 5)
                     ->setVariable('topPosition', Variable::POSITION_BOTTOM);
@@ -366,7 +366,7 @@ class RelativePositioning extends AbstractStrategy
         $this->addCommand($imageBox);
 
         $text = new TextBoxCommand('colText', $leftPosition, null, $pageWidth, 100);
-        $text->addString($this->getDemoText(2))
+        $text->addString($this->getDemoText(4, 'long'))
              ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
              ->setTopRelative('imageBottom', 3)
              ->setVariable('topPosition', Variable::POSITION_BOTTOM);

@@ -329,7 +329,7 @@ class RelativePositioning extends AbstractStrategy
                  ->setVariable('imageRight', Variable::POSITION_RIGHT);
         $this->addCommand($imageBox);
 
-        $highlight = new Paragraph($this->getDemoWords(80), 'CopyText', 'Highlight');
+        $highlight = new Paragraph($this->getDemoWords(60), 'CopyText', 'Highlight');
         $text = new TextBoxCommand('textBox', null, null, $pageWidth - 63, 40);
         $text->addParagraph($highlight)
              ->setTopRelative('topPosition', 3)

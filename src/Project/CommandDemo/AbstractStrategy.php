@@ -223,16 +223,19 @@ abstract class AbstractStrategy
         $html = '';
         for ($i = 1; $i <= $paragraphs; $i++) {
             if ($headers) {
-                $html .= "<h$i>{$this->getDemoWords(rand(1, 3))}</h$i>";
+                $html .= "<h$i>{$this->getDemoWords(rand(3, 5))}</h$i>";
             }
             $sentence = $this->getFaker()
                              ->sentence($length, false);
 
             if (null !== $decorate) {
                 $words = explode(' ', $sentence);
-                for ($i = 0; $i <= rand(1, 3); $i++) {
+                for ($j = 0; $j <= rand(1, 3); $j++) {
                     foreach ($decorate as $tag) {
                         $index = rand(0, $length - 1);
+                        if (str_starts_with($words[$index], '<')) {
+                            continue;
+                        }
                         $words[$index] = "<$tag>$words[$index]</$tag>";
                     }
                 }

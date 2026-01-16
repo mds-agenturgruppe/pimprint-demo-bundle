@@ -5,14 +5,14 @@ services:
         public: false
 
     Mds\PimPrint\DemoBundle\Service\:
-        resource: '../../Service'
+        resource: '../src/Service'
 
     Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\:
-        resource: '../../Project/DynamicPaginationDemo'
+        resource: '../src/Project/DynamicPaginationDemo'
 
     Mds\PimPrint\DemoBundle\Project\LocalizationDemo\:
-        resource: '../../Project/LocalizationDemo'
+        resource: '../src/Project/LocalizationDemo'
 
     Mds\PimPrint\DemoBundle\Project\CarsDemo\:
-        resource: '../../Project/CarsDemo'
-        exclude: '../../*/Dto/*'
+        resource: '../src/Project/CarsDemo'
+        exclude: '../src/*/Dto/*'

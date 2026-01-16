@@ -44,7 +44,7 @@ class Version20260115162909 extends AbstractMigration
      *
      * @var string
      */
-    protected string $path = '../Resources/pimprint/';
+    protected string $path = '../../public/pimprint/';
 
     /**
      * Asset folder name.
@@ -153,7 +153,7 @@ class Version20260115162909 extends AbstractMigration
      *
      * @throws \Exception
      */
-    private function removeAssets(array $files, Folder $folder)
+    private function removeAssets(array $files, Folder $folder): void
     {
         foreach ($files as $file) {
             $assetPath = $folder->getFullPath() . '/' . $file;

@@ -1,7 +1,0 @@
-imports:
-    - { resource: getting-started.yml }
-    - { resource: pimprint.yml }
-
-doctrine_migrations:
-    migrations_paths:
-        'Mds\PimPrint\DemoBundle\Migrations': '@MdsPimPrintDemoBundle/Migrations'

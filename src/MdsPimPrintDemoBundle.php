@@ -42,6 +42,16 @@ class MdsPimPrintDemoBundle extends AbstractPimcoreBundle
      */
     public function getDescription(): string
     {
-        return 'mds PimPrint DemoBundle for Pimcore X Demo.';
+        return 'mds PimPrint DemoBundle for Pimcore Demo.';
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
     }
 }

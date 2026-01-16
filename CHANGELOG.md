@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `pimprint-core-bundle` v4.5 compatibility - Symfony service architecture
 - Example: Use PimPrint `CommandQueue` Service directly in `CarsDemo\CarSalesLabel\LabelRenderer`
+- Symfony bundle structure
 
 ## [4.4.0] - 2025-06-18
 

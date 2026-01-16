@@ -219,7 +219,7 @@ class CarSalesLabel extends AbstractCarsDemoProject
                 $this->addCommand(new NextPage());
             }
 
-            $this->addCommands($this->labelRenderer->render($car));
+            $this->labelRenderer->render($car);
         }
     }
 }

@@ -68,26 +68,24 @@ class LabelRenderer extends AbstractHelper
      *
      * @param Car $car
      *
-     * @return array
+     * @return void
      * @throws ContainerExceptionInterface
      * @throws FilesystemException
      * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
-    public function render(Car $car): array
+    public function render(Car $car): void
     {
         $this->car = $car;
-
         $this->contentDto = $this->contentCreator->createCarDetailContentDto($car);
 
-        $return = [];
-        $return[] = $this->getTitleTextBox();
-        $return[] = $this->getLogoImageBox();
-        $return = array_merge($return, $this->getDetailTables());
-        $return[] = $this->getPriceTextBox();
-        $return[] = $this->getTaxTextBox();
+        $commandQueue = $this->commandQueue();
 
-        return $return;
+        $commandQueue->add($this->getTitleTextBox());
+        $commandQueue->add($this->getLogoImageBox());
+        $commandQueue->add($this->getDetailTables());
+        $commandQueue->add($this->getPriceTextBox());
+        $commandQueue->add($this->getTaxTextBox());
     }
 
     /**

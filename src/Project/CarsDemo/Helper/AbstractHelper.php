@@ -13,6 +13,7 @@
 
 namespace Mds\PimPrint\DemoBundle\Project\CarsDemo\Helper;
 
+use Mds\PimPrint\CoreBundle\Service\CommandQueue;
 use Pimcore\Localization\IntlFormatter;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -41,6 +42,7 @@ abstract class AbstractHelper implements ServiceSubscriberInterface
             IntlFormatter::class       => IntlFormatter::class,
             TranslatorInterface::class => TranslatorInterface::class,
             TranslationHelper::class   => TranslationHelper::class,
+            CommandQueue::class        => CommandQueue::class,
         ];
     }
 
@@ -90,5 +92,17 @@ abstract class AbstractHelper implements ServiceSubscriberInterface
     protected function intlFormatter(): IntlFormatter
     {
         return $this->container->get(IntlFormatter::class);
+    }
+
+    /**
+     * Returns PimPrint CommandQueue
+     *
+     * @return CommandQueue
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function commandQueue(): CommandQueue
+    {
+        return $this->container->get(CommandQueue::class);
     }
 }

@@ -31,6 +31,8 @@ use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\Category;
 use Pimcore\Model\DataObject\Manufacturer;
 use Pimcore\Model\WebsiteSetting;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class AbstractRenderingProject
@@ -170,11 +172,16 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      * Loads the `Category` from the request sent by the PimPrint InDesign plugin.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupCategory(): void
     {
-        $category = Category::getById($this->pluginParams->get(PluginParameters::PARAM_PUBLICATION));
+        $category = Category::getById(
+            $this->pluginParams()
+                 ->get(PluginParameters::PARAM_PUBLICATION)
+        );
         if ($category instanceof Category && $category->isPublished()) {
             $this->category = $category;
         }
@@ -184,11 +191,16 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      * Loads the `Manufacturer` from the request sent by the PimPrint InDesign plugin.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupManufacturer(): void
     {
-        $manufacturer = Manufacturer::getById($this->pluginParams->get(PluginParameters::PARAM_PUBLICATION));
+        $manufacturer = Manufacturer::getById(
+            $this->pluginParams()
+                 ->get(PluginParameters::PARAM_PUBLICATION)
+        );
         if ($manufacturer instanceof Manufacturer && $manufacturer->isPublished()) {
             $this->manufacturer = $manufacturer;
         }
@@ -198,11 +210,16 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      * Loads the `Car` from the request sent by the PimPrint InDesign plugin.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupCar(): void
     {
-        $car = Car::getById($this->pluginParams->get(PluginParameters::PARAM_PUBLICATION));
+        $car = Car::getById(
+            $this->pluginParams()
+                 ->get(PluginParameters::PARAM_PUBLICATION)
+        );
         if ($car instanceof Car && $car->isPublished()) {
             $this->car = $car;
         }
@@ -213,6 +230,8 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      *
      * @return void
      *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setDocumentProperties(): void
@@ -228,6 +247,8 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      * Initializes variables for dynamic positioning.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function registerVariables(): void
@@ -254,6 +275,8 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      * @param PageLayoutInterface $template
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setChapterLayout(ChapterDto $chapter, PageLayoutInterface $template): void
@@ -277,7 +300,9 @@ abstract class AbstractCarsDemoProject extends RenderingProject
      *
      * @param string|null $chapterName
      *
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function renderChapterHeadline(?string $chapterName): void

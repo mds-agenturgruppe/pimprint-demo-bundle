@@ -99,6 +99,8 @@ class CarSalesLabel extends AbstractCarsDemoProject
      * {@inheritDoc}
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupContent(): void

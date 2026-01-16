@@ -25,9 +25,13 @@ use Mds\PimPrint\CoreBundle\InDesign\Html\FragmentParser;
 use Mds\PimPrint\CoreBundle\InDesign\Html\Style as HtmlStyle;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates the `Table` command for placing table elements in an InDesign document.
+ *
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
@@ -292,8 +296,10 @@ class Table extends AbstractStrategy
      * through the use of the `CopyBox` command.
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function enhancedTableContent(): void
     {

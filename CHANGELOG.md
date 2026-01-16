@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `\Mds\PimPrint\DemoBundle\Project\CarPrintDemo\CarList`
     - `\Mds\PimPrint\DemoBundle\Project\CarPrintDemo\CarSalesLabel`
 
+### Refactor
+
+- `pimprint-core-bundle` v4.5 compatibility - Symfony service architecture
+
 ## [4.4.0] - 2025-06-18
 
 ### Feature

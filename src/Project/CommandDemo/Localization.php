@@ -21,6 +21,8 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\SortLayers;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Table as TableBox;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates localization of page elements.
@@ -34,8 +36,10 @@ class Localization extends AbstractStrategy
      * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     public function build(): void
     {
@@ -90,8 +94,10 @@ class Localization extends AbstractStrategy
      * Places non-localized elements into the rendered document.
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function notLocalizedElements(): void
     {
@@ -124,8 +130,10 @@ class Localization extends AbstractStrategy
      * Localized elements are automatically placed on language-specific layers.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function localizedElements(): void
     {
@@ -157,7 +165,9 @@ class Localization extends AbstractStrategy
      * Renders a localized table
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderLocalizedTable(): void

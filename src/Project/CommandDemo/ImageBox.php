@@ -20,6 +20,8 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBoxScaled;
 use Mds\PimPrint\CoreBundle\InDesign\Command\NextPage;
 use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 use Pimcore\Model\Asset;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates the `ImageBox` command for placing image elements in an InDesign document.
@@ -32,8 +34,10 @@ class ImageBox extends AbstractStrategy
      * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     public function build(): void
     {
@@ -55,8 +59,10 @@ class ImageBox extends AbstractStrategy
      * @param float $topPosition Reference to the vertical position for placing images.
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function placeImage(float &$topPosition): void
     {
@@ -98,8 +104,10 @@ class ImageBox extends AbstractStrategy
      * @param float $topPosition the top-position for the images
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function fillModes(float $topPosition): void
     {
@@ -159,8 +167,10 @@ class ImageBox extends AbstractStrategy
      * InDesign-compatible assets on the fly, as shown in this demo.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      * @see \Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox::PROPERTY_PIMPRINT_ASSET
      */
     private function assetTypes(): void
@@ -231,8 +241,10 @@ class ImageBox extends AbstractStrategy
      * to the asset’s position and dimensions inside the placed image box.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function imageScaledBox(): void
     {
@@ -276,8 +288,10 @@ class ImageBox extends AbstractStrategy
      * dimensions of an A4 portrait page, and adjusts its offsets.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function fullPagePlacement(): void
     {

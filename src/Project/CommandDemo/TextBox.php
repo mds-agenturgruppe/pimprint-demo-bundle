@@ -21,6 +21,8 @@ use Mds\PimPrint\CoreBundle\InDesign\Html\Style as HtmlStyle;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Characters;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates the `TextBox` command for placing text elements in an InDesign document.
@@ -76,8 +78,10 @@ class TextBox extends AbstractStrategy
      * defined in the InDesign template to the text.
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function characterAndParagraph(): void
     {

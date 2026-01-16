@@ -100,7 +100,8 @@ class CarDetail extends AbstractCarsDemoProject
     /**
      * {@inheritDoc}
      *
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     protected function setupContent(): void
     {

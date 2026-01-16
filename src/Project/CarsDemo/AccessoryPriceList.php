@@ -103,6 +103,8 @@ class AccessoryPriceList extends AbstractCarsDemoProject
      * Sets up the content and prepares it for the rendering.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupContent(): void
@@ -112,7 +114,7 @@ class AccessoryPriceList extends AbstractCarsDemoProject
 
         //The second language is selected in the custom form field
         $this->priceListRenderer->setSecondLanguage(
-            $this->pluginParams->getCustomField($this->secondLanguageSelect->getParam())
+            $this->pluginParams()->getCustomField($this->secondLanguageSelect->getParam())
         );
     }
 

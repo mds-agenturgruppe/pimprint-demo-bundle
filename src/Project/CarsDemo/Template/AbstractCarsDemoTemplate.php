@@ -20,6 +20,8 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\Service\SpecialChars;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class AbstractCarsDemoTemplate
@@ -215,6 +217,8 @@ abstract class AbstractCarsDemoTemplate extends A4PortraitTemplate implements Pa
      * The left-side page number uses a `TextBox` with automatic page numbering and the appended chapter name.
      *
      * @return TextBox
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getPageNumberLeft(): TextBox
@@ -242,6 +246,8 @@ abstract class AbstractCarsDemoTemplate extends A4PortraitTemplate implements Pa
      * The right-side page number uses a `TextBox` with automatic page numbering and the appended chapter name.
      *
      * @return TextBox
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getPageNumberRight(): TextBox

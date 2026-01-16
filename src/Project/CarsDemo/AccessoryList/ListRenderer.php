@@ -106,7 +106,9 @@ class ListRenderer extends AbstractHelper
      * create ImageBox command for the accessory part image
      *
      * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getImageBox(): ?ImageBox
@@ -365,7 +367,9 @@ class ListRenderer extends AbstractHelper
      * Create ImageBox command for the accessory part manufacturer logo
      *
      * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getManufacturerLogoImageBox(): ?ImageBox

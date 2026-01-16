@@ -34,6 +34,8 @@ use Mds\PimPrint\DemoBundle\Project\Traits\FakerGeneratorTrait;
 use Pimcore\Model\DataObject\Car\Listing;
 use Pimcore\Model\DataObject\Manufacturer;
 use Pimcore\Translation\Translator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class ColumnPagination
@@ -88,8 +90,10 @@ class ColumnPagination extends RenderingProject
      * {@inheritDoc}
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     public function buildPublication(): void
     {
@@ -124,11 +128,16 @@ class ColumnPagination extends RenderingProject
      * Load Manufacturer object
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function setupManufacturer(): void
     {
-        $manufacturer = Manufacturer::getById($this->pluginParams->get(PluginParameters::PARAM_PUBLICATION));
+        $manufacturer = Manufacturer::getById(
+            $this->pluginParams()
+                 ->get(PluginParameters::PARAM_PUBLICATION)
+        );
         if ($manufacturer instanceof Manufacturer) {
             $this->manufacturer = $manufacturer;
 
@@ -168,16 +177,20 @@ class ColumnPagination extends RenderingProject
      * The plugin does not use the start alignment directly during document generation.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function demonstratePluginStartAlignment(): void
     {
         switch (true) {
-            case $this->pluginParams->isStartOnLeftPage():
+            case $this->pluginParams()
+                      ->isStartOnLeftPage():
                 $this->addPreMessage('Start on left page');
                 break;
 
-            case $this->pluginParams->isStartOnRightPage():
+            case $this->pluginParams()
+                      ->isStartOnRightPage():
                 $this->addPreMessage('Start on right page');
         }
     }
@@ -187,6 +200,8 @@ class ColumnPagination extends RenderingProject
      * We add 50 pages to ensure the document has "probably" enough pages.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function setDocumentProperties(): void
@@ -201,6 +216,8 @@ class ColumnPagination extends RenderingProject
      * All left and top box positions in this document depend on these two variables.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function registerVariables(): void
@@ -237,8 +254,10 @@ class ColumnPagination extends RenderingProject
      * Use this when page layout elements change based on content.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function registerTemplateCommands(): void
     {
@@ -303,8 +322,9 @@ class ColumnPagination extends RenderingProject
      * @param Car $car
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      */
     private function renderCar(Car $car): void
     {
@@ -323,8 +343,10 @@ class ColumnPagination extends RenderingProject
      * @param Car $car
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function renderCarIntro(Car $car): void
     {
@@ -422,7 +444,9 @@ class ColumnPagination extends RenderingProject
      * Render the fictitious table
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderCarTable(): void

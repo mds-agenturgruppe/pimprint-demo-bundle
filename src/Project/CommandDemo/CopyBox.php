@@ -15,6 +15,8 @@ namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates the CopyBox command for placing template elements in an InDesign document.
@@ -32,6 +34,8 @@ class CopyBox extends AbstractStrategy
      * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     public function build(): void
@@ -91,6 +95,8 @@ class CopyBox extends AbstractStrategy
      * @param float $topPosition
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function copyWithResize(float $topPosition): void

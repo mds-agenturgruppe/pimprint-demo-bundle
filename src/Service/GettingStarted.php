@@ -16,6 +16,8 @@ namespace Mds\PimPrint\DemoBundle\Service;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox;
 use Mds\PimPrint\CoreBundle\Project\RenderingProject;
 use Mds\PimPrint\CoreBundle\Service\InDesign\PublicationTreeBuilder;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Class GettingStarted
@@ -49,6 +51,8 @@ class GettingStarted extends RenderingProject
      * Demonstrates the PimPrint basic concept.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     public function buildPublication(): void

@@ -19,6 +19,8 @@ use Mds\PimPrint\CoreBundle\Project\RenderingProject;
 use Mds\PimPrint\CoreBundle\Service\InDesign\PublicationTreeBuilder;
 use Mds\PimPrint\CoreBundle\Service\PluginParameters;
 use Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Project to demonstrate all PimPrint InDesign commands.
@@ -81,6 +83,8 @@ class CommandDemo extends RenderingProject
      * Method called to build the InDesign commands to generate the publication.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     public function buildPublication(): void
@@ -103,7 +107,8 @@ class CommandDemo extends RenderingProject
      * @param AbstractCommand $command
      *
      * @return AbstractProject
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function addCommand(AbstractCommand $command): AbstractProject
     {
@@ -116,7 +121,8 @@ class CommandDemo extends RenderingProject
      * @param array $commands
      *
      * @return AbstractProject
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function addCommands(array $commands): AbstractProject
     {

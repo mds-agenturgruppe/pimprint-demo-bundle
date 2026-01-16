@@ -4,60 +4,15 @@ services:
         autoconfigure: true
         public: false
 
+    Mds\PimPrint\DemoBundle\Service\:
+        resource: '../../Service'
+
     Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\:
         resource: '../../Project/DynamicPaginationDemo'
+
+    Mds\PimPrint\DemoBundle\Project\LocalizationDemo\:
+        resource: '../../Project/LocalizationDemo'
 
     Mds\PimPrint\DemoBundle\Project\CarsDemo\:
         resource: '../../Project/CarsDemo'
         exclude: '../../*/Dto/*'
-
-#    Register rendering projects as service
-    Mds\PimPrint\DemoBundle\Service\GettingStarted:
-        parent: mds.pimprint.core.rendering_project #Rendering projects must use 'mds.pimprint.core.rendering_project' as parent
-        public: true    #must be defined public
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Service\CommandDemo:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject:
-        parent: mds.pimprint.core.master_locale_rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPagination:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-#    CardDemo Projects
-    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarList:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarDetail:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarSalesLabel:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryList:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryPriceList:
-        parent: mds.pimprint.core.rendering_project
-        public: true
-        autowire: true
-        autoconfigure: false
-
-    #Helper services
-    Mds\PimPrint\DemoBundle\Project\LocalizationDemo\CarTreeBuilder: ~

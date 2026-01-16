@@ -108,6 +108,8 @@ class AccessoryList extends AbstractCarsDemoProject
      * AccessoryParts can be rendered either for a category or a manufacturer.
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     protected function setupContent(): void
@@ -248,8 +250,9 @@ class AccessoryList extends AbstractCarsDemoProject
      * Renders the manufacturer logo on the page header
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
-     * @throws \Exception
+     * @throws NotFoundExceptionInterface
      */
     private function renderManufacturerLogo(): void
     {

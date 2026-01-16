@@ -120,7 +120,10 @@ class LabelRenderer extends AbstractHelper
     /**
      * Creates the `ImageBox` for the car’s manufacturer logo
      *
+     * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getLogoImageBox(): ?ImageBox

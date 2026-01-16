@@ -15,6 +15,8 @@ namespace Mds\PimPrint\DemoBundle\Project\Traits;
 
 use Faker\Factory;
 use Faker\Generator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Trait FakerGeneratorTrait
@@ -34,7 +36,8 @@ trait FakerGeneratorTrait
      * Returns Faker Generator
      *
      * @return Generator
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     private function getFaker(): Generator
     {

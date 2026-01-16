@@ -98,7 +98,9 @@ class DetailRenderer extends AbstractHelper
      * Creates the `ImageBox` for the car’s main image
      *
      * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getMainImageBox(): ?ImageBox
@@ -129,7 +131,10 @@ class DetailRenderer extends AbstractHelper
     /**
      * Creates the `ImageBox` for the car’s manufacturer logo
      *
+     * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getLogoImageBox(): ?ImageBox
@@ -449,7 +454,9 @@ class DetailRenderer extends AbstractHelper
      * @param int           $index
      *
      * @return ImageBox
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getAccessoryImageBox(

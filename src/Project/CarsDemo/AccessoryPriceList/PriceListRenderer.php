@@ -315,7 +315,9 @@ class PriceListRenderer extends AbstractHelper
      * @param AccessoryPart $accessoryPart
      *
      * @return Text|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getImage(AccessoryPart $accessoryPart): ?Text

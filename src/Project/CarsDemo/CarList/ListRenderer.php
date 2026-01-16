@@ -92,7 +92,9 @@ class ListRenderer extends AbstractHelper
      * Create `ImageBox` for car image
      *
      * @return ImageBox|null
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function getImageBox(): ?ImageBox

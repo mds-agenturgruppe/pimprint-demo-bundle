@@ -23,6 +23,8 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\VariableOutput;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MaxValue;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MinValue;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Demonstrates relative positioning concepts in PimPrint.
@@ -39,8 +41,10 @@ class RelativePositioning extends AbstractStrategy
      * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     public function build(): void
     {
@@ -121,8 +125,10 @@ class RelativePositioning extends AbstractStrategy
      * You can use these variables in left and top positions like manually defined variables.
      *
      * @return void
-     * @throws \Exception
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function boxVariables(): void
     {
@@ -288,8 +294,10 @@ class RelativePositioning extends AbstractStrategy
      * Demonstrates relative positioning when creating a flexible content page.
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function demoPage(): void
     {

@@ -33,6 +33,8 @@ use Pimcore\Model\Asset\Image;
 use Pimcore\Model\DataObject\Car;
 use Pimcore\Model\DataObject\Data\Hotspotimage;
 use Pimcore\Model\DataObject\Manufacturer;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -88,6 +90,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      *
      * @return void
      * @throws FilesystemException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     public function buildPublication(): void
@@ -113,6 +117,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * Sets default demo page settings
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function setDocumentSettings(): void
@@ -127,8 +133,9 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * \Mds\PimPrint\DemoBundle\Project\CommandDemo\Localization::build
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
-     * @throws \Exception
+     * @throws NotFoundExceptionInterface
      * @see \Mds\PimPrint\DemoBundle\Project\CommandDemo\Localization::build
      */
     private function renderExamplePage(): void
@@ -146,11 +153,16 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * This demo only renders 'Actual-Car' objects
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function setupCar(): void
     {
-        $car = Car::getById($this->pluginParams->get(PluginParameters::PARAM_PUBLICATION));
+        $car = Car::getById(
+            $this->pluginParams()
+                 ->get(PluginParameters::PARAM_PUBLICATION)
+        );
         if ($car instanceof Car) {
             if ('actual-car' === $car->getObjectType()) {
                 $this->car = $car;
@@ -187,7 +199,9 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderManufacturer(int $topPos): void
@@ -234,8 +248,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function renderCar(int $topPos): void
     {
@@ -256,6 +272,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderCarName(int $topPos): void
@@ -319,7 +337,9 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderCarImage(int $topPos): void
@@ -372,8 +392,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * Render localized car description
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function renderCarDescription(): void
     {
@@ -430,8 +452,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
-     * @throws \Exception
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
     private function renderUseMasterLocaleExamples(int $topPos): void
     {
@@ -453,6 +477,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderFixedSizeText(int $topPos): void
@@ -489,6 +515,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderFixedHeightText(int $topPos): void
@@ -522,6 +550,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * Renders a localized TextBox with random content to demonstrate AbstractBox::USE_MASTER_LOCALE_NONE
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderDontUseMasterLocaleText(): void
@@ -551,6 +581,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderCopyBox(int $topPos): void
@@ -576,7 +608,9 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderImageBox(int $topPos): void
@@ -604,7 +638,9 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
      * @throws FilesystemException
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderTableBox(int $topPos): void
@@ -666,6 +702,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * Renders usage description text of demo page
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function renderDemoDescription(): void
@@ -712,6 +750,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param int $topPos
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function rendersLayoutBar(int $topPos): void
@@ -737,6 +777,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * Sort the generated layers
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @throws \Exception
      */
     private function sortLayers(): void

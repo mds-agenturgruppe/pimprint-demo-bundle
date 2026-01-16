@@ -17,14 +17,14 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 
 /**
- * Demonstrates how to display arbitrary messages in InDesign Plugin for notification and error purposes.
+ * Demonstrates how to display messages in the InDesign plugin for notifications and errors.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class Messages extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -36,7 +36,7 @@ class Messages extends AbstractStrategy
     }
 
     /**
-     * Demonstrates different types of messages displayed in InDesign Plugin.
+     * Demonstrates different message types displayed in the InDesign plugin.
      *
      * @return void
      * @throws \Exception
@@ -47,17 +47,18 @@ class Messages extends AbstractStrategy
         $this->addCommand(new GoToPage(1));
         $topPosition = 12.7;
 
-        //AbstractProject offers with addPreMessage() a method to send arbitraty messages to InDesign,
-        //which are displayed before rendering starts.
+        // AbstractProject provides the addPreMessage() method to send messages to InDesign.
+        // These messages are displayed before rendering starts.
         $this->addPreMessage('Demo of Plugin messages');
 
-        //Place a example box.
+        // Place an example box.
         $this->addCommand(new CopyBoxCommand('image', 12.7, $topPosition));
 
-        //It does not matter when a PreMessages is added. They are always displayed before rendering starts.
+        // It does not matter when you add a PreMessage.
+        // InDesign always displays it before rendering starts.
         $this->addPreMessage('Next message');
 
-        //With PageMessages messages can be displayed while rendering in context with the current rendered page.
+        // PageMessages display messages during rendering in the context of the currently rendered page.
         $this->addPageMessage('Message displayed while rendering.');
 
         $topPosition += $margin;
@@ -66,7 +67,7 @@ class Messages extends AbstractStrategy
         $this->addCommand(new CopyBoxCommand('image', 12.7, $topPosition));
         $this->addPageMessage('Placed two more boxes on page.');
 
-        //PageMessages can either be displayed in rendering overlay or added to the page in a text box.
+        // PageMessages can appear as a rendering overlay or be added to the page in a text box.
         $this->addPageMessage('OnPage message.', true);
 
         $this->addPageMessage(

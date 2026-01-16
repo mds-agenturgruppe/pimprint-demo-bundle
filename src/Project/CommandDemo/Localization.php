@@ -23,7 +23,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBox;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 
 /**
- * Demonstrates the localization of page-elements.
+ * Demonstrates localization of page elements.
  * Localized elements are automatically placed on language-specific layers.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
@@ -31,7 +31,7 @@ use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 class Localization extends AbstractStrategy
 {
     /**
-     * {@inheritDoc}
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -49,8 +49,8 @@ class Localization extends AbstractStrategy
     }
 
     /**
-     * This method does not render any content into the document.
-     * It only explains the localization API of page-elements.
+     * This method does not render content into the document.
+     * It only explains the localization API for page elements.
      *
      * @return void
      * @throws \Exception
@@ -58,29 +58,28 @@ class Localization extends AbstractStrategy
      */
     private function conceptExplanation(): void
     {
-//        All commands that creates page-elements in the InDesign document (CopyBox, TextBox, Table and ImageBox)
-//        can be defined as localized or not.
-//        If a page element is defined as localized it is automatically placed on a layer that has the current rendered
-//        locale appended to the layer name.
-
-//        By default, all of these elements are created not localized.
+        // All commands that create page elements in the InDesign document (CopyBox, TextBox, Table, and ImageBox)
+        // can be defined as localized or not.
+        // If a page element is defined as localized, it is automatically placed on a layer
+        // with the current rendered locale appended to the layer name.
+        // By default, all these elements are created as not localized.
         $copyBox = new CopyBox('copyBox', 10, 10);
 
-//        Each box can be set to localized manually
+        // You can set each box to be localized manually.
         $copyBox->setLocalized(true);
 
-//        The locale of the box is set automatically to the currently rendered locale.
-//        For special the locale can be set manually
+        // The box locale is set automatically to the currently rendered locale.
+        // For special use-cases, you can set the locale manually.
         $copyBox->setLocale('en');
 
-//        For convenience reasons the default localization behaviour can be changed for each element separately.
-//        When setDefaultLocalized is set to true, all new instances of this element are created localized.
+        // For convenience, you can change the default localization behavior per element.
+        // When setDefaultLocalized is true, all new instances of the element are localized.
         CopyBox::setDefaultLocalized(true);
         TextBox::setDefaultLocalized(true);
         TableBox::setDefaultLocalized(true);
         ImageBox::setDefaultLocalized(true);
 
-//        For this demo purpose we set the default to false again.
+        // For this demo, reset the default behavior to false.
         CopyBox::setDefaultLocalized(false);
         TextBox::setDefaultLocalized(false);
         TableBox::setDefaultLocalized(false);
@@ -88,7 +87,7 @@ class Localization extends AbstractStrategy
     }
 
     /**
-     * Places not localized elements into the rendered document.
+     * Places non-localized elements into the rendered document.
      *
      * @return void
      * @throws \Exception
@@ -96,32 +95,32 @@ class Localization extends AbstractStrategy
      */
     private function notLocalizedElements(): void
     {
-//        The following page-elements will be created not localized.
-//        They will be placed on the current active demo layer 'Localization Demo'.
-//        Note: Layer is created in \Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy::initDemoLayer()
+        // The following page elements are created as not localized.
+        // They are placed on the current active demo layer "Localization Demo".
+        // Note: The layer is created in \Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy::initDemoLayer().
 
         $copyBox = new CopyBox('copyBox', 12.7, 12.7);
-//        For demo purpose we set not localized (default behaviour)
+        // For demo purposes, we use not localized elements (default behavior).
         $copyBox->setLocalized(false);
         $this->addCommand($copyBox);
 
         $asset = $this->loadRandomAsset('/Car Images/%');
         $imageBox = new ImageBox('image', 30, 12.7, 60, 40, $asset, ImageBox::FIT_FILL_PROPORTIONALLY);
-//        For demo purpose we set not localized (default behaviour)
+        // For demo purposes, we use not localized elements (default behavior).
         $imageBox->setLocalized(false);
         $this->addCommand($imageBox);
 
         $textBox = new TextBox('textBox', 12.7, 60, 100, 10);
-        //For demo purpose we set not localized (default behaviour)
+        // For demo purposes, we use not localized elements (default behavior).
         $textBox->setLocalized(false);
         $textBox->addString(
-            'Change the rendered locale in the PlugIn and render this demo publication in different locales.'
+            'Change the rendered locale in the plugin and render this demo publication in different locales.'
         );
         $this->addCommand($textBox);
     }
 
     /**
-     * Demonstrates the placement of localized page-elements.
+     * Demonstrates placing localized page elements.
      * Localized elements are automatically placed on language-specific layers.
      *
      * @return void
@@ -130,9 +129,9 @@ class Localization extends AbstractStrategy
      */
     private function localizedElements(): void
     {
-//        The following page-elements will be created not localized.
-//        They will be placed on the current active demo layer 'Localization Demo :: locale'.
-//        Note: Layer is created in \Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy::initDemoLayer()
+        // The following page elements are created as localized.
+        // They are placed on the current active demo layer "Localization Demo :: locale".
+        // Note: The layer is created in \Mds\PimPrint\DemoBundle\Project\CommandDemo\AbstractStrategy::initDemoLayer().
 
         $copyBox = new CopyBox('copyBox', 12.7, 100);
         $copyBox->setLocalized();
@@ -143,7 +142,7 @@ class Localization extends AbstractStrategy
         $imageBox->setLocalized();
         $this->addCommand($imageBox);
 
-        //TextBox will be rendered on a separate localized layer 'Localized Text :: locale'
+        // The TextBox is rendered on a separate localized layer "Localized Text :: locale".
         $this->addCommand(new SetLayer('Localized Text'));
 
         $textBox = new TextBox('textBox', 100, 100, 60, 10);
@@ -155,7 +154,7 @@ class Localization extends AbstractStrategy
     }
 
     /**
-     * Render localized table
+     * Renders a localized table
      *
      * @return void
      * @throws FilesystemException
@@ -181,7 +180,7 @@ class Localization extends AbstractStrategy
               ->setFit(ImageBox::FIT_CONTENT_TO_FRAME)
               ->setWidth(10)
               ->setHeight(10);
-        //In localized tables all components in cells must be localized too.
+        // In localized tables, all elements in cells must be localized too.
         $image->setLocalized();
 
         $paragraph = new Paragraph();
@@ -192,18 +191,18 @@ class Localization extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the sorting of layers.
+     * Demonstrates layer sorting
      *
      * @return void
      * @throws \Exception
      */
     private function sortLayers(): void
     {
-//        Layers are sorted by defining an array with the order of layer names
+        // Layers are sorted by defining an array with the order of layer names.
         $order = [
-            'Localization Demo',            //Exact layer name
-            '/Localization Demo :: \w+/',   //Regex for localized "Localization Demo" layers
-            '/Localized Text :: \w+/',      //Regex for localized "Localized Text" layers
+            'Localization Demo',            // Exact layer name
+            '/Localization Demo :: \w+/',   // Regex for localized "Localization Demo" layers
+            '/Localized Text :: \w+/',      // Regex for localized "Localized Text" layers
         ];
 
         $this->addCommand(

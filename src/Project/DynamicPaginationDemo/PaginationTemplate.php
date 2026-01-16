@@ -25,14 +25,14 @@ use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 class PaginationTemplate extends A4PortraitTemplate
 {
     /**
-     * Width of content area
+     * Width of the content area
      *
      * @var float
      */
     const CONTENT_WIDTH = self::PAGE_WIDTH - self::PAGE_MARGIN_LEFT - self::PAGE_MARGIN_RIGHT;
 
     /**
-     * Height of content area
+     * Height of the content area
      *
      * @var float
      */
@@ -53,23 +53,23 @@ class PaginationTemplate extends A4PortraitTemplate
     const CONTENT_ORIGIN_LEFT = self::PAGE_MARGIN_LEFT;
 
     /**
-     * Max yPos where is content placed in a page
+     * Max yPos where is content placed on a page
      *
      * @var float
      */
     const CONTENT_BOTTOM = self::PAGE_HEIGHT - self::PAGE_MARGIN_BOTTOM;
 
     /**
-     * Max xPos where is content placed in a page
+     * Max xPos where is content placed on a page
      *
      * @var float
      */
     const CONTENT_RIGHT = self::PAGE_WIDTH - self::PAGE_MARGIN_RIGHT;
 
     /**
-     * Width of layout column
-     * Change value to:
-     * - 60: 3 columns have space on a A4 portrait
+     * Defines the width of a layout column.
+     * Set the value to:
+     * - 60: three columns fit on an A4 portrait page
      *
      * @var int
      */
@@ -91,18 +91,18 @@ class PaginationTemplate extends A4PortraitTemplate
     const BOX_MARGIN = 5;
 
     /**
-     * CheckNewColumn maxXPos defines the max x position to place columns at.
+     * CheckNewColumn maxXPos defines the maximum x-position where columns can be placed.
      * Change value to:
-     * - 100: only one column with width 90 fits
+     * - 100: only one column with width `90` fits
      *
      * @var int|null
      */
     const SPLIT_COLUMN_MAX_X = null;
-//    const SPLIT_COLUMN_MAX_X = 150; //Whitespace on right page side
+//    const SPLIT_COLUMN_MAX_X = 150; //Whitespace on the right page side
 
     /**
-     * MarginOffset places the group into a new column if less than are left on the page after group end.
-     * Change the values to:
+     * MarginOffset moves the group to a new column if less space remains on the page after the group ends.
+     * Set the values to:
      * - 0, 100, 50
      *
      * @var int
@@ -113,8 +113,6 @@ class PaginationTemplate extends A4PortraitTemplate
 
     /**
      * Content elements used in DataPrint projects
-     *
-     * @var string
      */
     const ELEMENT_HEADLINE = 'headline';
 
@@ -130,8 +128,6 @@ class PaginationTemplate extends A4PortraitTemplate
 
     /**
      * InDesign styles
-     *
-     * @var string
      */
     const TABLE_CELL_HEAD = 'TableHead';
 
@@ -142,7 +138,7 @@ class PaginationTemplate extends A4PortraitTemplate
     const PARAGRAPH_HEADER_TEXT_RIGHT = 'SubHeadline_1_right';
 
     /**
-     * Returns CheckNewPage command matching the layout page pagination
+     * Returns CheckNewPage command that matches the layout page
      *
      * @param int|float|null $marginOffset
      *
@@ -160,7 +156,7 @@ class PaginationTemplate extends A4PortraitTemplate
 
         $command->setNewPosXFacingPages(
             PaginationTemplate::CONTENT_ORIGIN_LEFT,
-            //For demo purpose we place the content on right pages 5mm more to the right
+            //For demo purposes, we place the content 5 mm further to the right on right-hand pages
             PaginationTemplate::CONTENT_ORIGIN_LEFT + 5
         );
 
@@ -168,7 +164,7 @@ class PaginationTemplate extends A4PortraitTemplate
     }
 
     /**
-     * Returns CheckNewColumn command matching the layout column and page pagination
+     * Returns the CheckNewColumn command that matches the layout column and page
      *
      * @param int|float|null $marginOffset
      *

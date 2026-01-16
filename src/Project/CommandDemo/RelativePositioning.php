@@ -14,8 +14,8 @@
 namespace Mds\PimPrint\DemoBundle\Project\CommandDemo;
 
 use League\Flysystem\FilesystemException;
-use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
+use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
@@ -25,19 +25,18 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\Variables\MinValue;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 
 /**
- * Demonstrates the functionality and concepts in PimPrint for relative positioning of elements to each other.
+ * Demonstrates relative positioning concepts in PimPrint.
  *
- * PimPrint offers the Variable command to set arbitrary variables in InDesign.
- * All position parameters can be defined relative to this variables.
- * On top of this the bounds of placed elements can be dynamically defined as variables to be able to position
- * elements relative to each other.
+ * PimPrint provides the `Variable` command to set custom variables in InDesign.
+ * You can define all position parameters relative to these variables.
+ * You can also store the bounds of placed elements as variables to position elements relative to each other.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class RelativePositioning extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -54,8 +53,8 @@ class RelativePositioning extends AbstractStrategy
     }
 
     /**
-     * With Variable command arbitrary variables can be defined in InDesign.
-     * In top and left placement parameters these variables can be used.
+     * You can define arbitrary variables in InDesign using the `Variable` command.
+     * You can use these variables in top and left placement parameters.
      *
      * @return void
      * @throws \Exception
@@ -64,36 +63,36 @@ class RelativePositioning extends AbstractStrategy
     {
         $this->addCommand(new GoToPage());
 
-        //Sets variable with name 'xPos' with value 105 (10.5cm)
+        // Sets the variable "xPos" to 105 (10.5 cm).
         $this->addCommand(
             new Variable('xPos', 105)
         );
 
-        //Sets variable with name 'yPos' with value 120 (12cm)
+        // Sets the variable "yPos" to 120 (12 cm).
         $this->addCommand(
             new Variable('yPos', 120)
         );
 
-        //When placing a box defined variables can be used for placement.
-        //This box is placed at static left and relative top yPos variable position.
+        // When placing a box, you can use defined variables for positioning.
+        // This box uses a static left position and a top position relative to the "yPos" variable.
         $box = $this->createDemoBox();
         $box->setLeft(12.7)
             ->setTopRelative('yPos');
         $this->addCommand($box);
 
-        //This box is placed at relative left xPos variable and static top position
+        // This box uses a left position relative to the "xPos" variable and a static top position.
         $box = $this->createDemoBox();
         $box->setTop(12.7)
             ->setLeftRelative('xPos');
         $this->addCommand($box);
 
-        //Both left and top position can be relative.
+        // You can define both left and top positions as relative.
         $box = $this->createDemoBox();
         $box->setLeftRelative('xPos')
             ->setTopRelative('yPos');
         $this->addCommand($box);
 
-        //Previous not defined variables in relative positioning creates an \Exception when adding the command.
+        // If a relative variable is not defined, adding the command throws an \Exception.
         $box = $this->createDemoBox();
         $box->setTopRelative('notDefinedVariable');
         try {
@@ -102,13 +101,13 @@ class RelativePositioning extends AbstractStrategy
             $this->placeText($e->getMessage(), 20, 20, 65, 10);
         }
 
-        //Box will be placed at left "'xPos' +30.5mm" and top "'yPos' -30.5mm"
+        // The box is placed at left "'xPos' +30.5mm" and top "'yPos' -30.5mm".
         $box = $this->createDemoBox();
         $box->setLeftRelative('xPos', 30.5)
             ->setTopRelative('yPos', -30.5);
         $this->addCommand($box);
 
-        //Existing variables can be overwritten anytime.
+        // You can overwrite existing variables at any time.
         $this->addCommand(new Variable('xPos', 40));
         $this->addCommand(new Variable('yPos', 245));
         $box = $this->createDemoBox();
@@ -118,8 +117,8 @@ class RelativePositioning extends AbstractStrategy
     }
 
     /**
-     * When a box is placed the bounds of the box can be defined as dynamically variables.
-     * These variables can be used in left and top positions as manual defined variables.
+     * When you place a box, you can store its bounds as dynamic variables.
+     * You can use these variables in left and top positions like manually defined variables.
      *
      * @return void
      * @throws \Exception
@@ -130,8 +129,8 @@ class RelativePositioning extends AbstractStrategy
         $this->addCommand(new GoToPage(2));
         $asset = $this->loadRandomAsset('%/Car Images/%');
 
-        //For demonstration purpose we randomize the image position and size.
-        //(Open the InDesign page and generate the demo multiple times.)
+        // For demonstration purposes, we randomize the image position and size.
+        // (Open the InDesign page and generate the demo multiple times.)
         $image = new ImageBoxCommand(
             'image',
             rand(40, 60),
@@ -142,55 +141,55 @@ class RelativePositioning extends AbstractStrategy
             ImageBoxCommand::FIT_FILL_PROPORTIONALLY
         );
 
-        //When placing a box the bounds can be dynamically assigned as variables.
+        // When placing a box, you can assign its bounds as variables dynamically.
         $image->setVariable('topPos', Variable::POSITION_TOP)
               ->setVariable('bottomPos', Variable::POSITION_BOTTOM)
               ->setVariable('leftPos', Variable::POSITION_LEFT)
               ->setVariable('rightPos', Variable::POSITION_RIGHT);
         $this->addCommand($image);
 
-        //For development purpose variables can be output in the plugin.
-        //By default, the output is only done in 'dev' environment. (See optional setForce() option)
-
-        //Outputs the variable 'topPos' in the plugin with optional label.
+        // For development purposes, you can output variables in the plugin.
+        // By default, this output appears only in the 'dev' environment (see the optional setForce() option).
+        // Outputs the variable 'topPos' in the plugin with an optional label.
         $this->addCommand(new VariableOutput('topPos', 'Image topPos'));
 
 
-        //As manual defined variables new elements can be placed relative to the variables.
-        //By this elements can be positioned relative to other elements.
+        // Like manually defined variables, you can place new elements relative to variables.
+        // This allows you to position elements relative to other elements.
 
-        //Box is placed at top-left corner of image
+        // The box is placed at the top-left corner of the image.
         $box = $this->createDemoBox();
-        //Keep in mind that elements are placed by the left-top position. So we have to pay attention to the box size.
+        // Keep in mind that elements use the top-left position for placement,
+        // so you must consider the box size.
         $box->setTopRelative('topPos', $box->getHeight() * -1)
             ->setLeftRelative('leftPos', $box->getWidth() * -1);
         $this->addCommand($box);
 
-        //Box is places at top-right corner of image
+        // The box is placed at the top-right corner of the image.
         $box = $this->createDemoBox();
         $box->setTopRelative('topPos', $box->getHeight() * -1)
             ->setLeftRelative('rightPos');
         $this->addCommand($box);
 
-        //Box is placed at bottom-left corner of image
+        // The box is placed at the bottom-left corner of the image.
         $box = $this->createDemoBox();
         $box->setTopRelative('bottomPos')
             ->setLeftRelative('leftPos', $box->getWidth() * -1);
         $this->addCommand($box);
 
-        //Box is placed at bottom-right corner of image
+        // The box is placed at the bottom-right corner of the image.
         $box = $this->createDemoBox();
         $box->setTopRelative('bottomPos')
             ->setLeftRelative('rightPos');
         $this->addCommand($box);
 
-        //Box is placed above the image and centered to it.
+        // The box is placed above the image and centered on it.
         $box = $this->createDemoBox();
         $box->setTopRelative('topPos', $box->getHeight() * 2 * -1)
             ->setLeftRelative('leftPos', ($image->getWidth() / 2) - ($box->getWidth() / 2));
         $this->addCommand($box);
 
-        //Some playing around...
+        // Some experimentation
         $box = $this->createDemoBox();
         $box->setTopRelative('bottomPos')
             ->setLeftRelative('leftPos', ($image->getWidth() / 2) - ($box->getWidth() / 2))
@@ -211,8 +210,9 @@ class RelativePositioning extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the usage of Variable\AbstractMath commands. With this commands InDesign sets a variable to
-     * maximum or minimum value of other variables. This is useful to build multi-column flexible layouts.
+     * Demonstrates the use of Variable\AbstractMath commands.
+     * These commands set a variable in InDesign to the maximum or minimum value of other variables.
+     * This is useful for building flexible multi-column layouts.
      *
      * @return void
      * @throws \Exception
@@ -221,16 +221,16 @@ class RelativePositioning extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(3));
 
-        //Example with manual variables
+        // Example using manual variables
         $this->addCommand(new Variable('variable1', 20));
         $this->addCommand(new Variable('variable2', 40));
         $this->addCommand(new Variable('variable3', 60));
 
-        //Set 'maxValue' to the maximum value of 'variable1', 'variable2' and 'variable3'
+        // Sets "maxValue" to the maximum value of "variable1", "variable2", and "variable3".
         $this->addCommand(
             new MaxValue('maxValue', ['variable1', 'variable2', 'variable3'])
         );
-        //Place a example box at top 'maxValue'
+        // Places an example box at the top position "maxValue".
         $text = new TextBoxCommand('textBox', 12.7);
         $text->addString('Box placed at maxValue top Position')
              ->setWidth(50)
@@ -238,11 +238,11 @@ class RelativePositioning extends AbstractStrategy
              ->setTopRelative('maxValue');
         $this->addCommand($text);
 
-        //Set 'minValue' to the minimum value of 'variable1', 'variable2' and 'variable3'
+        // Sets "minValue" to the maximum value of "variable1", "variable2", and "variable3".
         $this->addCommand(
             new MinValue('minValue', ['variable1', 'variable2', 'variable3'])
         );
-        //Place a example box at top 'minValue'
+        // Places an example box at the top position "minValue".
         $text = new TextBoxCommand('textBox', 12.7);
         $text->addString('Box placed at minValue top Position')
              ->setWidth(50)
@@ -250,10 +250,10 @@ class RelativePositioning extends AbstractStrategy
              ->setTopRelative('minValue');
         $this->addCommand($text);
 
-        //Example with two 'columns' of elements with random height
+        // Example with two columns of elements with random heights.
         $this->addCommand(new Variable('topPos', 75));
 
-        //Text with random length in first 'column'
+        // Text with a random length in the first column.
         $text = new TextBoxCommand('textBox', 12.7);
         $text->setWidth(100)
              ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT_HEIGHT)
@@ -262,20 +262,20 @@ class RelativePositioning extends AbstractStrategy
              ->setVariable('bottomCol1', Variable::POSITION_BOTTOM);
         $this->addCommand($text);
 
-        //Random box height in second 'column'
-            $box = $this->createDemoBox();
-            $box->setLeft(120)
-                ->setHeight(rand(20, 100))
-                ->setTopRelative('topPos', 5)
-                ->setVariable('bottomCol2', Variable::POSITION_BOTTOM);
-            $this->addCommand($box);
+        // Random box height in the second column.
+        $box = $this->createDemoBox();
+        $box->setLeft(120)
+            ->setHeight(rand(20, 100))
+            ->setTopRelative('topPos', 5)
+            ->setVariable('bottomCol2', Variable::POSITION_BOTTOM);
+        $this->addCommand($box);
 
-        //Set variable 'maxColumn' to the maximum of 'bottomCol1' and 'bottomCol2'
+        // Sets the variable "maxColumn" to the maximum of "bottomCol1" and "bottomCol2".
         $this->addCommand(
             new MaxValue('maxColumn', ['bottomCol1', 'bottomCol2'])
         );
 
-        //Place the next box at calculated 'topPos'
+        // Places the next box at the calculated "topPos".
         $text = new TextBoxCommand('textBox', 12.7);
         $text->setWidth(180)
              ->setHeight(10)
@@ -285,7 +285,7 @@ class RelativePositioning extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the usage of relative positioning when  creating a flexible a content page.
+     * Demonstrates relative positioning when creating a flexible content page.
      *
      * @return void
      * @throws \Exception
@@ -380,7 +380,7 @@ class RelativePositioning extends AbstractStrategy
     }
 
     /**
-     * Creates a copyBox element with 2x2 cm.
+     * Creates a `CopyBox` element that is 2 × 2 cm.
      *
      * @return CopyBoxCommand
      * @throws \Exception

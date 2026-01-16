@@ -29,7 +29,7 @@ class GettingStarted extends RenderingProject
      *
      * @param PublicationTreeBuilder $treeBuilder
      */
-    public function __construct(private PublicationTreeBuilder $treeBuilder)
+    public function __construct(private readonly PublicationTreeBuilder $treeBuilder)
     {
     }
 
@@ -56,8 +56,8 @@ class GettingStarted extends RenderingProject
         //Initialize the InDesign rendering
         $this->startRendering();
 
-        //Copy the element named 'templateElement' from template document into the generated document.
-        $command = new CopyBox('templateElement', 10, 10);
+        //Copy the element named 'templateElement' from the template document into the generated document.
+        $command = new CopyBox('templateElement', 10, 10); //Position left/top 10 mm
         $this->addCommand($command);
     }
 }

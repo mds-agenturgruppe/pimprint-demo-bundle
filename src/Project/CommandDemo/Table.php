@@ -22,19 +22,19 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\Table as TableCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 use Mds\PimPrint\CoreBundle\InDesign\Html\FragmentParser;
-use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Html\Style as HtmlStyle;
+use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
 
 /**
- * Demonstrates the Table command for placement of table elements in InDesign document.
+ * Demonstrates the `Table` command for placing table elements in an InDesign document.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class Table extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -53,7 +53,7 @@ class Table extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the basic usage of placing a table defining columns and adding rows with cells.
+     * Demonstrates basic table placement by defining columns and adding rows with cells.
      *
      * @return void
      * @throws \Exception
@@ -63,89 +63,90 @@ class Table extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(1));
 
-        //Create the Table command and set position and size initially.
-        //As all commands all parameters can be set with setter methods.
+        // Create the Table command and set its initial position and size.
+        // Like all commands, you can set all parameters using setter methods.
         $tableBox = new TableCommand('tableBox', 12.7, 20, 176, 150);
         $tableBox->setFit(TableCommand::FIT_FRAME_TO_CONTENT);
 
-        //Set the default height for rows
+        // Sets the default row height.
         $tableBox->setRowHeight(5);
 
-        //In a first step the columns of the table are defined. Each column expects at least a width in mm.
+        // First, define the table columns. Each column requires at least a width in mm.
         $tableBox->addColumn(20)
                  ->addColumn(20)
                  ->addColumn(30)
                  ->addColumn(40);
 
-        //Rows and cells are added sequentially to table.
+        // Then add rows and cells sequentially to the table.
         $tableBox->startRow();
 
-        //The simplest cell content is passing plain test into the cell.
+        // The simplest cell content is plain text.
         $tableBox->addCell('Cell 1/1')
                  ->addCell('Cell 1/2')
                  ->addCell('Cell 1/3')
                  ->addCell('Cell 1/4');
 
-        //If we add more cells to a row, than columns defined an exception is thrown
+        // If a row has more cells than defined columns, an \Exception is thrown.
         try {
             $tableBox->addCell('Not existent cell');
         } catch (\Exception $e) {
             $this->placeText($e->getMessage());
         }
 
-        //Start the next row
+        // Starts the next row.
         $tableBox->startRow()
-            //Table cells support colspan parameter
+            // Table cells support the colspan parameter.
                  ->addCell('Cell 2/1')
                  ->addCell('Cell 2/2', null)
                  ->addCell('Cell 2/3', null, 2);
 
         $tableBox->startRow()
-            //Table cells support colspan parameter
+            // Table cells support the colspan parameter.
                  ->addCell('Cell 3/1', null, 2)
                  ->addCell('Cell 3/2', null)
                  ->addCell('Cell 3/3', null);
 
         $tableBox->startRow()
-            //Add one empty "spacing cell" with colspan 4.
+            // Adds one empty spacing cell with colspan 4.
                  ->addCell('', null, 4);
 
         $tableBox->startRow()
-            //Not all cells of a row must contain content. This row has only the first two cells.
+            // Not all cells in a row need content. This row uses only the first two cells.
                  ->addCell('Cell 4/1', null)
                  ->addCell('Cell 4/2', null);
 
         $tableBox->startRow()
-            //Cell content can be set in arbitrary order. With the ident parameter the column number can be defined.
+            // You can set cell content in any order.
+            // Use the ident parameter to define the column index.
                  ->addCell('Cell 5/2', 2)
                  ->addCell('Cell 5/3', 3)
                  ->addCell('Cell 5/1', 1)
-                 ->addCell('Cell 5/4'); //If the ident parameter omitted the next empty cell is used
-        //Also see Table::namedColumns() example for ident parameter usage.
+                 ->addCell('Cell 5/4'); // If you omit the ident parameter, the table uses the next empty cell.
+        // See the Table::namedColumns() example for ident usage.
 
         $tableBox->startRow()
                  ->addCell('Content will not be rendered in InDesign.');
-        //An already started row can be removed from the table.
+        // You can remove an already started row from the table.
         $tableBox->abortRow();
 
-        //A row can contain any cells at all.
-        $tableBox->startRow(10); //Each row can have a individual own height
+        // A row may contain no cells.
+        $tableBox->startRow(10); // Each row can have its own height.
 
-        //Add some random rows and cells
+        // Adds some random rows and cells.
         for ($row = 6; $row <= 20; $row++) {
             $tableBox->startRow();
             for ($column = 1; $column <= 4; $column++) {
                 $tableBox->addCell("Cell $row/$column", null);
-                (bool)rand(0, 1) ? $column = 4 : false;
+                rand(0, 1) ? $column = 4 : false;
             }
         }
 
-        //Place the table on InDesign page.
+        // Places the table on the InDesign page.
         $this->addCommand($tableBox);
     }
 
     /**
-     * Table command offers named columns. This allows to access cells in a explicit way.
+     * The `Table` command supports named columns, which allow explicit access to cells.
      *
      * @return void
      * @throws \Exception
@@ -157,21 +158,21 @@ class Table extends AbstractStrategy
 
         $tableBox = $this->getDemoTable();
 
-        //When defining columns names for columns can be set with the 'ident' param.
-        //The order of appearance in the table is the order in which the columns are added to the table.
+        // When defining columns, you can set column names using the 'ident' parameter.
+        // The order in the table matches the order in which you add the columns.
         $tableBox->addColumn(10, 'counter')
                  ->addColumn(40, 'title')
                  ->addColumn(40, 'property')
                  ->addColumn(80, 'description');
 
         $tableBox->startRow()
-            //When adding cells, columns can be accessed via its ident.
+            // When adding cells, you can access columns by their ident.
                  ->addCell('1', 'counter')
                  ->addCell('Column "title"', 'title')
                  ->addCell('Column "property"', 'property')
                  ->addCell('Column "description"', 'description');
 
-        //When accessing a not defined column an exception is thrown.
+        // Accessing an undefined column throws an \Exception.
         try {
             $tableBox->startRow()
                      ->addCell('Not existent column', 'notDefined');
@@ -181,34 +182,34 @@ class Table extends AbstractStrategy
         }
 
         $tableBox->startRow()
-            //Order when adding named cells doesn't matter.
+            // The order of adding named cells does not matter.
                  ->addCell('Added first', 'property')
                  ->addCell('Added second', 'description')
                  ->addCell('Added third', 'title')
                  ->addCell('2', 'counter');
 
         $tableBox->startRow()
-            //As in basic example rows can have empty cells
+            // Rows can contain empty cells, as in the basic example.
                  ->addCell('Row with empty cells', 'description')
                  ->addCell('3', 'counter');
 
         $tableBox->startRow()
-            //As in basic example cells can have colspans.
+            // Cells can use colspan, as in the basic example.
                  ->addCell('4', 'counter', 2);
 
         $tableBox->startRow()
-            //In named columns mode cell content can be overwritten.
+            // In named-column mode, you can overwrite cell content.
                  ->addCell('property', 'property')
-                 ->addCell('description', 'description')
+                 ->addCell('description', 'description') // set description
                  ->addCell('title', 'title')
                  ->addCell('5', 'counter')
-                 ->addCell('Overwritten content in column "description"', 'description');
+                 ->addCell('Overwritten content in column "description"', 'description'); // overwrite
 
         $this->addCommand($tableBox);
     }
 
     /**
-     * Tables can be styled with table and cell styles in the InDesign template.
+     * Tables can use table and cell styles defined in the InDesign template.
      *
      * @return void
      * @throws \Exception
@@ -220,29 +221,29 @@ class Table extends AbstractStrategy
 
         $tableBox = $this->getDemoTable(12.7);
 
-        //Set the table style defined in InDesign template
+        // Sets the table style defined in the InDesign template.
         $tableBox->setTableStyle('PriceTable');
 
-        //When defining a column the default cell style in InDesign template can be set.
-        $tableBox->addColumn(40, null, 'ProductLabel')
-                 ->addColumn(22, null, 'Price_A')
-                 ->addColumn(22, null, 'Price_B')
-                 ->addColumn(22, null, 'Price_C')
-                 ->addColumn(22, null, 'Price_D')
-                 ->addColumn(22, null, 'Price_E');
+        // When defining a column, you can set the default cell style from the template.
+        $tableBox->addColumn(40, style: 'ProductLabel')
+                 ->addColumn(22, style: 'Price_A')
+                 ->addColumn(22, style: 'Price_B')
+                 ->addColumn(22, style: 'Price_C')
+                 ->addColumn(22, style: 'Price_D')
+                 ->addColumn(22, style: 'Price_E');
 
         $headCellStyle = 'TableHead';
         $tableBox->startRow(10)
-            //When adding cells the cell a style parameter can be passed to overwrite the default column style.
-                 ->addCell('Article', null, 1, $headCellStyle)
-                 ->addCell('Price A [€]', null, 1, $headCellStyle)
-                 ->addCell('Price B [€]', null, 1, $headCellStyle)
-                 ->addCell('Price C [€]', null, 1, $headCellStyle)
-                 ->addCell('Price D [€]', null, 1, $headCellStyle)
-                 ->addCell('Price E [€]', null, 1, $headCellStyle);
+            // When adding cells, you can pass a cell style to override the default column style.
+                 ->addCell('Article', style: $headCellStyle)
+                 ->addCell('Price A [€]', style: $headCellStyle)
+                 ->addCell('Price B [€]', style: $headCellStyle)
+                 ->addCell('Price C [€]', style: $headCellStyle)
+                 ->addCell('Price D [€]', style: $headCellStyle)
+                 ->addCell('Price E [€]', style: $headCellStyle);
 
         $tableBox->startRow()
-            //When adding cells without style parameter the cell style defined for the column is being used.
+            // If you omit the style parameter, the column’s default cell style is used.
                  ->addCell($this->getDemoWords(3))
                  ->addCell($this->getDemoPrice())
                  ->addCell($this->getDemoPrice())
@@ -251,8 +252,9 @@ class Table extends AbstractStrategy
                  ->addCell($this->getDemoPrice());
 
         $tableBox->startRow()
-            //When adding cells with style the optional perpendStyle parameter allows just to prepend the style to
-            //the default column style.
+            // When adding cells with a style, the optional appendStyle parameter
+            // allows you to append the style text to the default column style name.
+            // => PriceTable -> PriceTable_strike
                  ->addCell($this->getDemoWords(3))
                  ->addCell($this->getDemoPrice())
                  ->addCell($this->getDemoPrice(), null, 1, '_strike', true)
@@ -261,10 +263,10 @@ class Table extends AbstractStrategy
                  ->addCell($this->getDemoPrice());
 
         $tableBox->startRow(15)
-            //Adding a blank spacer row with text
+            // Adds a blank spacer row with text.
                  ->addCell($this->getDemoWords(10), null, 6, 'TableCell');
 
-        //Add some random rows and cells
+        // Adds some random rows and cells.
         for ($row = 1; $row <= 10; $row++) {
             $tableBox->startRow()
                      ->addCell($this->getDemoWords(3));
@@ -278,7 +280,7 @@ class Table extends AbstractStrategy
                     default:
                         $tableBox->addCell($this->getDemoPrice(), null, 1, '_strike', true);
                 }
-                (bool)rand(0, 2) ? false : $column = 5;
+                rand(0, 2) ? false : $column = 5;
             }
         }
 
@@ -286,7 +288,8 @@ class Table extends AbstractStrategy
     }
 
     /**
-     * Table content can be complex texts, images and arbitrary template elements though the usage of CopyBox command.
+     * Table content can include complex text, images, and arbitrary template elements
+     * through the use of the `CopyBox` command.
      *
      * @return void
      * @throws \Exception
@@ -296,18 +299,18 @@ class Table extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(4));
 
-        //In this demo we place rich formatted text into a table. We use paragraph and character styles defined in
-        //the InDesign template element "textBox". We have to place this element in the Document to have the styles
-        //available in this demo.
+        // In this demo, we place rich-formatted text into a table.
+        // We use paragraph and character styles defined in the InDesign template element: "textBox".
+        // We must place this element in the document to make the styles available.
         $this->addCommand(new TextBoxCommand('textBox', -10, -10, 1, 1));
 
-        //Create the table box and add columns
+        // Creates the table box and adds columns.
         $tableBox = $this->getDemoTable(12.7)
                          ->setTableStyle('PriceTable')
                          ->addColumn(30, 'label')
                          ->addColumn(154.6, 'content');
 
-        //To format cell content any InDesign\Text object can be used.
+        // You can use any InDesign\Text object to format cell content.
         $text = new Text();
         $text->setParagraphStyle('CopyText')
              ->addPlainText($this->getDemoWords(6))
@@ -315,7 +318,7 @@ class Table extends AbstractStrategy
              ->addPlainText($this->getDemoWords(8), null, 'Highlight')
              ->addPlainText($this->getDemoText(1, 'short'));
 
-        //Use Text instance as cell content.
+        // Use a Text instance as cell content.
         $tableBox->startRow()
                  ->addCell(
                      $this->createLabelContent('Programmatically created text'),
@@ -323,7 +326,7 @@ class Table extends AbstractStrategy
                  )
                  ->addCell($text, 'content');
 
-        //All functionality of InDesign\Text, including HTML content, can be used as cell content.
+        // You can use all InDesign\Text features, including HTML, as cell content.
         $style = new HtmlStyle();
         $style->setParagraph('h1', 'Headline')
               ->setParagraph('h2', 'SubHeadline_1')
@@ -350,7 +353,7 @@ class Table extends AbstractStrategy
               ->setFit(ImageBoxCommand::FIT_CONTENT_TO_FRAME)
               ->setWidth(30)
               ->setHeight(20);
-        $paragraph = new Paragraph(PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL, 'CopyText');
+        $paragraph = new Paragraph();
         $paragraph->addComponent($image);
 
         $tableBox->startRow(100)
@@ -364,7 +367,7 @@ class Table extends AbstractStrategy
     }
 
     /**
-     * FragmentParser offers functionality to parse complete HTML fragments.
+     * The `FragmentParser` parses complete HTML fragments.
      * The parsing process creates multiple InDesign commands.
      *
      * @return void
@@ -374,7 +377,7 @@ class Table extends AbstractStrategy
     private function htmlTable(): void
     {
         $this->addCommand(new GoToPage(5));
-        $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, 12.7));
+        $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, 12.7 - 5));
 
         $factory = function (string $element, \DomElement $node = null) {
             $ySpacing = 5;
@@ -467,8 +470,8 @@ EOT;
     }
 
     /**
-     * Demonstrates the SplitTable command.
-     * This command offers splits up tables onto multiple pages repeating the header and footer rows.
+     * Demonstrates the `SplitTable` command.
+     * This command splits tables across multiple pages and repeats the header and footer rows.
      *
      * @return void
      * @throws \Exception
@@ -479,7 +482,7 @@ EOT;
         $this->addCommand(new GoToPage(6));
         $topPosition = 12.7;
 
-        //Sample headline
+        // Sample headline
         $headline = new TextBoxCommand('textBox', 12.7, $topPosition);
         $headline->addString('SplitTable Headline')
                  ->setWidth(50)
@@ -490,18 +493,18 @@ EOT;
 
         $text = new TextBoxCommand('textBox', 12.7);
         $text->addString($this->getDemoText(1))
-                 ->setWidth(184.6)
-                 ->setHeight(50)
-                 ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
-                ->setTopRelative(Variable::VARIABLE_Y_POSITION, 5)
-                 ->setVariable(Variable::VARIABLE_Y_POSITION, Variable::POSITION_BOTTOM);
+             ->setWidth(184.6)
+             ->setHeight(50)
+             ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
+             ->setTopRelative(Variable::VARIABLE_Y_POSITION, 5)
+             ->setVariable(Variable::VARIABLE_Y_POSITION, Variable::POSITION_BOTTOM);
         $this->addCommand($text);
 
-        //Create the table.
+        // Create the table.
         $tableBox = $this->getDemoTable();
-        //Give the table the maximum height that is can use on a single page with it's preCommands content.
+        // Sets the maximum height the table can use on a single page, including its preCommands content.
         $tableBox->setHeight(265)
-            ->setWidth(180);
+                 ->setWidth(180);
         $tableBox->setTableStyle('PriceTable')
                  ->addColumn(36)
                  ->addColumn(36)
@@ -509,64 +512,65 @@ EOT;
                  ->addColumn(36)
                  ->addColumn(36);
 
-        //Position the table with 2mm margin to variable yPos.
+        // Positions the table with a 2mm margin relative to the yPos variable.
         $tableBox->setTopRelative(Variable::VARIABLE_Y_POSITION, 2.5)
-        //Assign table bottom to Variable::VARIABLE_Y_POSITION in InDesign.
+            // Assigns the table bottom to Variable::VARIABLE_Y_POSITION in InDesign.
                  ->setVariable(Variable::VARIABLE_Y_POSITION, Variable::POSITION_BOTTOM);
 
-        //TableCommand::ROW_TYPE_HEADER rows will be repeated automatically when tables are split over multiple pages.
+        // TableCommand::ROW_TYPE_HEADER rows repeat automatically when the table splits across pages.
         $cellStyle = 'TableHead';
         $tableBox->startRow(10, TableCommand::ROW_TYPE_HEADER)
-                 ->addCell('Table Head 1', null, 1, $cellStyle)
-                 ->addCell('Table Head 2', null, 1, $cellStyle)
-                 ->addCell('Table Head 3', null, 1, $cellStyle)
-                 ->addCell('Table Head 4', null, 1, $cellStyle)
-                 ->addCell('Table Head 5', null, 1, $cellStyle);
+                 ->addCell('Table Head 1', style: $cellStyle)
+                 ->addCell('Table Head 2', style: $cellStyle)
+                 ->addCell('Table Head 3', style: $cellStyle)
+                 ->addCell('Table Head 4', style: $cellStyle)
+                 ->addCell('Table Head 5', style: $cellStyle);
 
-        //For demo purpose we add some random rows to the table.
+        // For demo purposes, we add some random rows to the table.
+        $cellStyle = 'TableCell';
         for ($i = 1; $i <= rand(60, 100); $i++) {
             $tableBox->startRow()
-                     ->addCell("Cell Content $i/1")
-                     ->addCell("Cell Content $i/2")
-                     ->addCell("Cell Content $i/3")
-                     ->addCell("Cell Content $i/4")
-                     ->addCell($this->getDemoWords(3));
+                     ->addCell("Cell Content $i/1", style: $cellStyle)
+                     ->addCell("Cell Content $i/2", style: $cellStyle)
+                     ->addCell("Cell Content $i/3", style: $cellStyle)
+                     ->addCell("Cell Content $i/4", style: $cellStyle)
+                     ->addCell($this->getDemoWords(3), style: $cellStyle);
         }
 
-        //TableCommand::ROW_TYPE_FOOTER rows will be repeated automatically when tables are split over multiple pages.
+        // TableCommand::ROW_TYPE_FOOTER rows also repeat automatically when the table splits across pages.
         $cellStyle = 'TableFoot';
         $tableBox->startRow(10, TableCommand::ROW_TYPE_FOOTER)
-                 ->addCell('Table Foot 1', null, 1, $cellStyle)
-                 ->addCell('Table Foot 2', null, 1, $cellStyle)
-                 ->addCell('Table Foot 3', null, 1, $cellStyle)
-                 ->addCell('Table Foot 4', null, 1, $cellStyle)
-                 ->addCell('Table Foot 5', null, 1, $cellStyle);
+                 ->addCell('Table Foot 1', style: $cellStyle)
+                 ->addCell('Table Foot 2', style: $cellStyle)
+                 ->addCell('Table Foot 3', style: $cellStyle)
+                 ->addCell('Table Foot 4', style: $cellStyle)
+                 ->addCell('Table Foot 5', style: $cellStyle);
 
-        //CheckNewPage command defined the maximum y-Position where content can be rendered on the page.
-        //If an element was placed underneath this y-Position it is placed on the next page at new y-Position.
+        // The CheckNewPage command defines the maximum y-position where content can be rendered on the page.
+        // If an element is placed below this y-position, it is placed on the next page at the new y-position.
         $checkNewPage = new CheckNewPage(284, $topPosition);
 
-        //Create the SplitTable command and pass the Table to split and the CheckNewPage page break definition.
+        // Create the SplitTable command and pass the table to split and the CheckNewPage page-break definition.
         $splitTable = new SplitTable($tableBox, $checkNewPage);
 
-        //We want to have the $headline repeated on each page before the table.
+        // Repeat the $headline on each page before the table.
         $splitTable->addPreCommand($headline);
 
-        //Add the SplitTable command to CommandQueue.
+        // Add the SplitTable command to the CommandQueue.
         $this->addCommand($splitTable);
 
-        //Place a box after the table.
+        // Places a box after the table.
         $text = new TextBoxCommand('textBox', 12.7);
         $text->addString('Textbox after split table')
-                 ->setWidth(50)
-                 ->setHeight(10)
-                 ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
-                 ->setTopRelative(Variable::VARIABLE_Y_POSITION, 5);
+             ->setWidth(50)
+             ->setHeight(10)
+             ->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT)
+             ->setTopRelative(Variable::VARIABLE_Y_POSITION, 5);
         $this->addCommand($text);
     }
 
     /**
-     * Creates InDesign\Text instance for label cell.
+     * Creates an `InDesign\Text` instance for the label cell.
      *
      * @param string $content
      *
@@ -582,7 +586,7 @@ EOT;
     }
 
     /**
-     * Creates a Table command instance.
+     * Creates a `Table` command instance.
      *
      * @param float $topPosition
      *
@@ -608,6 +612,6 @@ EOT;
      */
     private function getDemoPrice(int $min = 10, int $max = 99): string
     {
-        return (string)rand($min, $max) . '.' . rand(10, 99);
+        return rand($min, $max) . '.' . rand(10, 99);
     }
 }

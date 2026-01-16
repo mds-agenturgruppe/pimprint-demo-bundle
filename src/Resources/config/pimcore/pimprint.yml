@@ -1,16 +1,16 @@
 mds_pim_print_core:
-#    Optional locales to set in render mode to have floats converted to '.-strings'
-#    In demo we set a correct locale to assure that generation works on all server systems.
-#    This configuration is only needed on server systems where flaots are converted to ',-strings'
-    lc_numeric: ['en_US.UTF-8', 'de_DE.UTF-8']
-#    host:
-#        hostname:
-#        protocol:
-#        port:
-#    Disable SVG Support when using InDesign prior CC 2020 (15.0)
-#    svg_support: false
-#    Set to false to use Asset modificationDate. Use if Storage returns wrong lastModified timestamp.
-#    file_storage_mtime: false
+    #    Optional locales to set in render mode to have floats converted to '.-strings'
+    #    In demo we set a correct locale to assure that generation works on all server systems.
+    #    This configuration is only needed on server systems where flaots are converted to ',-strings'
+    lc_numeric: [ 'en_US.UTF-8', 'de_DE.UTF-8' ]
+    #    host:
+    #        hostname:
+    #        protocol:
+    #        port:
+    #    Disable SVG Support when using InDesign prior CC 2020 (15.0)
+    #    svg_support: false
+    #    Set to false to use Asset modificationDate. Use if Storage returns wrong lastModified timestamp.
+    #    file_storage_mtime: false
     projects:
         commandDemo:
             ident: 'commandDemo' #Use for multi Bundle or configuration implementations.
@@ -18,23 +18,23 @@ mds_pim_print_core:
             service: 'Mds\PimPrint\DemoBundle\Service\CommandDemo' #Service to use to render the project. Must inherit AbstractProject.
             create_update_layers: false
             template:
-                default: 'PimPrint-CommandDemo.indd' #Default InDesign template filename.
-#            plugin_elements: #Available plugin elements.
-#                start_alignment: false #Field for start left/right page.
-#                page_bounds: false #Fields for page start/end.
-#                update_mode: true #Field for update modes.
-#                update_modes: [501, 502, 512] #Available update modes for project.
+                default: 'PimPrint_CommandDemo.indd' #Default InDesign template filename.
+            #            plugin_elements: #Available plugin elements.
+            #                start_alignment: false #Field for start left/right page.
+            #                page_bounds: false #Fields for page start/end.
+            #                update_mode: true #Field for update modes.
+            #                update_modes: [501, 502, 512] #Available update modes for project.
             assets:
                 download: true #Toggles asset download.
                 pre_download: false #Toggles asset download before rendering start.
-#                warnings_on_page: true #Toggles missing asset onPage warnings messages.
-#                thumbnail: 'product_detail_small' #Optional Pimcore thumbnail configuration for preview images.
+        #                warnings_on_page: true #Toggles missing asset onPage warnings messages.
+        #                thumbnail: 'product_detail_small' #Optional Pimcore thumbnail configuration for preview images.
         columnPagination:
             ident: 'columnPagination'
             name: 'Dynamic Column Pagination'
-            service: 'Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPaginationDemo'
+            service: 'Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPagination'
             template:
-                default: 'PimPrint-CommandDemo.indd'
+                default: 'PimPrint_CommandDemo.indd'
             assets:
                 download: true
             plugin_elements:
@@ -47,34 +47,46 @@ mds_pim_print_core:
             name: 'Localization Demo'
             service: 'Mds\PimPrint\DemoBundle\Project\LocalizationDemo\LocalizationProject'
             template:
-                default: 'PimPrint-CommandDemo.indd'
+                default: 'PimPrint_CommandDemo.indd'
             assets:
                 download: true
-        dataPrintCarBrochure:
-            ident: 'dataPrintCarBrochure'
-            name: 'Car Brochure'
-            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintCarBrochure'
-            template:
-                default: 'PimPrint-DataPrintDemo_blue.indd'
-            assets:
-                download: true
-        dataPrintCarList:
-            ident: 'dataPrintCarList'
+        carsDemoCarList:
+            ident: 'carsDemoCarList'
             name: 'Car List'
-            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintCarList'
+            service: 'Mds\PimPrint\DemoBundle\Project\CarsDemo\CarList'
             template:
-                default: 'PimPrint-DataPrintDemo_blue.indd'
+                default: 'PimPrint_CarsDemo_Template_pimcore.indd'
             assets:
                 download: true
-            plugin_elements:
-                update_modes: [ 501, 502 ]
-        dataPrintAccessoryPartList:
-            ident: 'dataPrintAccessoryPartList'
-            name: 'AccessoryPart List'
-            service: 'Mds\PimPrint\DemoBundle\Service\DataPrintAccessoryPartList'
+        carsDemoCarDetail:
+            ident: 'carsDemoCarDetail'
+            name: 'Car Detail'
+            service: 'Mds\PimPrint\DemoBundle\Project\CarsDemo\CarDetail'
             template:
-                default: 'PimPrint-DataPrintDemo_blue.indd'
+                default: 'PimPrint_CarsDemo_Template_pimcore.indd'
             assets:
                 download: true
-            plugin_elements:
-                update_modes: [ 501, 502 ]
+        carsDemoCarSalesLabel:
+            ident: 'carsDemoCarSalesLabel'
+            name: 'Car Sales Label'
+            service: 'Mds\PimPrint\DemoBundle\Project\CarsDemo\CarSalesLabel'
+            template:
+                default: 'PimPrint_Cars_SalesLabel_pimcore.indd'
+            assets:
+                download: true
+        carsDemoAccessoryList:
+            ident: 'carsDemoAccessoryList'
+            name: 'Accessory List'
+            service: 'Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryList'
+            template:
+                default: 'PimPrint_CarsDemo_Template_pimcore.indd'
+            assets:
+                download: true
+        carsDemoAccessoryPriceList:
+            ident: 'carsDemoAccessoryPriceList'
+            name: 'Accessory Price List'
+            service: 'Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryPriceList'
+            template:
+                default: 'PimPrint_CarsDemo_Template_pimcore.indd'
+            assets:
+                download: true

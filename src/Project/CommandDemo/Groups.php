@@ -22,14 +22,15 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\Variable;
 
 /**
- * Demonstrates grouping with GroupStart and GroupEnd command.
+ * Demonstrates how to group multiple commands using the `GroupStart` and `GroupEnd` commands.
+ * This will then create a group of elements in the InDesign document.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class Groups extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -44,19 +45,19 @@ class Groups extends AbstractStrategy
     }
 
     /**
-     * Boxes can be grouped together in the InDesign document.
+     * Boxes can be grouped in the InDesign document.
      *
-     * @param float $topPosition
+     * @param float $topPosition the top-position for the boxes
      *
      * @return void
      * @throws \Exception
      */
     private function simpleGroup(float $topPosition): void
     {
-        //Start a new group by passing a GroupStart command to CommandQueue.
+        // Start a new group by passing a GroupStart command to CommandQueue.
         $this->addCommand(new GroupStart());
 
-        //All following elements will be grouped together in InDesign document.
+        // All the following elements will be grouped together in the InDesign document.
         $image = new CopyBoxCommand('image', 12.7, $topPosition);
         $image->setVariable('imageBottom', Variable::POSITION_BOTTOM);
         $this->addCommand($image);
@@ -68,48 +69,47 @@ class Groups extends AbstractStrategy
              ->setTopRelative('imageBottom', 2);
         $this->addCommand($text);
 
-        $this->addCommand(new CopyBoxCommand('copyBox', 50, $topPosition));
+        $this->addCommand(new CopyBoxCommand('copyBox', 60, $topPosition));
         $this->addCommand(new CopyBoxCommand('copyBox', 80, $topPosition));
         $topPosition += 15;
-        $this->addCommand(new CopyBoxCommand('copyBox', 50, $topPosition));
+        $this->addCommand(new CopyBoxCommand('copyBox', 60, $topPosition));
         $this->addCommand(new CopyBoxCommand('copyBox', 80, $topPosition));
 
-        //End the group by passing a GroupEnd command to CommandQueue.
-        //All elements are positioned at there defined position and are grouped together.
+        // End the group by passing a GroupEnd command to CommandQueue.
         $this->addCommand(new GroupEnd());
 
-        //Groups can be used to position all elements in the group together.
-        //For this example we place all elements relative to each other at the top of the page.
-        //When ending the group we place the group on the right position on the page.
+        // Groups allow you to position all elements together.
+        // In this example, we place all elements relative to each other at the top of the page.
+        // When the group ends, we move the group to the correct position on the page.
         $this->addCommand(new GroupStart());
         $this->renderGroupElements('Group position');
-        //The complete group is positioned on the page.
         $topPosition += 50;
-        $groupEnd = new GroupEnd(null, true);
+        $groupEnd = new GroupEnd(moveTo: true);
         $groupEnd->setTop($topPosition)
                  ->setLeft(12.7);
         $this->addCommand($groupEnd);
 
-        //After placing an or moving a group all elements can be ungrouped. This can be used for easier positioning
-        //but to have elements ungrouped in the final InDesign document.
+        // After placing or moving a group, you can ungroup all elements.
+        // This allows easier positioning while keeping elements ungrouped in the final InDesign document.
         $this->addCommand(new GroupStart());
         $this->renderGroupElements('Ungrouped');
-        //The complete group is positioned on the page and ungrouped after placement.
+        // Position the group on the page and ungroup it after placement.
         $topPosition += 50;
-        $groupEnd = new GroupEnd(null, true, true);
+        $groupEnd = new GroupEnd(moveTo: true, ungroupAfter: true);
         $groupEnd->setTop($topPosition)
                  ->setLeft(12.7);
         $this->addCommand($groupEnd);
     }
 
     /**
-     * Groups are mainly used in combination with CheckNewPage command. It allows to move all grouped elements
-     * automatically to the next page if the bounds would exceed the defined page space.
+     * Groups are mainly used with the `CheckNewPage` command.
+     * This moves all grouped elements to the next page if their bounds exceed the available page space.
      *
-     * In this demo we place 10 times the same group on the page. By adding the CheckNewPage to the GroupEnd command
-     * groups are moved to the next page if there isn't enough space left on current page.
+     * In this demo, we place the same group 10 times on the page.
+     * By adding `CheckNewPage` to the `GroupEnd` command, the group moves
+     * to the next page if there is not enough space left on the current page.
      *
-     * @param float $topPosition
+     * @param float $topPosition the top-position on the new page
      *
      * @return void
      * @throws \Exception
@@ -119,25 +119,25 @@ class Groups extends AbstractStrategy
         $blockMargin = 10;
         $this->addCommand(new NextPage());
 
-        //Define yPos variable in InDesign document for relative positioning of all groups.
+        // Define the yPos variable in the InDesign document for relative positioning of all groups.
         $this->addCommand(new Variable(Variable::VARIABLE_Y_POSITION, $topPosition - $blockMargin));
 
-        //CheckNewPage command defined the maximum y-Position where content can be rendered on the page.
-        //If an element was placed underneath this y-Position it is placed on the next page at then new y-Position
-        //parameter value.
+        // The CheckNewPage command defines the maximum y-position where content can be rendered on the page.
+        // If an element is placed below this y-position, it moves to the next page
+        // and uses the new y-position parameter value.
         $checkNewPage = new CheckNewPage(284, $topPosition);
 
         for ($i = 1; $i <= 10; $i++) {
-            //Start a new group.
+            // Start a new group.
             $this->addCommand(new GroupStart());
             $this->renderGroupElements("Group $i");
-            //In this example we position the complete group relative to the group before by using the yPos variable.
-            $groupEnd = new GroupEnd($checkNewPage, true);
-            //Position of the group can be set in GroupEnd Command
+            // In this example we position the complete group relative to the group before by using the yPos variable.
+            $groupEnd = new GroupEnd(layoutBreakCommand: $checkNewPage, moveTo: true);
+            // The position of the group can be set in GroupEnd Command
             $groupEnd->setLeft(12.7)
-                //Groups can be positioned relative like all other AbstractBox
+                // Groups can be positioned relatively as every other AbstractBox element.
                      ->setTopRelative(Variable::VARIABLE_Y_POSITION, $blockMargin);
-            //Set group bottom as new yPos variable in InDesign document
+            // Set the group bottom position as the new yPos variable in the InDesign document.
             $groupEnd->setVariable(Variable::VARIABLE_Y_POSITION, Variable::POSITION_BOTTOM);
 
             $this->addCommand($groupEnd);
@@ -145,10 +145,10 @@ class Groups extends AbstractStrategy
     }
 
     /**
-     * Creates demo elements for a group example.
-     * Elements will be placed in the top left corner of the page relative to each other.
+     * Renders a group of elements, consisting of an image, label text, and multiple copy boxes.
+     * Elements are placed relative to each other in the top-left corner of the page.
      *
-     * @param string $label
+     * @param string $label The text label to be rendered within the group.
      *
      * @return void
      * @throws \Exception
@@ -168,9 +168,9 @@ class Groups extends AbstractStrategy
              ->setLeftRelative('imageLeft');
         $this->addCommand($text);
 
-        $this->addCommand(new CopyBoxCommand('copyBox', 50 - 12.7, 0));
+        $this->addCommand(new CopyBoxCommand('copyBox', 60 - 12.7, 0));
         $this->addCommand(new CopyBoxCommand('copyBox', 80 - 12.7, 0));
-        $this->addCommand(new CopyBoxCommand('copyBox', 50 - 12.7, 15));
+        $this->addCommand(new CopyBoxCommand('copyBox', 60 - 12.7, 15));
         $this->addCommand(new CopyBoxCommand('copyBox', 80 - 12.7, 15));
     }
 }

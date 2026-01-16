@@ -5,4 +5,4 @@ mds_pim_print_core:
             name: 'Getting Started'
             service: 'Mds\PimPrint\DemoBundle\Service\GettingStarted'
             template:
-                default: 'PimPrint-GettingStarted.indd'
+                default: 'PimPrint_GettingStarted.indd'

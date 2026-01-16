@@ -25,8 +25,8 @@ trait LoadRandomAssetTrait
 {
     /**
      * Loads a random jpg or png Asset in $path.
-     * If $maxWidth is set only assets that are smaller are returned. In some demonstrations we wan't to have small
-     * images and in Pimcore demo may be larger ones.
+     * If $maxWidth is set, only assets that are smaller are returned. In some demos we want to have small
+     * images and in the Pimcore demo may be larger ones.
      *
      * @param string   $path
      * @param int|null $maxWidth Max width of the asset.

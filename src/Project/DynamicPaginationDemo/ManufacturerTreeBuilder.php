@@ -26,7 +26,7 @@ use Pimcore\Model\DataObject\Manufacturer;
 class ManufacturerTreeBuilder extends PublicationTreeBuilder
 {
     /**
-     * Returns all publications in tree structure to display in InDesign-Plugin.
+     * Returns Manufacturer DataObjects in a tree structure to display in InDesign-Plugin.
      *
      * @return array
      */

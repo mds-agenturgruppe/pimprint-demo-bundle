@@ -17,18 +17,19 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\CopyBox as CopyBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 
 /**
- * Demonstrates the CopyBox command for placement of template elements in InDesign document.
+ * Demonstrates the CopyBox command for placing template elements in an InDesign document.
  *
- * CopyBox command is the simplest command to place content in InDesign document.
- * It takes the element defined by parameter elementName from the template Document and places it
- * at top and left position in the generated document. The content in the element isn't changed.
+ * The CopyBox command is the simplest way to place content in an InDesign document.
+ * It takes the element defined by the `elementName` parameter from the template document and places it
+ * at the top-left position in the generated document.
+ * The command does not change the element’s content.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class CopyBox extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -45,7 +46,8 @@ class CopyBox extends AbstractStrategy
     }
 
     /**
-     * Boxes are placed in the InDesign document at top and left positions without changing the size.
+     * Copy the template elements to the InDesign document without resizing
+     * Place them at the $topPosition
      *
      * @param float $topPosition
      *
@@ -54,36 +56,37 @@ class CopyBox extends AbstractStrategy
      */
     private function copyWithoutResize(float $topPosition): void
     {
-        //Copies imagebox with elementName "image" into the InDesign document.
-        //The image file in the imagebox isn't changed.
+        // Copy the image box with elementName "image" into the InDesign document.
+        // The image file in the image box is not changed.
         $this->addCommand(
             new CopyBoxCommand('image', 12.7, $topPosition)
         );
 
-        //Copies rectangle with elementName "copyBox" into the InDesign document.
-        //The size and content of isn't changes.
+        // Copy the rectangle with elementName "copyBox" into the InDesign document.
+        // The size and content are not changed.
         $this->addCommand(
-            new CopyBoxCommand('copyBox', 50, $topPosition)
+            new CopyBoxCommand('copyBox', 60, $topPosition)
         );
 
         $topPosition += 15;
-        //Elements from the template can be placed multiple times in the InDesign document.
+        // You can place elements from the template multiple times in the InDesign document.
         $this->addCommand(
-            new CopyBoxCommand('copyBox', 50, $topPosition)
+            new CopyBoxCommand('copyBox', 60, $topPosition)
         );
 
         $topPosition += 15;
-        //All commands have setters for all parameters.
+        // All commands provide setters for their parameters.
         $copyBox = new CopyBoxCommand();
         $copyBox->setElementName('copyBox')
-                ->setLeft(50)
+                ->setLeft(60)
                 ->setTop($topPosition);
         $this->addCommand($copyBox);
     }
 
     /**
-     * When placing boxes in the InDesign document, the size can be adjusted freely with the width and height parameter.
-     * Resizing is done in SizeTrait.
+     * When placing boxes in the InDesign document, you can freely adjust the size
+     * using the width and height parameters.
+     * `SizeTrait` handles the resizing.
      *
      * @param float $topPosition
      *
@@ -92,24 +95,24 @@ class CopyBox extends AbstractStrategy
      */
     private function copyWithResize(float $topPosition): void
     {
-        //Copies rectangle with elementName "copyBox" into the InDesign document and changes its width and height.
+        // Copies the rectangle with elementName "copyBox" into the InDesign document and change its width and height.
         $this->addCommand(
-            new CopyBoxCommand('copyBox', 50, $topPosition, 20, 20)
+            new CopyBoxCommand('copyBox', 60, $topPosition, 20, 20)
         );
 
         $topPosition += 25;
-        //Places rectangle "copyBox" and changes its width.
+        // Places the rectangle "copyBox" and change its width.
         $this->addCommand(
-            new CopyBoxCommand('copyBox', 50, $topPosition, 40)
+            new CopyBoxCommand('copyBox', 60, $topPosition, 40)
         );
 
         $topPosition += 5;
-        //Places rectangle "copyBox" and changes its height.
-        $copyBox = new CopyBoxCommand('copyBox', 50, $topPosition);
+        // Places the rectangle "copyBox" and change its height.
+        $copyBox = new CopyBoxCommand('copyBox', 60, $topPosition);
         $copyBox->setHeight(100);
         $this->addCommand($copyBox);
 
-        //Negative box sizes aren't allowed and throws an \Exception.
+        // Negative box sizes are not allowed and throw an \Exception.
         try {
             $copyBox->setHeight(-10);
         } catch (\Exception $e) {
@@ -128,21 +131,22 @@ class CopyBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(2));
 
-        //Copies the text box "copyPositionText" from template document.
+        // Copy the text box "copyPositionText" from the template document.
         $copyBox = new CopyBoxCommand('copyPositionText');
 
-        //Use template position when box is placed into the InDesign document.
+        // Use the template position when placing the box into the InDesign document.
         $copyBox->setUseTemplatePosition(true);
         $this->addCommand($copyBox);
 
-        //Copies rectangle "copyPositionSquare" into the document
+        // Copy rectangle "copyPositionSquare" into the document
         $copyBox = new CopyBoxCommand('copyPositionSquare');
         $copyBox->setUseTemplatePosition(true);
         $this->addCommand($copyBox);
     }
 
     /**
-     * When placing boxes in the InDesign document at the template position (top and left) the box can be resized.
+     * When placing boxes in the InDesign document at the template position (top and left), you can resize the box.
+     * The original template position is preserved during placement.
      *
      * @return void
      * @throws \Exception
@@ -152,13 +156,13 @@ class CopyBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(3));
 
-        //Copies the text box "copyPositionSquare" from template document.
+        // Copy the text box "copyPositionSquare" from the template document.
         $copyBox = new CopyBoxCommand('copyPositionSquare');
 
-        //Use template position when box is placed into the InDesign document.
+        // Use template position when box is placed into the InDesign document.
         $copyBox->setUseTemplatePosition(true);
 
-        //Adjust the size as needed
+        // Adjust the size of the box
         $copyBox->setWidth(40)
                 ->setHeight(40);
 

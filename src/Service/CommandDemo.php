@@ -62,11 +62,11 @@ class CommandDemo extends RenderingProject
             'ImageBox',
             'TextBox',
             'Table',
+            'Relative Positioning',
             'Page Handling',
             'Groups',
             'Layers',
             'Localization',
-            'Relative Positioning',
             'Messages',
         ];
         $return = [];
@@ -98,7 +98,7 @@ class CommandDemo extends RenderingProject
     }
 
     /**
-     * Change method signature to have addCommand accessible in demo strategy context.
+     * Change method signature to have addCommand accessible in the demo strategy context.
      *
      * @param AbstractCommand $command
      *
@@ -111,7 +111,7 @@ class CommandDemo extends RenderingProject
     }
 
     /**
-     * Change method signature to have addCommand accessible in demo strategy context.
+     * Change method signature to have addCommand accessible in the demo strategy context.
      *
      * @param array $commands
      *
@@ -124,7 +124,7 @@ class CommandDemo extends RenderingProject
     }
 
     /**
-     * Change method signature to have addCommand accessible in demo strategy context.
+     * Change method signature to have addCommand accessible in the demo strategy context.
      *
      * @param string $message
      *

@@ -17,21 +17,21 @@ use League\Flysystem\FilesystemException;
 use Mds\PimPrint\CoreBundle\InDesign\Command\GoToPage;
 use Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox as ImageBoxCommand;
 use Mds\PimPrint\CoreBundle\InDesign\Command\TextBox as TextBoxCommand;
+use Mds\PimPrint\CoreBundle\InDesign\Html\Style as HtmlStyle;
 use Mds\PimPrint\CoreBundle\InDesign\Text;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Characters;
 use Mds\PimPrint\CoreBundle\InDesign\Text\Paragraph;
-use Mds\PimPrint\CoreBundle\InDesign\Html\Style as HtmlStyle;
 
 /**
- * Demonstrates the TextBox command for placement of text elements in InDesign document.
- * PimPrint supports InDesign paragraph styles and character styles.
+ * Demonstrates the `TextBox` command for placing text elements in an InDesign document.
+ * PimPrint supports InDesign paragraph and character styles.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class TextBox extends AbstractStrategy
 {
     /**
-     * TextBox command offers a variety of possibilities to style and display texts.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -49,8 +49,9 @@ class TextBox extends AbstractStrategy
     }
 
     /**
-     * The most basic usage is adding a string via TextBox::addString(). In this case no direct styling will be
-     * applied to the text. Text will be styled as defined in the template element.
+     * The most basic usage is adding a string via `TextBox::addString()`.
+     * In this case, no direct styling is applied to the text.
+     * The template element defines the text styling.
      *
      * @return void
      * @throws \Exception
@@ -59,20 +60,20 @@ class TextBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(1));
 
-        //Place the 'headline' text box from InDesign template
+        // Places the "headline" text box from the InDesign template.
         $textBox = new TextBoxCommand('headline', 12.7, 12.7, 184.6, 5);
         $textBox->addString($this->getDemoWords());
         $this->addCommand($textBox);
 
-        //Place the 'copyText' text box from InDesign template
+        // Places the "copyText" text box from the InDesign template.
         $textBox = new TextBoxCommand('copyText', 12.7, 22, 184.6, 200);
         $textBox->addString($this->getDemoText(1, 'max'));
         $this->addCommand($textBox);
     }
 
     /**
-     * To have full styling flexibility for text boxes paragraph and character styles defined in InDesign template
-     * can be applied to the text.
+     * To achieve full styling flexibility for text boxes, you can apply paragraph and character styles
+     * defined in the InDesign template to the text.
      *
      * @return void
      * @throws \Exception
@@ -82,99 +83,99 @@ class TextBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(2));
 
-        //Create a text box command and add content sequentially.
+        // Creates a text box command and adds content sequentially.
         $textBox = $this->createDemoBox();
         $textBox->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT);
 
-        //Create a paragraph with paragraph style 'Headline'.
+        // Creates a paragraph with the paragraph style "Headline".
         $paragraph = new Paragraph($this->getDemoWords(8), 'Headline');
         //Add the paragraph to the text box.
         $textBox->addParagraph($paragraph);
 
-        //Create a paragraph with paragraph style 'CopyText'.
+        // Creates a paragraph with the paragraph style "CopyText".
         $paragraph = new Paragraph($this->getDemoText(1, 'long'), 'CopyText');
         $textBox->addParagraph($paragraph);
 
-        //Create a paragraph with paragraph style 'CopyText' and character style 'Highlight'.
+        // Creates a paragraph with the paragraph style "CopyText" and character style "Highlight".
         $paragraph = new Paragraph($this->getDemoText(1, 'short'), 'CopyText', 'Highlight');
         $textBox->addParagraph($paragraph);
 
-        //Create a paragraph with paragraph style 'CopyText_ident'.
+        // Creates a paragraph with the paragraph style "CopyText_ident".
         $paragraph = new Paragraph($this->getDemoText(1, 'medium'), 'CopyText_ident');
         $textBox->addParagraph($paragraph);
 
-        //To give flexibility beyond paragraphs we can add chunks of characters with different
-        //character styles to a paragraph.
+        // To allow more flexibility than paragraphs,
+        // you can add character chunks with different character styles to a paragraph.
 
-        //Create a paragraph and add content sequentially.
+        // Creates a paragraph command and adds content sequentially.
         $paragraph = new Paragraph();
-        $paragraph->setParagraphStyle('CopyText'); //Optionally set a paragraph style
+        $paragraph->setParagraphStyle('CopyText'); // Optionally sets a paragraph style.
 
-        //Create characters without a style.
+        // Creates characters without a style.
         $characters = new Characters($this->getDemoWords());
-        //Add the characters to the paragraph.
+        // Adds the characters to the paragraph.
         $paragraph->addComponent($characters);
 
-        //Create characters with character style 'superscript'
+        // Creates characters with the character style "superscript".
         $characters = new Characters($this->getDemoWords(2), 'Superscript');
         $paragraph->addComponent($characters);
 
         $characters = new Characters($this->getDemoWords());
-        //Note that when adding characters to a paragraph text is concatenated without space.
-        //The optional prependSpace parameter in addComponents allows to add this space character if needed.
+        // Note that adding characters to a paragraph concatenates text without spaces.
+        // Use the optional prependSpace parameter in addComponent to add a space if needed.
         $paragraph->addComponent($characters, true);
 
-        //Create characters with character style 'Highlight'.
+        // Creates characters with the character style "Highlight".
         $characters = new Characters($this->getDemoWords(), 'Highlight');
         $paragraph->addComponent($characters, true);
 
         $characters = new Characters($this->getDemoWords(20));
         $paragraph->addComponent($characters, true);
 
-        //Characters can also contain a hyperlink.
+        // Characters can also contain hyperlinks.
         $characters = new Characters('Visit www.mds.eu', 'Bold');
         $characters->setHref('https://www.mds.eu');
         $paragraph->addComponent($characters, true);
 
-        //Add the paragraph with sequentially added chars to text box.
+        // Adds the paragraph with sequentially added characters to the text box.
         $textBox->addParagraph($paragraph);
 
-        //Paragraphs can contain simple newlines
+        // Paragraphs can contain simple newlines.
         $paragraph = new Paragraph(PHP_EOL, 'CopyText');
-        //As paragraph components also ImageBox commands can be used to place inline images into text.
-        //Mainly used to add images into tables. (See Table command demonstration)
+        // You can also use ImageBox commands as paragraph components to place inline images in text.
+        // This is mainly used to add images to tables (see the Table command demo).
         $asset = $this->loadRandomAsset('/Car Images/%');
         $image = new ImageBoxCommand('image');
         $image->setAsset($asset)
               ->setFit(ImageBoxCommand::FIT_FILL_PROPORTIONALLY)
               ->setWidth(30)
               ->setHeight(20);
-        //Add the image box as component to the paragraph.
+        // Adds the image box as a component to the paragraph.
         $paragraph->addComponent($image);
         $textBox->addParagraph($paragraph);
 
         $textBox->addParagraph(new Paragraph($this->getDemoWords(20) . ':', 'CopyText'));
 
-        //List items can be styled with InDesign paragraph styles
+        // List items can be styled with InDesign paragraph styles.
         for ($i = 0; $i <= 5; $i++) {
-            //Create a paragraph with paragraph style 'ListItem'.
+            // Creates a paragraph with the paragraph style "ListItem".
             $textBox->addParagraph(
                 new Paragraph(
                     $this->getDemoWords(3),
-                    'ListItem', //InDesign template paragraph style for ListItems
-                    //Add random character style for demo purpose.
-                    (bool)rand(0, 1) ? (bool)rand(0, 1) ? 'Highlight' : 'Bold' : ''
+                    'ListItem', // Uses the InDesign template paragraph style "ListItem".
+                    // Adds a random character style for demo purposes.
+                    rand(0, 1) ? (bool)rand(0, 1) ? 'Highlight' : 'Bold' : ''
                 )
             );
         }
 
-        //Place the text box with all content at one in InDesign document.
+        // Places the text box with all content at once in the InDesign document.
         $this->addCommand($textBox);
     }
 
     /**
-     * Class InDesign/Text contains a parser to transform text into Paragraph objects.
-     * It offers a simper interface to create multi paragraph text as shown in TextBox::characterAndParagraph().
+     * The `InDesign\Text` class contains a parser that transforms text into `Paragraph` objects.
+     * It provides a simpler interface to create multi-paragraph text, as shown in `TextBox::characterAndParagraph()`.
      *
      * @return void
      * @throws \Exception
@@ -183,27 +184,27 @@ class TextBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(3));
 
-        //Create the text instance.
+        // Creates the text instance.
         $text = new Text();
-        $text->setParagraphStyle('CopyText'); //Sets the default paragraph style.
+        $text->setParagraphStyle('CopyText'); // Sets the default paragraph style.
 
-        //Add plain text as paragraph.
+        // Adds plain text as a paragraph.
         $text->addPlainText($this->getDemoWords(6));
 
-        //Add a plain text as paragraph with paragraph style.
+        // Adds plain text as a paragraph with a paragraph style.
         $text->addPlainText($this->getDemoWords(5), 'Headline');
 
-        //Add a plain text as paragraph with character style.
+        // Adds plain text as a paragraph with a paragraph style.
         $text->addPlainText($this->getDemoWords(8), null, 'UpperSpace');
 
-        //Add some more plain text
+        // Adds more plain text.
         $text->addPlainText($this->getDemoText(3, 'long'));
 
         for ($i = 0; $i <= 5; $i++) {
             $text->addPlainText($this->getDemoWords(4), $i == 5 ? 'ListItem_last' : 'ListItem');
         }
 
-        //Text allows manual adding of paragraphs to give the full flexibility of paragraphs and characters.
+        // Text allows manual paragraph creation for full control over paragraphs and characters.
         $paragraph = new Paragraph(
             $this->getDemoWords(),
             'Headline',
@@ -211,23 +212,23 @@ class TextBox extends AbstractStrategy
         );
         $text->addParagraph($paragraph);
 
-        //Create the TextBox command.
+        // Creates the TextBox command.
         $textBox = $this->createDemoBox();
         $textBox->setFit(TextBoxCommand::FIT_FRAME_TO_CONTENT);
 
-        //Add Text instance to the TextBox
+        // Adds the Text instance to the TextBox.
         $textBox->addText($text);
 
-        //Place the text box in InDesign document.
+        // Places the text box in the InDesign document.
         $this->addCommand($textBox);
     }
 
     /**
-     * The HTML parser handles tag class attributes as InDesign paragraph and character styles.
-     * Class attributes of block elements are converted to paragraph styles.
-     * Class attributes of inline elements are converted to character styles
+     * The HTML parser maps tag class attributes to InDesign paragraph and character styles.
+     * Class attributes on block elements map to paragraph styles.
+     * Class attributes on inline elements map to character styles.
      *
-     * This offers a quick and simple way to create formatted text content in InDesign.
+     * This provides a quick and simple way to create formatted text content in InDesign.
      *
      * @return void
      * @throws \Exception|FilesystemException
@@ -236,17 +237,19 @@ class TextBox extends AbstractStrategy
     {
         $this->addCommand(new GoToPage(4));
 
-        //HTML Parser supports inline images.
+        // The HTML parser supports inline images.
         $asset = $this->loadRandomAsset('/Car Images/%');
         $imgTag = sprintf(
             '<img src="%s" class="%s" width="184.6" height="100" data-fit="FILL_PROPORTIONALLY">',
             $asset->getFullPath(),
-            'image' //class is treated as InDesign element name
-            //optional fit parameter can be used with ImageBox fit modes.
-            //Or use the factory closure AbstractParser::FACTORY_ELEMENT_IMAGE can create dynamic ImageBox commands.
+            'image' // The class is treated as the InDesign element name.
+            // You can use the optional fit parameter with ImageBox fit modes.
+            // Alternatively, use the AbstractParser::FACTORY_ELEMENT_IMAGE factory closure
+            // to create dynamic ImageBox commands.
         );
 
-        //Demo HTML content. Class attributes are defined paragraph and character styles in InDesign template.
+        // Demo HTML content. Class attributes map to paragraph and character styles
+        // defined in the InDesign template.
         $html = <<<EOT
 <h1 class="Headline">
     Si dolor summum malum est, dici aliter non potest
@@ -285,25 +288,23 @@ class TextBox extends AbstractStrategy
  </p>
 EOT;
 
-        //Create Text instance
+        // Creates the Text instance.
         $text = new Text();
-        //Add HTML to Text.
+        // Adds HTML to the Text instance.
         $text->addHtml($html);
 
-        //Create TextBox command.
+        // Creates the TextBox command.
         $textBox = $this->createDemoBox();
-        // Add Text to TextBox.
+        // Adds the Text instance to the TextBox.
         $textBox->addText($text);
 
+        // Places the text box in the InDesign document.
         $this->addCommand($textBox);
     }
 
     /**
-     * Class InDesign/Text uses a HTML parser for transform HTML into Paragraph objects.
-     * Styling with InDesign paragraph and character styles can be done programmatically wia Text\HTML\Style
-     *
-     * Example HTML is generated by:
-     * https://loripsum.net/api/long/3/headers/ul/decorate
+     * The `InDesign\Text` class uses an HTML parser to transform HTML into `Paragraph` objects.
+     * You can apply InDesign paragraph and character styles programmatically via `Text\HTML\Style`.
      *
      * @return void
      * @throws \Exception|FilesystemException
@@ -312,36 +313,37 @@ EOT;
     {
         $this->addCommand(new GoToPage(5));
 
-        //Define HTML\Style
+        // Defines an HTML\Style.
         $style = new HtmlStyle();
         $style->setParagraph('h1', 'Headline')
               ->setParagraph('h2', 'SubHeadline_1')
               ->setParagraph('h3', 'SubHeadline_2')
               ->setParagraph('li', 'ListItem')
-            //li tags in ul and ol supports :first and :last pseudo classes
+            // li tags in ul and ol support the :first and :last pseudo-classes.
               ->setParagraph('li:last', 'ListItem_last')
               ->setParagraph('p', 'CopyText')
               ->setCharacter('b', 'Bold')
               ->setCharacter('i', 'Highlight');
 
         $text = new Text();
-        //Set $style in HTML parser
+        // Sets the styles in the HTML parser.
         $text->getHTMLParser()
              ->setStyle($style);
 
-        //Add HTML to Text
+        // Adds HTML to the Text instance.
         $text->addHtml($this->getDemoHtml());
 
-        //Create TextBox command.
+        // Creates the TextBox command.
         $textBox = $this->createDemoBox();
-        //Add Text to TextBox.
+        // Adds the Text instance to the TextBox.
         $textBox->addText($text);
 
+        // Places the text box in the InDesign document.
         $this->addCommand($textBox);
     }
 
     /**
-     * Creates a TextBox command instance.
+     * Creates a `TextBox` command instance.
      *
      * @return TextBoxCommand
      * @throws \Exception

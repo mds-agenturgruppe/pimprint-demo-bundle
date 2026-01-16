@@ -48,14 +48,14 @@ class LocalizationProject extends MasterLocaleRenderingProject
     use FakerGeneratorTrait;
 
     /**
-     * Car to render document for.
+     * Car object
      *
      * @var Car
      */
     private Car $car;
 
     /**
-     * Manufacturer assigned to Car to render document for.
+     * Manufacturer object
      *
      * @var Manufacturer
      */
@@ -67,8 +67,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
      * @param CarTreeBuilder      $treeBuilder
      * @param TranslatorInterface $translator
      */
-    public function __construct(private CarTreeBuilder $treeBuilder, private TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly CarTreeBuilder $treeBuilder,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     /**
@@ -112,7 +114,6 @@ class LocalizationProject extends MasterLocaleRenderingProject
      *
      * @return void
      * @throws \Exception
-     * @see \Mds\PimPrint\DemoBundle\Project\DataPrint\AbstractProject::setDocumentSettings
      */
     private function setDocumentSettings(): void
     {
@@ -121,7 +122,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders example localized page. For detailed explanation of the localization API refer to:
+     * Renders example localized page.
+     * For a detailed explanation of the localization API refer to:
      * \Mds\PimPrint\DemoBundle\Project\CommandDemo\Localization::build
      *
      * @return void
@@ -140,7 +142,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Loads car to render document for. This demo only renders 'Actual-Car' objects
+     * Load car object to render the document.
+     * This demo only renders 'Actual-Car' objects
      *
      * @return void
      * @throws \Exception
@@ -160,7 +163,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Loads manufacturer for selected car. This demo needs a Manufacturer assigned to the rendered Car
+     * Load the manufacturer object for the current car.
+     * This demo needs a Manufacturer assigned to the Car
      *
      * @return void
      * @throws \Exception
@@ -174,11 +178,11 @@ class LocalizationProject extends MasterLocaleRenderingProject
             return;
         }
 
-        throw new \Exception('Selected car must have a Manufacturer assigned to render the document');
+        throw new \Exception('Selected Car object must have a Manufacturer assigned to render the document');
     }
 
     /**
-     * Renders not localized manufacturer elements on layer "Manufacturer"
+     * Render non-localized manufacturer elements on layer "Manufacturer"
      *
      * @param int $topPos
      *
@@ -188,14 +192,14 @@ class LocalizationProject extends MasterLocaleRenderingProject
      */
     private function renderManufacturer(int $topPos): void
     {
-        //Manufacturer elements are rendered on an onw layer.
+        //Manufacturer elements are rendered on a separate layer
         $this->addCommand(new SetLayer('Manufacturer'));
 
-        //Set manufacturer id to boxIdent for content sensitive updates.
+        //Set the manufacturer id as the boxIdent for content-sensitive updates.
         $this->setBoxIdentReference($this->manufacturer->getId());
 
-        //Manufacturer data is not localized. We render not localized elements.
-        //As the default settings for all elements is not localized we don't need to call setLocalized().
+        //Manufacturer data is not localized. We render non-localized elements.
+        //As the default setting for all elements is non-localized, we don't need to call setLocalized().
 
         $logo = $this->manufacturer->getLogo();
         if ($logo instanceof Image) {
@@ -225,7 +229,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders localized and not localized car elements.
+     * Render localized and non-localized car elements.
      *
      * @param int $topPos
      *
@@ -235,9 +239,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
      */
     private function renderCar(int $topPos): void
     {
-        //Set car id to boxIdent for content sensitive updates.
+        //Set the car id as the boxIdent for content-sensitive updates.
         $this->setBoxIdentReference($this->car->getId());
 
+        //Put the elements on a separate layer
         $this->addCommand(new SetLayer('Car'));
 
         $this->renderCarName($topPos);
@@ -246,7 +251,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders localized car name.
+     * Render localized car name.
      *
      * @param int $topPos
      *
@@ -267,22 +272,24 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $carNameBox->setVariable('descriptionTop', Variable::POSITION_BOTTOM);
         $carNameBox->setBoxIdentReferenced('name');
 
-        //Car name has localized content. We localize the box.
+        //Car name has localized content -> we localize the box.
         $carNameBox->setLocalized();
 
         //Localized elements have the `setUseMasterLocaleDimension` option.
-        //This option controls the behaviour of the placement of localized elements with reference to the master locale.
+        //This option determines whether localized elements should match the dimensions of the master locale.
         //@see \Mds\PimPrint\CoreBundle\InDesign\Command\AbstractBox::setUseMasterLocaleDimension
 
         //Option AbstractBox::USE_MASTER_LOCALE_POSITION:
-        //Uses Position (left, top) from master locale. Dimensions (width, height) and fit from command.
+        //Uses the master locale's position (left, top).
+        //Takes dimensions (width, height) and fit from the command.
         $carNameBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_POSITION);
 
         $this->addCommand($carNameBox);
     }
 
     /**
-     * Builds localized and optionally faked demo car name.
+     * Build the localized car name.
+     * If the name is empty, generates a placeholder word.
      *
      * @return string
      * @throws \Exception
@@ -307,7 +314,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders not localized car image.
+     * Renders a non-localized car image.
      *
      * @param int $topPos
      *
@@ -338,7 +345,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Returns first image from car image gallery
+     * Get first image from the car image gallery
      *
      * @return Image|null
      */
@@ -362,7 +369,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders localized car description
+     * Render localized car description
      *
      * @return void
      * @throws \Exception
@@ -373,7 +380,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox = new TextBox(
             ExampleTemplate::ELEMENT_TEXTBOX,
             ExampleTemplate::PAGE_MARGIN_LEFT,
-            null, //We do top relative positioning
+            null, //using top relative positioning
             120,
             100,
             TextBox::FIT_FRAME_TO_CONTENT_HEIGHT
@@ -389,14 +396,17 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox->setLocalized();
 
         //Option AbstractBox::USE_MASTER_LOCALE_WIDTH:
-        //Uses Position (left, top) and width from master locale. Height and fit from command.
+        //Uses the master locale's position (left, top).
+        //Takes dimensions (width, height) and fit from the command.
         $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_WIDTH);
 
         $this->addCommand($textBox);
     }
 
     /**
-     * Builds localized and optionally faked demo car description.
+     * Builds localized car description.
+     * If the description is empty, generates a random sentence with
+     * the same word amount as the english description.
      *
      * @return string
      * @throws \Exception
@@ -408,7 +418,6 @@ class LocalizationProject extends MasterLocaleRenderingProject
             return $description;
         }
 
-        //If we have no locale text we fake the word amount of the english text.
         $description = $this->car->getDescription('en');
 
         return $this->getFaker()
@@ -416,7 +425,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders localized elements to demonstrate all not yet used useMasterLocaleDimension options.
+     * Renders localized elements to demonstrate all possible `useMasterLocaleDimension` options.
      *
      * @param int $topPos
      *
@@ -467,7 +476,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox->setLocalized();
 
         //Option AbstractBox::USE_MASTER_LOCALE_ALL:
-        //Uses Position (left, top) and dimension (width, height) from master locale. No fit is made.
+        //Uses the master locale's position (left, top) and dimensions (width, height).
+        //Does not apply any fit adjustments.
         $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_ALL);
 
         $this->addCommand($textBox);
@@ -501,7 +511,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox->setLocalized();
 
         //Option AbstractBox::USE_MASTER_LOCALE_HEIGHT:
-        //Uses Position (left, top) and height from master locale. Width and fit from command.
+        //Uses the master locale's position (left, top) and height.
+        //Takes width and fit from the command.
         $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_HEIGHT);
 
         $this->addCommand($textBox);
@@ -527,8 +538,8 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox->setLocalized();
 
         //Option AbstractBox::USE_MASTER_LOCALE_NONE:
-        //Uses Position (left, top) and dimension (width, height) from command.
-        //Nothing is used from master locale.
+        //Uses position (left, top) and dimensions (width, height) from the command.
+        //Does not use any values from the master locale.
         $textBox->setUseMasterLocaleDimension(AbstractBox::USE_MASTER_LOCALE_NONE);
 
         $this->addCommand($textBox);
@@ -560,7 +571,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Demonstrates the useMasterLocaleDimension mode AbstractBox::USE_MASTER_LOCALE_POSITION for ImageBox
+     * Demonstrates the `useMasterLocaleDimension` mode with `AbstractBox::USE_MASTER_LOCALE_POSITION` for `ImageBox`.
      *
      * @param int $topPos
      *
@@ -588,7 +599,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Demonstrates the useMasterLocaleDimension mode AbstractBox::USE_MASTER_LOCALE_POSITION for TableBox
+     * Demonstrates the `useMasterLocaleDimension` mode `AbstractBox::USE_MASTER_LOCALE_POSITION` for `TableBox`
      *
      * @param int $topPos
      *
@@ -610,7 +621,6 @@ class LocalizationProject extends MasterLocaleRenderingProject
 
         $tableBox->addColumn(40, null, ExampleTemplate::STYLE_TABLE_CELL)
                  ->addColumn(40, null, ExampleTemplate::STYLE_TABLE_CELL);
-
 
 
         for ($i = 0; $i <= 2; $i++) {
@@ -653,7 +663,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders usage description of demo page
+     * Renders usage description text of demo page
      *
      * @return void
      * @throws \Exception
@@ -662,10 +672,10 @@ class LocalizationProject extends MasterLocaleRenderingProject
     {
         $this->addCommand(new SetLayer('Demo description'));
 
-        $message = 'This page demonstrates the localisation of documents. ';
-        $message .= 'The document has localised and non-localised content. ';
-        $message .= 'The positions of all localised Car elements can be manually adjusted in the master language. ';
-        $message .= 'These changed positions are taken over when generating the language variants.';
+        $message = 'This page demonstrates how to localize documents. ';
+        $message .= 'The document contains both localized and non-localized content. ';
+        $message .= 'You can manually adjust the positions of all localized car elements in the master language. ';
+        $message .= 'The adjusted positions are applied when generating language variants.';
 
         $textBox = new TextBox(
             ExampleTemplate::ELEMENT_TEXTBOX,
@@ -680,7 +690,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
         $textBox->setBoxIdent('demoDescriptionTop');
         $this->addCommand($textBox);
 
-        $message = 'Elements below demonstrated useMasterLocaleDimension modes for different elements.';
+        $message = 'Elements below demonstrate the useMasterLocaleDimension modes for different elements.';
 
         $textBox = new TextBox(
             ExampleTemplate::ELEMENT_TEXTBOX,
@@ -697,7 +707,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Renders a layout element for demo purposes
+     * Render a layout element for demo purposes
      *
      * @param int $topPos
      *
@@ -716,7 +726,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
             5
         );
 
-        //Manually reset the box ident
+        //Manually reset the boxIdent
         $this->setBoxIdentReference('');
         $copyBox->setBoxIdentReferenced('layoutBar' . $topPos);
 
@@ -724,7 +734,7 @@ class LocalizationProject extends MasterLocaleRenderingProject
     }
 
     /**
-     * Sorts layers
+     * Sort the generated layers
      *
      * @return void
      * @throws \Exception

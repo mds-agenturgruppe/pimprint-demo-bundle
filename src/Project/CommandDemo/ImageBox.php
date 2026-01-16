@@ -22,14 +22,14 @@ use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 use Pimcore\Model\Asset;
 
 /**
- * Demonstrates the ImageBox command for placement of image elements in InDesign document.
+ * Demonstrates the `ImageBox` command for placing image elements in an InDesign document.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class ImageBox extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -50,9 +50,9 @@ class ImageBox extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the placement of images.
+     * Places an image on the page using different configurations of the `ImageBox` command.
      *
-     * @param float $topPosition
+     * @param float $topPosition Reference to the vertical position for placing images.
      *
      * @return void
      * @throws \Exception
@@ -63,19 +63,20 @@ class ImageBox extends AbstractStrategy
         $this->addCommand(new GoToPage(1));
         $asset = $this->loadRandomAsset('/Brand Logos/', 500);
 
-        //Places $asset in a ImageBox on the page. Image parameter expects Asset\Image instance.
-        //In this example no width and height is set. Then the size of the template element is used.
+        // Places $asset in an ImageBox on the page.
+        // The image parameter expects an Asset\Image instance.
+        // This example does not set width or height, so it uses the template element size.
         $this->addCommand(
             new ImageBoxCommand('image', 12.7, $topPosition, null, null, $asset)
         );
 
-        //In this example width and height is set.
+        // This example sets the width and height of the placed image box.
         $this->addCommand(
             new ImageBoxCommand('image', 40, $topPosition, 40, 20, $asset)
         );
 
         $topPosition += 25;
-        //All parameters of ImageBox command can be set and changed programmatically with setter methods.
+        // You can set and change all ImageBox command parameters using setters.
         $imageBox = new ImageBoxCommand('image', 40, $topPosition);
         $imageBox->setAsset($asset)
                  ->setWidth(40)
@@ -83,7 +84,7 @@ class ImageBox extends AbstractStrategy
         $this->addCommand($imageBox);
 
         $topPosition += 25;
-        //In this example the box size is set to the file-dimensions of $asset.
+        // This example sets the box size to the file dimensions of $asset.
         $imageBox = new ImageBoxCommand('image', 12.7, $topPosition);
         $imageBox->setAsset($asset, null, true);
         $this->addCommand($imageBox);
@@ -92,9 +93,9 @@ class ImageBox extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the supported FILL modes of InDesign images.
+     * Demonstrate the supported FIT modes for InDesign images.
      *
-     * @param float $topPosition
+     * @param float $topPosition the top-position for the images
      *
      * @return void
      * @throws \Exception
@@ -108,60 +109,59 @@ class ImageBox extends AbstractStrategy
         $margin = 2.3;
         $left = 12.7;
 
-        //#1 Demonstrates FIT_CENTER_CONTENT mode
+        // #1 FIT_CENTER_CONTENT
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_CENTER_CONTENT);
         $this->addCommand($imageBox);
 
         $left += $width + $margin;
-        //#2 Demonstrates FIT_CONTENT_AWARE_FIT mode
+        // #2 FIT_CONTENT_AWARE_FIT
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_CONTENT_AWARE_FIT);
         $this->addCommand($imageBox);
 
         $left += $width + $margin;
-        //#3 Demonstrates FIT_CONTENT_TO_FRAME mode
+        // #3 FIT_CONTENT_TO_FRAME
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_CONTENT_TO_FRAME);
         $this->addCommand($imageBox);
 
         $left = 12.7;
         $topPosition += $height + 5;
-        //#4 Demonstrates FIT_PROPORTIONALLY mode
+        // #4 FIT_PROPORTIONALLY
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_PROPORTIONALLY);
         $this->addCommand($imageBox);
 
         $left += $width + $margin;
-        //#5 Demonstrates FIT_FILL_PROPORTIONALLY mode
+        // #5 FIT_FILL_PROPORTIONALLY
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_FILL_PROPORTIONALLY);
         $this->addCommand($imageBox);
 
         $left = 12.7;
         $topPosition += $height + 5;
-        //#6 Demonstrates FIT_FRAME_TO_CONTENT mode
+        // #6 FIT_FRAME_TO_CONTENT
         $imageBox = new ImageBoxCommand('image', $left, $topPosition, $width, $height, $asset);
         $imageBox->setFit(ImageBoxCommand::FIT_FRAME_TO_CONTENT);
         $this->addCommand($imageBox);
     }
 
     /**
-     * Demonstrates usage of different Pimcore Model\Asset types with thumbnail behaviours.
+     * Demonstrates how to use different Pimcore `Model\Asset` types with thumbnail behavior.
      *
-     * PimPrint supports fallback Images for InDesign:
-     * When placing an Asset into a ImageBox Command PimPrint checks for Property 'pimprint_asset' and uses the
-     * assigned Asset for display in InDesign. With this behaviour user specific print assets can be assigned to assets
-     * like SVGs which aren't supported by InDesign.
+     * PimPrint supports fallback images for InDesign.
+     * When placing an `Asset` into an `ImageBox` command, PimPrint checks the property "pimprint_asset"
+     * and uses the assigned asset in InDesign.
+     * This allows you to add print-ready assets to files like SVGs.
      *
-     * Alternatively the Pimcore thumbnail processor can be used to build assets usable in InDesign on the fly, which
-     * is demonstrated in this demo.
+     * Alternatively, you can use the Pimcore thumbnail processor to generate
+     * InDesign-compatible assets on the fly, as shown in this demo.
      *
      * @return void
      * @throws \Exception
-     * @throws \Exception
      * @throws FilesystemException
-     * @see \Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox::PROPERTY_PIMPRINT_ASSET)
+     * @see \Mds\PimPrint\CoreBundle\InDesign\Command\ImageBox::PROPERTY_PIMPRINT_ASSET
      */
     private function assetTypes(): void
     {
@@ -173,38 +173,41 @@ class ImageBox extends AbstractStrategy
         $height = 40;
         $margin = 5;
 
+        // demo code for SVG support
         $asset = $this->loadRandomAsset('/Brand Logos/%', null, ['image/svg+xml']);
         if (!$asset instanceof Asset) {
             $this->project->addPageMessage('No SVG Demo-Asset found.');
         } else {
-            //Scalable Vector Graphics (SVG) support was dropped with CS4, but resumed with version CC 2020 (15.0)
-            //SVG support can be disabled via configuration `mds_pim_print_core.svg_support`
+            // SVG support can be disabled via configuration `mds_pim_print_core.svg_support`
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);
             $imageBox->setHeight($height)
                      ->setWidth($width);
             try {
-                //`mds_pim_print_core.svg_support`: true
+                // `mds_pim_print_core.svg_support`: true
+                // SVG is used in InDesign
                 $imageBox->setAsset($asset);
                 $this->addCommand($imageBox);
                 $topPosition += $height + $margin;
             } catch (\Exception $e) {
-                //`mds_pim_print_core.svg_support`: false
-                //setAsset throws an exception when asset isn't usable in InDesign
+                // `mds_pim_print_core.svg_support`: false
+                // setAsset throws an exception when the asset isn't usable in InDesign
                 $this->project->addPageMessage($e->getMessage());
 
-                //If you need to display an SVG in a not supported InDesign Version you can force to use
-                //a Pimcore thumbnail instead.
-                //In this case refer to the next ImageBox example where a thumbnail is forced.
+                // Note for older InDesign versions:
+                // If you need to display an SVG in an unsupported InDesign version,
+                // you can force the use of a Pimcore thumbnail instead.
+                // See the next ImageBox example, where a thumbnail is forced.
             }
         }
 
-        //If you don't want to use the original asset you can force a Pimcore named thumbnail configuration.
+        // If you don't want to use the original asset or filetype, you can use a Pimcore thumbnail configuration.
         $asset = $this->loadRandomAsset('/Car Images/%');
         $imageBox = new ImageBoxCommand('image', $left, $topPosition);
         $imageBox->setHeight($height)
                  ->setWidth($width);
 
-        //When setting an asset the name of a thumbnail config can be used to use thumbnails a not the original asset.
+        // When setting an asset, you can use the name of a thumbnail configuration
+        // to use a thumbnail instead of the original asset.
         $imageBox->setAsset($asset, 'product_detail');
 
         $this->addCommand($imageBox);
@@ -214,7 +217,7 @@ class ImageBox extends AbstractStrategy
         if (!$asset instanceof Asset) {
             $this->project->addPageMessage('No PDF Demo-Asset found.');
         } else {
-            //PDFs can be placed natively in InDesign
+            // InDesign can place PDFs natively.
             $imageBox = new ImageBoxCommand('image', $left, $topPosition);
             $imageBox->setHeight($height)
                      ->setWidth($width)
@@ -224,8 +227,8 @@ class ImageBox extends AbstractStrategy
     }
 
     /**
-     * Demonstrates the usage of ImageBoxScaled which gives directly access to the asset
-     * position and dimension inside the placed image box.
+     * Demonstrates the use of ImageBoxScaled, which provides direct access
+     * to the asset’s position and dimensions inside the placed image box.
      *
      * @return void
      * @throws \Exception
@@ -243,19 +246,19 @@ class ImageBox extends AbstractStrategy
         $margin = 10;
 
         $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
-        $imageBoxScaled->setXScroll(5) //Moves the asset inside the box to the right
-                       ->setYScroll(5); //Moves the asset inside the box downwards
+        $imageBoxScaled->setXScroll(5) // Moves the image inside the box to the right
+                       ->setYScroll(5); // Moves the image inside the box downward
         $this->addCommand($imageBoxScaled);
 
         $topPosition += $height + $margin;
         $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
-        $imageBoxScaled->setXScroll(-5) //Negative offset
-                       ->setYScroll(-5); //Negative offset
+        $imageBoxScaled->setXScroll(-5) // Negative offset
+                       ->setYScroll(-5); // Negative offset
         $this->addCommand($imageBoxScaled);
 
         $topPosition += $height + $margin;
         $imageBoxScaled = new ImageBoxScaled('image', $left, $topPosition, $width, $height, $asset);
-        $imageBoxScaled->setScale(10); //Sets x-y scale to 10% of the original asset dimensions
+        $imageBoxScaled->setScale(10); // Sets the X and Y scale to 10% of the original asset dimensions.
         $this->addCommand($imageBoxScaled);
 
         $topPosition += $height + $margin;
@@ -267,11 +270,14 @@ class ImageBox extends AbstractStrategy
     }
 
     /**
-     * Sets a PDF in full width on a page.
+     * Places a full-page PDF scaled to fit within the page dimensions.
+     *
+     * This method creates a new page, adds a PDF scaled to the full
+     * dimensions of an A4 portrait page, and adjusts its offsets.
      *
      * @return void
-     * @throws FilesystemException
      * @throws \Exception
+     * @throws FilesystemException
      */
     private function fullPagePlacement(): void
     {
@@ -283,10 +289,12 @@ class ImageBox extends AbstractStrategy
             0,
             A4PortraitTemplate::PAGE_WIDTH,
             A4PortraitTemplate::PAGE_HEIGHT,
-            $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf'])
+            $this->loadRandomAsset('/Sample Content/Documents/%', null, ['application/pdf']),
+            ImageBoxCommand::FIT_FILL_PROPORTIONALLY
         );
-        $imageBoxScaled->setXScroll(-10)
-                       ->setYScroll(-10);
+        $imageBoxScaled->setXScroll(5)
+                       ->setYScroll(5);
+
         $this->addCommand($imageBoxScaled);
     }
 }

@@ -68,7 +68,7 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      */
@@ -85,7 +85,7 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Initializes rendering of demo publication.
+     * Initialize the demo document and layer settings
      *
      * @return void
      * @throws \Exception
@@ -97,34 +97,39 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Sets default demo page settings
+     * Sets default demo document settings
      *
      * @return void
      * @throws \Exception
      */
     protected function setDocumentSettings(): void
     {
-//        Use the predefined A4PortraitTemplate page template class with the default InDesign page settings.
+        // You can use the predefined A4PortraitTemplate with the default InDesign page settings.
         $example = new DocumentSetup(new A4PortraitTemplate(), 20);
-//        Note: In "Mds\PimPrint\CoreBundle\InDesign\Template\Concrete" in many page templates are predefined
-//        with standard indesign dimensions
 
-//      But we simply transfer the document settings from the template file "PimPrint-CommandDemo.indd"
+        // Note: Many standard page templates with default InDesign dimensions exist in
+        // "Mds\PimPrint\CoreBundle\InDesign\Template\Concrete".
+
+        // Here we copy document settings from the template file "PimPrint_CommandDemo.indd".
         $command = new DocumentTemplateSetup();
-//        Facing pages is used from the manually created document to have the "Page Handling" demo
-//        work with or without facing pages to demonstrate the dynamic facing page layout creation.
+
+        // Use the facing-pages setting from the template document.
+        // This allows the "Page Handling" demo to work with or without facing pages
+        // and to demonstrate dynamic facing-page layout creation
         $command->setFacingPages(false)
                 ->setStartNumber(true);
         $this->addCommand($command);
 
-//        We set the number of pages to 20, to have enough pages in the document for all command demos.
-//        Empty pages will be removed at the end of the rendering.
+        // Set the document to 20 pages.
+        // This ensures enough pages for all demos.
+        // The renderer removes empty pages at the end.
         $command = new DocumentSetup(null, 20);
         $this->addCommand($command);
     }
 
     /**
-     * Initializes the demo layer in InDesign document.
+     * Initializes the demo layer for the project.
+     * Sets up the layer using the class name and add the command
      *
      * @return void
      * @throws \Exception
@@ -137,7 +142,7 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Places a TextBox with $text at $left,$top with size $widthX$height on current active page.
+     * Places a `TextBox` with $text at $left and $top, with a size of $width x $height, on the current active page.
      *
      * @param string $text
      * @param float  $left
@@ -161,9 +166,9 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Returns $number of words
+     * Generate a string containing a specified number of random words.
      *
-     * @param int $number
+     * @param int $number The number of words to generate. Defaults to 5.
      *
      * @return string
      * @throws \Exception
@@ -178,10 +183,10 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Returns $numberParagraphs lines in $length of demo plaintext
+     * Generates dummy text consisting of multiple paragraphs.
      *
-     * @param int    $numberParagraphs
-     * @param string $length
+     * @param int    $numberParagraphs The number of paragraphs to generate. Defaults to 2.
+     * @param string $length           The length of each paragraph. Defaults to 'medium'.
      *
      * @return string
      * @throws \Exception
@@ -200,15 +205,15 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Returns html demo text from Loripsum API.
+     * Generates HTML content for demo purposes.
      *
-     * @param int        $paragraphs
-     * @param bool       $headers
-     * @param bool       $list
-     * @param array|null $decorate
-     * @param string     $length
+     * @param int        $paragraphs Number of paragraphs to generate. Defaults to 3.
+     * @param bool       $headers    Whether to include headers before each paragraph. Defaults to true.
+     * @param bool       $list       Whether to include an unordered list after the paragraphs. Defaults to true.
+     * @param array|null $decorate   Optional tags to decorate specific words in the sentences. Defaults to ['b', 'i'].
+     * @param string     $length     Length descriptor for sentences ('short', 'medium', 'long'). Defaults to 'medium'.
      *
-     * @return string
+     * @return string Generated demo HTML content.
      * @throws \Exception
      */
     protected function getDemoHtml(
@@ -257,11 +262,11 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Returns length in int for verbose $length parameter
+     * Get the length value based on the given verbosity parameter.
      *
-     * @param string $length
+     * @param string $length Verbosity level ('short', 'long', 'max', or other).
      *
-     * @return int
+     * @return int Corresponding length value for the given verbosity level.
      */
     protected function getLengthFromVerboseParam(string $length): int
     {
@@ -274,8 +279,9 @@ abstract class AbstractStrategy
     }
 
     /**
-     * Delegated all undefined method calls to $project.
-     * Convenience method offers in all strategies the same interface as in CommandDemo project.
+     * Delegates all undefined method calls to `$project`.
+     * This convenience method provides the same interface in all strategies
+     * as in the `CommandDemo` project.
      *
      * @param string $method
      * @param array  $arguments

@@ -7,7 +7,11 @@ services:
     Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\:
         resource: '../../Project/DynamicPaginationDemo'
 
-    #Register rendering projects as service
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\:
+        resource: '../../Project/CarsDemo'
+        exclude: '../../*/Dto/*'
+
+#    Register rendering projects as service
     Mds\PimPrint\DemoBundle\Service\GettingStarted:
         parent: mds.pimprint.core.rendering_project #Rendering projects must use 'mds.pimprint.core.rendering_project' as parent
         public: true    #must be defined public
@@ -23,27 +27,37 @@ services:
         public: true
         autowire: true
         autoconfigure: false
-    Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPaginationDemo:
+    Mds\PimPrint\DemoBundle\Project\DynamicPaginationDemo\ColumnPagination:
         parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
-    Mds\PimPrint\DemoBundle\Service\DataPrintCarBrochure:
+#    CardDemo Projects
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarList:
         parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
-    Mds\PimPrint\DemoBundle\Service\DataPrintCarList:
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarDetail:
         parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
-    Mds\PimPrint\DemoBundle\Service\DataPrintAccessoryPartList:
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\CarSalesLabel:
+        parent: mds.pimprint.core.rendering_project
+        public: true
+        autowire: true
+        autoconfigure: false
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryList:
+        parent: mds.pimprint.core.rendering_project
+        public: true
+        autowire: true
+        autoconfigure: false
+    Mds\PimPrint\DemoBundle\Project\CarsDemo\AccessoryPriceList:
         parent: mds.pimprint.core.rendering_project
         public: true
         autowire: true
         autoconfigure: false
 
     #Helper services
-    Mds\PimPrint\DemoBundle\Service\DataPrintPublicationLoader: ~
     Mds\PimPrint\DemoBundle\Project\LocalizationDemo\CarTreeBuilder: ~

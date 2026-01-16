@@ -24,14 +24,14 @@ use Mds\PimPrint\CoreBundle\InDesign\Template\Concrete\A4PortraitTemplate;
 class ExampleTemplate extends A4PortraitTemplate
 {
     /**
-     * Width of content area
+     * Width of the content area
      *
      * @var float
      */
     const CONTENT_WIDTH = self::PAGE_WIDTH - self::PAGE_MARGIN_LEFT - self::PAGE_MARGIN_RIGHT;
 
     /**
-     * Height of content area
+     * Height of the content area
      *
      * @var float
      */
@@ -52,14 +52,14 @@ class ExampleTemplate extends A4PortraitTemplate
     const CONTENT_ORIGIN_LEFT = self::PAGE_MARGIN_LEFT;
 
     /**
-     * Max yPos where is content placed in a page
+     * Max yPos where is content placed on a page
      *
      * @var float
      */
     const CONTENT_BOTTOM = self::PAGE_HEIGHT - self::PAGE_MARGIN_BOTTOM;
 
     /**
-     * Max xPos where is content placed in a page
+     * Max xPos where is content placed on a page
      *
      * @var float
      */
@@ -67,8 +67,6 @@ class ExampleTemplate extends A4PortraitTemplate
 
     /**
      * Content elements used in DataPrint projects
-     *
-     * @var string
      */
     const ELEMENT_COPYBOX = 'copyBox';
 
@@ -82,8 +80,6 @@ class ExampleTemplate extends A4PortraitTemplate
 
     /**
      * InDesign styles
-     *
-     * @var string
      */
     const STYLE_PARAGRAPH_COPYTEXT = 'CopyText';
 

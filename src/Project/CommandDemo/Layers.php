@@ -19,14 +19,14 @@ use Mds\PimPrint\CoreBundle\InDesign\Command\SetLayer;
 use Mds\PimPrint\CoreBundle\InDesign\Command\SortLayers;
 
 /**
- * Demonstrates layer functions when placing elements in InDesign Document.
+ * Demonstrates layer functions when placing elements in an InDesign document.
  *
  * @package Mds\PimPrint\DemoBundle\Project\CommandDemo
  */
 class Layers extends AbstractStrategy
 {
     /**
-     * Method generated the InDesign commands to build the demo publication.
+     * The method generates the InDesign commands to build the demo publication.
      *
      * @return void
      * @throws \Exception
@@ -38,74 +38,76 @@ class Layers extends AbstractStrategy
         $this->boxLayers(12.7);
         $this->sortLayers();
 
-//        Empty layers can be removed with RemoveEmptyLayers command.
+        // Empty layers can be removed with the RemoveEmptyLayers command.
         $this->addCommand(
             new RemoveEmptyLayers()
         );
     }
 
     /**
-     * Demonstrates the placement of elements on layers and usage of SetLayer command.
+     * Demonstrates placing elements on layers and using the `SetLayer` command.
      *
-     * @param float $topPosition
+     * @param float $topPosition the top-position of the elements
      *
      * @return void
      * @throws \Exception
      */
     private function boxLayers(float $topPosition): void
     {
-//        Element is placed on the same layer as in the template document.
-//        If the layer doesn't exist in the generated document the layer is created automatically.
+        // The element is placed on the same layer as in the template document.
+        // If the layer does not exist in the generated document, InDesign creates it automatically.
         $this->addCommand(
             new CopyBox('image', 12.7, $topPosition)
         );
 
-//        Layer name that an element is placed on can be set via LayerTrait
-        $box = new CopyBox('image', 50, $topPosition);
+        // You can set the layer name when copying an element using `LayerTrait`.
+        $box = new CopyBox('image', 60, $topPosition);
         $box->setLayer('Layer A');
         $this->addCommand($box);
 
-//        New layers can be created with SetLayer command. All following boxes are added to the last set layer.
+        // You can create new layers using the `SetLayer` command.
+        // All following boxes are added to the last created layer.
         $this->addCommand(
             new SetLayer('Layer B')
         );
         $this->addCommand(
-            new CopyBox('copyBox', 100, $topPosition)
+            new CopyBox('copyBox', 110, $topPosition)
         );
         $this->addCommand(
-            new CopyBox('copyBox', 120, $topPosition)
+            new CopyBox('copyBox', 130, $topPosition)
         );
 
         $this->addCommand(
             new SetLayer('Layer C')
         );
         $this->addCommand(
-            new CopyBox('copyBox', 140, $topPosition)
+            new CopyBox('copyBox', 150, $topPosition)
         );
         $this->addCommand(
-            new CopyBox('copyBox', 160, $topPosition)
+            new CopyBox('copyBox', 170, $topPosition)
         );
 
-//        New layers are only created when an element is placed on it. This layer won't be created in the document.
+        // New layers are created only when an element is placed on them.
+        // This layer is not created in the document.
         $this->addCommand(new SetLayer('Empty layer'));
     }
 
     /**
-     * Demonstrates the sorting of layers
+     * Demonstrates layer sorting
      *
      * @return void
      * @throws \Exception
      */
     private function sortLayers(): void
     {
-//        Layers are sorted by defining an array with the order of layer names
-//        In this example we order the layers created in boxLayers() in reverse order
+        // Layers are sorted by defining an array with the order of layer names.
+        // This example orders the layers created in boxLayers() in reverse order.
         $order = [
-            'Layer C', //Exact layer name
-            'Layer B', //Exact layer name
-            'Layer A', //Exact layer name
+            'Layer C', // Exact layer name
+            'Layer B', // Exact layer name
+            'Layer A', // Exact layer name
         ];
-//        All layers not defined in the order array are left where they are.
+        // All layers not defined in the $order array keep their current position.
 
         $this->addCommand(
             new SortLayers($order)

@@ -26,7 +26,7 @@ use Pimcore\Model\DataObject\Folder;
 class CarTreeBuilder extends PublicationTreeBuilder
 {
     /**
-     * Returns all publications in tree structure to display in InDesign-Plugin.
+     * Returns all publications in a tree structure for display in the InDesign plugin.
      *
      * @return array
      */

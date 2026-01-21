@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactor
 
 - Update `mds-agenturgruppe/php-code-checker` to `^4.0`
+- Update `mds-agenturgruppe/pimprint-core-bundle` to `^5.0`
 
 ## [4.5.0] - 2026-01-16
 

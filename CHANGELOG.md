@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Feature
 
 - Relicense to *mds. Commercial License (MCL)*
+- Pimcore 12 compatibility
 
 ### Refactor
 

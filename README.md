@@ -2,32 +2,35 @@
 
 mds PimPrint the InDesign Printing Solution for Pimcore.
 
-This bundle is a demo for [PimPrint CoreBundle](https://github.com/mds-agenturgruppe/pimprint-core-bundle) using the [Pimcore 11 Demo](https://github.com/pimcore/demo/tree/11.x).
+This bundle is a demo for [PimPrint CoreBundle](https://github.com/mds-agenturgruppe/pimprint-core-bundle) using the [Pimcore Demo](https://github.com/pimcore/demo).
 
-## Supported Pimcore Versions
+## Supported Pimcore Demos Versions
 
-- Pimcore 11: `mds-agenturgruppe/pimprint-demo-bundle:^4.0`
-- Pimcore 10: `mds-agenturgruppe/pimprint-demo-bundle:^3.0`
-- Pimcore 5/6: `mds-agenturgruppe/pimprint-demo-bundle:^1.0`
+| Pimcore Demo | PimPrint Demo | PimPrint Maintained |
+|--------------|---------------|:-------------------:|
+| `2025.x`     | `5.x`         |          ✅          |
+| `2024.4`     | `4.x`         |          ✅          |
 
-## Prerequisites
+## Prerequisite
 
-- [PHP 8.1](https://secure.php.net/) or higher
-- [Pimcore 11 Demo](https://github.com/pimcore/demo/tree/11.x) installed
+A running Pimcore Demo.
+
+- [Pimcore 2025.x Demo](https://github.com/pimcore/demo/tree/2025.x)
+- [Pimcore 2024.4 Demo](https://github.com/pimcore/demo/tree/2024.4)
 
 ## Installing PimPrint Demo
 
-Install `MdsPimPrintDemoBundle` into your Pimcore Demo by issuing:
+Install `MdsPimPrintDemoBundle` matching your Pimcore Demo version by issuing:
 
 ```bash
-composer require mds-agenturgruppe/pimprint-demo-bundle:^4.0
+composer require mds-agenturgruppe/pimprint-demo-bundle:^5.0
 ```
 
 Enable `MdsPimPrintCoreBundle` and `MdsPimPrintDemoBundle` in `config/bundles.php`:
 
 ```php
-MdsPimPrintCoreBundle::class => ['all' => true],
-MdsPimPrintDemoBundle::class => ['all' => true],
+\Mds\PimPrint\CoreBundle\MdsPimPrintCoreBundle::class => ['all' => true],
+\Mds\PimPrint\DemoBundle\MdsPimPrintDemoBundle::class => ['all' => true],
 ```
 
 ```bash

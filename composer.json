@@ -22,7 +22,7 @@
     "fakerphp/faker": "^1.23"
   },
   "require-dev": {
-    "mds-agenturgruppe/php-code-checker": "2.1.1"
+    "mds-agenturgruppe/php-code-checker": "^4.0"
   },
   "conflict": {
     "pimcore/pimcore": "<11.0 || >12.0"
